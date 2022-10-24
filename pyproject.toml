@@ -3,8 +3,8 @@ name = "infer_pyproject"
 version = "0.1.0"
 description = "Create a pyproject.toml file for an existing project."
 authors = [
-    {name = "Martin Thoma", email="info@martin-thoma.de"},
-    {email = "info@example.com"}
+    {name = "Colin Brown", email="colintravisbrown@gmail.com"},
+    {email = "cbrown3667@sdsu.edu"}
 ]
 license = {file = "LICENSE.txt"}
 readme = "README.md"
@@ -27,9 +27,9 @@ dev = [
 ]
 
 [project.urls]
-homepage = "https://github.com/MartinThoma/infer_pyproject"
-documentation = "https://github.com/MartinThoma/infer_pyproject"
-repository = "https://github.com/MartinThoma/infer_pyproject"
+homepage = "https://github.com/luquelab/infer_pyproject"
+documentation = "https://github.com/luquelab/infer_pyproject"
+repository = "https://github.com/luquelab/infer_pyproject"
 
 [project.scripts]
 poetry = "infer_pyproject.cli:main"

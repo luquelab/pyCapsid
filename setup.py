@@ -4,17 +4,15 @@ from setuptools import find_packages
 from setuptools import setup
 
 setup(
-    name='alphafold',
-    version='2.2.4',
-    description='An implementation of the inference pipeline of AlphaFold v2.0.'
-    'This is a completely new model that was entered as AlphaFold2 in CASP14 '
-    'and published in Nature.',
-    author='DeepMind',
-    author_email='alphafold@deepmind.com',
+    name='pycapsid',
+    version='0.0.1',
+    description='A set of computational tools written in python for the analysis of viral capsids',
+    author='Luque Lab, Colin Brown',
+    author_email='colintravisbrown@gmail.com',
     license='Apache License, Version 2.0',
-    url='https://github.com/deepmind/alphafold',
+    url='https://github.com/luquelab/pycapsid',
     packages=find_packages(),
-    install_requires=[
+    install_requires=[ # this will be updated down the line
         'absl-py',
         'biopython',
         'chex',
@@ -34,15 +32,15 @@ setup(
         'mock',
     ],
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
+        'Development Status :: 1 - Planning',
         'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: Apache Software License',
-        'Operating System :: POSIX :: Linux',
+        'License :: OSI Approved :: Apache Software License', # incorrect license
+        'Operating System :: POSIX :: Linux',  # needs to be changed
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
-        'Topic :: Scientific/Engineering :: Artificial Intelligence',
+        'Topic :: Scientific/Engineering :: Bio-Informatics',
     ],
 )
