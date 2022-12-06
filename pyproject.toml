@@ -1,45 +1,20 @@
-[project]
-name = "infer_pyproject"
-version = "0.1.0"
-description = "Create a pyproject.toml file for an existing project."
-authors = [
-    {name = "Colin Brown", email="colintravisbrown@gmail.com"},
-    {email = "cbrown3667@sdsu.edu"}
-]
-license = {file = "LICENSE.txt"}
-readme = "README.md"
-requires-python = ">=3.6"
-
-keywords = ["packaging", "dependency", "infer", "pyproject.toml"]
-
-classifiers = [
-    "Topic :: Software Development"
-]
-
-# Requirements: This is done differently by poetry!
-dependencies = [
-    "Click>=7.0"
-]
-
-[project.optional-dependencies]
-dev = [
-    "black>=18.3-alpha.0",
-]
-
-[project.urls]
-homepage = "https://github.com/luquelab/infer_pyproject"
-documentation = "https://github.com/luquelab/infer_pyproject"
-repository = "https://github.com/luquelab/infer_pyproject"
-
-[project.scripts]
-poetry = "infer_pyproject.cli:main"
-
 [build-system]
 requires = [
     "setuptools >= 35.0.2",
     "setuptools_scm >= 2.0.0, <3"
 ]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "infer_pyproject"
+version = "0.0.1"
+description = "A set of computational tools written in python for the analysis of viral capsids."
+authors = [
+    {name = "Colin Brown", email="colintravisbrown@gmail.com"},
+    {name = "Anu", email="colintravisbrown@gmail.com"}
+]
+license = {file = "LICENSE.txt"}
+readme = "README.md"
 
 [tool.black]
 line-length = 88

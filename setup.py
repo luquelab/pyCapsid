@@ -5,37 +5,34 @@ from setuptools import setup
 
 setup(
     name='pycapsid',
-    version='0.0.1',
+    version='0.0.01',
     description='A set of computational tools written in python for the analysis of viral capsids',
-    author='Luque Lab, Colin Brown',
+    author='Luque Lab, Colin Brown, Anuradha Agarwal',
     author_email='colintravisbrown@gmail.com',
-    license='Apache License, Version 2.0',
+    license='MIT License',
     url='https://github.com/luquelab/pycapsid',
-    packages=find_packages(),
-    install_requires=[ # this will be updated down the line
-        'absl-py',
-        'biopython',
-        'chex',
-        'dm-haiku',
-        'dm-tree',
-        'docker',
-        'immutabledict',
-        'jax',
-        'ml-collections',
+    packages=find_packages("src"),
+    package_dir={"": "src"},
+    python_requires = '<=3.10',
+    install_requires=[
+        'prody',
+        'biotite',
+        'scikit-learn',
         'numpy',
-        'pandas',
         'scipy',
-        'tensorflow-cpu',
+        'matplotlib',
+        'numba'
     ],
     tests_require=[
-        'matplotlib',  # For notebook_utils_test.
-        'mock',
+        'matplotlib',  # Need to create tests to determine this
     ],
     classifiers=[
         'Development Status :: 1 - Planning',
         'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: Apache Software License', # incorrect license
-        'Operating System :: POSIX :: Linux',  # needs to be changed
+        'License :: OSI Approved :: MIT License',
+        "Operating System :: Microsoft :: Windows",
+        "Operating System :: MacOS",
+        'Operating System :: POSIX :: Linux',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
