@@ -4,8 +4,8 @@ from setuptools import find_packages
 from setuptools import setup
 
 setup(
-    name='pycapsid',
-    version='0.0.01',
+    name='pyCapsid',
+    version='0.0.2',
     description='A set of computational tools written in python for the analysis of viral capsids',
     author='Luque Lab, Colin Brown, Anuradha Agarwal',
     author_email='colintravisbrown@gmail.com',
@@ -13,7 +13,7 @@ setup(
     url='https://github.com/luquelab/pycapsid',
     packages=find_packages("src"),
     package_dir={"": "src"},
-    python_requires = '<=3.10',
+    python_requires = '<3.11',
     install_requires=[
         'prody',
         'biotite',

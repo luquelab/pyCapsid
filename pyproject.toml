@@ -4,38 +4,3 @@ requires = [
     "setuptools_scm >= 2.0.0, <3"
 ]
 build-backend = "setuptools.build_meta"
-
-[project]
-name = "infer_pyproject"
-version = "0.0.1"
-description = "A set of computational tools written in python for the analysis of viral capsids."
-authors = [
-    {name = "Colin Brown", email="colintravisbrown@gmail.com"},
-    {name = "Anu", email="colintravisbrown@gmail.com"}
-]
-license = {file = "LICENSE.txt"}
-readme = "README.md"
-
-[tool.black]
-line-length = 88
-target_version = ['py36']
-include = '\.pyi?$'
-exclude = '''
-
-(
-  /(
-      \.eggs         # exclude a few common directories in the
-    | \.git          # root of the project
-    | \.hg
-    | \.mypy_cache
-    | \.tox
-    | \.venv
-    | _build
-    | buck-out
-    | build
-    | dist
-  )/
-  | foo.py           # also separately exclude a file named foo.py in
-                     # the root of the project
-)
-'''
