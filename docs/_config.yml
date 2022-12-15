@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Welcome to Jekyll!
 #
 # This config file is meant for settings that affect your whole blog, values
@@ -28,7 +29,7 @@ baseurl: "/pyCapsid" # the subpath of your site, e.g. /blog
 # github_username:  jekyll
 
 # Build settings
-theme: "just-the-docs"
+remote_theme: pmarsceill/just-the-docs
 markdown: kramdown
 
 plugins:
@@ -56,3 +57,17 @@ source: .
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
+=======
+title: Project name
+
+### Theme
+# theme: jekyll-theme-cayman
+remote_theme: pmarsceill/just-the-docs
+
+### Color scheme supports "light" (default) and "dark"
+color_scheme: light
+
+aux_links:
+  "Project Template on GitHub":
+    - "//github.com/luquelab/project_template"
+>>>>>>> main
