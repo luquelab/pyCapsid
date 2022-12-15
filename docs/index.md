@@ -4,7 +4,6 @@ title: Home
 nav_order: 1
 ---
 
-<<<<<<< HEAD
 # Home
 
 
@@ -25,5 +24,4 @@ nav_order: 1
 
 **How.** The documentation is generated using Jekyll and GitHub Pages from the docs/ folder in the GitHub repo associated with the project. The updates in the documentation are reflected in the repository.
 
-**What else?** Use the side panel to learn more about the current project's [Synthesis](https://luquelab.github.io/project_template/synthesis/), [Background](https://luquelab.github.io/project_template/background/), [Approach](https://luquelab.github.io/project_template/approach/) [Outputs](https://luquelab.github.io/project_template/output/), and [Impact](https://luquelab.github.io/project_template/impact/). Check also our [Athena initiative](https://luquelab.github.io/Athena/knowledge/synthesis.html). 
->>>>>>> main
+**What else?** Use the side panel to learn more about the current project's [Synthesis](https://luquelab.github.io/project_template/synthesis/), [Background](https://luquelab.github.io/project_template/background/), [Approach](https://luquelab.github.io/project_template/approach/) [Outputs](https://luquelab.github.io/project_template/output/), and [Impact](https://luquelab.github.io/project_template/impact/). Check also our [Athena initiative](https://luquelab.github.io/Athena/knowledge/synthesis.html).
