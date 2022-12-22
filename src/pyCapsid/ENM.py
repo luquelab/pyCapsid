@@ -1,13 +1,11 @@
 import matplotlib.pyplot as plt
 import numba as nb
 import numpy as np
-from settings import *
 
-def buildENM(calphas, coords, bfactors, cbeta=False, gfunc = 'power', backbone=False, k_backbone = 1, l_backbone=1):
+def buildENM(calphas, coords, cutoff=10, model='anm', cbeta=False, gfunc = 'power', baseDist=1, d_power = 0, backbone=False, k_backbone = 1, l_backbone=1):
     from scipy import sparse
     import numpy as np
     from sklearn.neighbors import BallTree, radius_neighbors_graph, kneighbors_graph
-    from settings import cbeta, backboneStrength, backboneConnect, bblen, gfunc, baseDistance
 
     n_atoms = coords.shape[0]
     dof = n_atoms * 3
@@ -17,18 +15,16 @@ def buildENM(calphas, coords, bfactors, cbeta=False, gfunc = 'power', backbone=F
     dists = distGraph.tocoo().copy()
     dists.sum_duplicates()
 
-    kirch = kirchGamma(dists, bfactors, d2=d2, flexibilities=flexibilities, gfunc=gfunc, bd= baseDistance)
+    kirch = kirchGamma(dists, gfunc=gfunc, bd= baseDist, d2=d_power)
 
-    if backboneConnect:
-        kbb = backboneStrength
+    if backbone:
         kirch = backbonePrody(calphas, kirch.tolil(), kbb, s=bblen)
-    print('nonzero values: ', kirch.nnz)
+
     dg = np.array(kirch.sum(axis=0))
     kirch.setdiag(-dg[0])
     kirch.sum_duplicates()
     kirch = kirch.tocsr()
-    #print(kirch.data)
-    #print('kirch: ', kirch.diagonal(k=0))
+
 
     if model=='anm':
         kc = kirch.tocoo().copy()
@@ -40,11 +36,9 @@ def buildENM(calphas, coords, bfactors, cbeta=False, gfunc = 'power', backbone=F
         hessian = fanm*hessian + (1-fanm)*sparse.kron(kirch, np.identity(3))
     else:
         hessian = kirch.copy()
+
     print('done constructing matrix')
-    # fig, ax = plt.subplots()
-    # mat = ax.matshow(hessian[:int(3 * n_asym / 10), :int(3 * n_asym / 10)].todense())
-    # plt.colorbar(mat, ax=ax)
-    # plt.show()
+
     from sklearn.utils.validation import check_symmetric
     check_symmetric(hessian, raise_warning=True, tol=1e-5)
     check_symmetric(kirch, raise_warning=True, tol=1e-5)
@@ -178,7 +172,6 @@ def backbonePrody(calphas, kirch, k, s):
 
 
 def betaCarbonModel(calphas):
-    from settings import cutoff, d2, fanm, backboneStrength, backboneConnect, bblen, model
     from sklearn.neighbors import BallTree, radius_neighbors_graph
     from scipy import sparse
     coords = calphas.getCoords()
@@ -265,7 +258,6 @@ def betaCarbonModel(calphas):
     check_symmetric(haa, raise_exception=True, tol=1e-5)
     check_symmetric(hbb, raise_exception=True, tol=1e-5)
     check_symmetric(hab, raise_exception=True, tol=1e-5)
-    from settings import aaGamma, bbGamma, abGamma
     print(kirch.shape, kbb.shape, kab.shape)
     hess = aaGamma*haa + bbGamma*hbb + abGamma*hab
 
