@@ -23,7 +23,7 @@ def cluster_embedding(n_range, maps, method='kmeans', score_method='median'):
 
     #from sklearn.metrics import silhouette_score
     #from sklearn.metrics import davies_bouldin_score
-    from clustering_util import median_score, cluster_types, calcCentroids, calcCosCentroids
+    from .clustering_util import median_score, cluster_types, calcCentroids, calcCosCentroids
 
 
 

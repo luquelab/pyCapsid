@@ -5,7 +5,7 @@ from setuptools import setup
 
 setup(
     name='pyCapsid',
-    version='0.0.2',
+    version='0.0.5',
     description='A set of computational tools written in python for the analysis of viral capsids',
     author='Luque Lab, Colin Brown, Anuradha Agarwal',
     author_email='colintravisbrown@gmail.com',
@@ -21,7 +21,7 @@ setup(
         'numpy',
         'scipy',
         'matplotlib',
-        'numba'
+        'numba',
         'statsmodels'
     ],
     tests_require=[

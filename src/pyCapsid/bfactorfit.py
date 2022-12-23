@@ -64,7 +64,6 @@ def fitBfactors(evals, evecs, bfactors, is3d, fitModes=False, plotModes=False, f
     n_modes = evals.shape[0]
     if fitModes:
         coeffs, ico_devs = fluctModes(evals, evecs, bfactors, is3d)
-
         if plotModes:
             plotByMode(np.arange(1, n_modes), coeffs, 'CC')
             plotByMode(np.arange(1, n_modes), ico_devs, 'Icosahedral Deviation')
@@ -78,10 +77,10 @@ def fitBfactors(evals, evecs, bfactors, is3d, fitModes=False, plotModes=False, f
             n_m = np.argmax(coeffs)
             coeff = coeffs[n_m]
             ico_dev = ico_devs[n_m]
-
         flucts = fastFlucts(evals, evecs, n_m, is3d)
     else:
-        flucts = fastFlucts(evals, evecs, n_modes, is3d)
+        n_m = n_modes
+        flucts = fastFlucts(evals, evecs, n_m, is3d)
         coeff = np.corrcoef(bfactors, flucts)[1, 0]
         ico_dev = checkIcoFlucts(flucts)
 
@@ -89,11 +88,10 @@ def fitBfactors(evals, evecs, bfactors, is3d, fitModes=False, plotModes=False, f
 
     bfactors_predicted = k*flucts + intercept
 
-    return coeff, k, intercept, bfactors_predicted, ci, pv, ico_dev
+    return coeff, k, intercept, bfactors_predicted, ci, pv, ico_dev, n_m
 
 def plotByMode(mode_indices, data, datalabel):
     import matplotlib.pyplot as plt
-    print('WHAT')
     fig, ax = plt.subplots(1, 1)
     ax.plot(mode_indices, data)
     # ax[0].vlines(nModes, np.min(coeffs), np.max(coeffs))
@@ -104,7 +102,7 @@ def plotByMode(mode_indices, data, datalabel):
 
 def plotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=False, plotModes=False, forceIco=False, icotol=0.002):
 
-    coeff, k, intercept, bfactors_predicted, ci, pv, ico_dev = fitBfactors(evals, evecs, bfactors, is3d, fitModes,
+    coeff, k, intercept, bfactors_predicted, ci, pv, ico_dev, nmodes = fitBfactors(evals, evecs, bfactors, is3d, fitModes,
                                                                            plotModes, forceIco, icotol)
     print(ci)
     ci = np.abs(ci[0][0] - ci[0][1])
@@ -137,3 +135,5 @@ def plotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=False, plotMod
             gamma) + r'$\pm$' + "{:.3e}".format(ci) + r'$ \frac{dyn}{cm}$' + '  CC = ' + "{:.3f}".format(
             coeff), fontsize=12)
     plt.show()
+
+    return coeff, k, intercept, bfactors_predicted, ci, pv, ico_dev, nmodes

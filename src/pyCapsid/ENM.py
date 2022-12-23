@@ -48,7 +48,6 @@ def kirchGamma(dists, **kwargs):
 
     if kwargs['gfunc'] == 'power':
         dists.data = -1/((dists.data/kwargs['bd'])**kwargs['d2'])
-        print(dists.data)
     elif kwargs['gfunc'] == 'exp':
         dists.data = -np.exp(((dists.data/kwargs['bd']) ** kwargs['d2']))
     else:
