@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def calcEmbedding(sims, n_vecs):
     from sklearn.manifold import spectral_embedding
     print('Performing Spectral Embedding')
@@ -12,20 +13,19 @@ def calcEmbedding(sims, n_vecs):
 
     return X_transformed
 
+
 def cluster_embedding(n_range, maps, method='kmeans', score_method='median'):
     print('Clustering Embedded Points')
     from sklearn.preprocessing import normalize
-    if method=='kmeans':
+    if method == 'kmeans':
         from sklearn.cluster import k_means
-    #from sklearn.cluster import MiniBatchKMeans, AgglomerativeClustering
-    #from sklearn.metrics import pairwise_distances
+    # from sklearn.cluster import MiniBatchKMeans, AgglomerativeClustering
+    # from sklearn.metrics import pairwise_distances
     # from sklearn_extra.cluster import KMedoids
 
-    #from sklearn.metrics import silhouette_score
-    #from sklearn.metrics import davies_bouldin_score
+    # from sklearn.metrics import silhouette_score
+    # from sklearn.metrics import davies_bouldin_score
     from .clustering_util import median_score, cluster_types, calcCentroids, calcCosCentroids
-
-
 
     labels = []
     scores = []
@@ -46,7 +46,7 @@ def cluster_embedding(n_range, maps, method='kmeans', score_method='median'):
             centroids = calcCosCentroids(emb, label, n_clusters)
         elif method == 'kmeans':
             centroids, label, inert, n_iter = k_means(emb, n_clusters=n_clusters,
-                                                  return_n_iter=True)
+                                                      return_n_iter=True)
         elif method == 'qr':
             label = cluster_qr(emb)
             centroids = calcCosCentroids(emb, label, n_clusters)
@@ -58,7 +58,6 @@ def cluster_embedding(n_range, maps, method='kmeans', score_method='median'):
                                                       return_n_iter=True)
         else:
             raise Exception('Method should be kmeans, discretize, qr, or qr_init.')
-
 
         labels.append(label)
         cl = np.unique(label)
@@ -73,13 +72,12 @@ def cluster_embedding(n_range, maps, method='kmeans', score_method='median'):
         variances.append(var)
         numtypes.append(ntypes)
 
-
     return labels, scores, variances, numtypes
 
 
 # Adapted from sklearn. May need to change later.
 def discretize(
-    vectors, n_clusters=10, *, copy=False, max_svd_restarts=300, n_iter_max=2000, random_state=None
+        vectors, n_clusters=10, *, copy=False, max_svd_restarts=300, n_iter_max=2000, random_state=None
 ):
     """Search for a partition matrix which is closest to the eigenvector embedding.
     This implementation was proposed in [1]_.
@@ -204,6 +202,7 @@ def discretize(
     if not has_converged:
         raise LinAlgError("SVD did not conve    rge")
     return labels
+
 
 # Also adapted from sklearn, similar method???
 def cluster_qr(vectors):

@@ -1,27 +1,26 @@
 import numpy as np
 import numba as nb
 
-#@nb.njit()
+
+# @nb.njit()
 def fastFlucts(evals, evecs, n_modes, is3d):
     n_d = evecs.shape[0]
     flucts = np.zeros(n_d)
     for i in range(n_modes):
-        flucts += 1/evals[i]*evecs[:,i]**2
+        flucts += 1 / evals[i] * evecs[:, i] ** 2
     if is3d:
         return np.reshape(flucts, (-1, 3)).sum(axis=-1)
     else:
         return flucts
 
 
-#@nb.njit()
+# @nb.njit()
 def checkIcoFlucts(flucts):
-    F = np.reshape(flucts, (60,-1))
+    F = np.reshape(flucts, (60, -1))
     devs = np.ptp(F, axis=0)
     d = np.max(devs)
-    #print('Maximum deviation from icosahedral: ', np.max(devs))
+    # print('Maximum deviation from icosahedral: ', np.max(devs))
     return d
-
-
 
 
 def springFit(bfactors, sqFlucts):
@@ -46,14 +45,13 @@ def springFit(bfactors, sqFlucts):
     return a, b, stderr, ci, pv
 
 
-
 def fluctModes(evals, evecs, bfactors, is3d):
     coeffs = []
     ico_devs = []
 
     for n_modes in range(1, len(evals)):
         flucts = fastFlucts(evals, evecs, n_modes, is3d)
-        cc = np.corrcoef(bfactors,flucts)[1,0]
+        cc = np.corrcoef(bfactors, flucts)[1, 0]
         icodev = checkIcoFlucts(flucts)
         coeffs.append(cc)
         ico_devs.append(icodev)
@@ -86,9 +84,10 @@ def fitBfactors(evals, evecs, bfactors, is3d, fitModes=False, plotModes=False, f
 
     k, intercept, stderr, ci, pv = springFit(bfactors, flucts[:, np.newaxis])
 
-    bfactors_predicted = k*flucts + intercept
+    bfactors_predicted = k * flucts + intercept
 
     return coeff, k, intercept, bfactors_predicted, ci, pv, ico_dev, n_m
+
 
 def plotByMode(mode_indices, data, datalabel):
     import matplotlib.pyplot as plt
@@ -100,10 +99,11 @@ def plotByMode(mode_indices, data, datalabel):
     fig.suptitle(datalabel + ' vs number of low frequency modes')
     plt.show()
 
-def plotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=False, plotModes=False, forceIco=False, icotol=0.002):
 
-    coeff, k, intercept, bfactors_predicted, ci, pv, ico_dev, nmodes = fitBfactors(evals, evecs, bfactors, is3d, fitModes,
-                                                                           plotModes, forceIco, icotol)
+def plotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=False, plotModes=False, forceIco=False, icotol=0.002):
+    coeff, k, intercept, bfactors_predicted, ci, pv, ico_dev, nmodes = fitBfactors(evals, evecs, bfactors, is3d,
+                                                                                   fitModes,
+                                                                                   plotModes, forceIco, icotol)
     print(ci)
     ci = np.abs(ci[0][0] - ci[0][1])
     gamma = (8 * np.pi ** 2) / k
@@ -118,7 +118,6 @@ def plotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=False, plotMod
             'weight': 'normal',
             'size': 11}
     matplotlib.rc('font', **font)
-
 
     n_asym = int(bfactors.shape[0] / 60)
 

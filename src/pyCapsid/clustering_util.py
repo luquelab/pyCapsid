@@ -1,19 +1,20 @@
 import numpy as np
 import numba as nb
 
+
 @nb.njit()
 def calcCentroids(X, labels, n_clusters):
     centroids = np.zeros((labels.shape[0], n_clusters))
     n = n_clusters
     for i in range(n_clusters):
-        mask = (labels==i)
+        mask = (labels == i)
         if not np.any(mask):
             n += -1
-            centroids[i,:] = np.random.rand(n_clusters)
+            centroids[i, :] = np.random.rand(n_clusters)
         else:
-            clust = X[mask,:]
+            clust = X[mask, :]
             cent = np.mean(clust, axis=0)
-            centroids[i,:] = cent
+            centroids[i, :] = cent
 
     if n != n_clusters:
         print('Some clusters unassigned')
@@ -21,20 +22,21 @@ def calcCentroids(X, labels, n_clusters):
 
     return np.array(centroids)
 
+
 @nb.njit()
 def calcCosCentroids(X, labels, n_clusters):
     centroids = np.zeros((n_clusters, n_clusters))
     n = n_clusters
     for i in range(n_clusters):
-        mask = (labels==i)
+        mask = (labels == i)
         if not np.any(mask):
             n += -1
-            centroids[i,:] = np.random.rand(n_clusters)
+            centroids[i, :] = np.random.rand(n_clusters)
         else:
-            clust = X[mask,:]
+            clust = X[mask, :]
             c = np.sum(clust, axis=0)
-            cent = c/np.linalg.norm(c)
-            centroids[i,:] = cent
+            cent = c / np.linalg.norm(c)
+            centroids[i, :] = cent
 
     if n != n_clusters:
         print('Some clusters unassigned')
@@ -72,14 +74,14 @@ def median_score(coords, centroids, score_method):
     #         a = np.mean(d2min[:, 0])
     #     r_score = b / a
 
-    dists = pairwise_distances(coords,centroids, metric='cosine')
+    dists = pairwise_distances(coords, centroids, metric='cosine')
     cdist = pairwise_distances(centroids, centroids, metric='cosine')
     normal = cdist.mean()
-    d2min = np.partition(dists, kth=2)[:,:2]
+    d2min = np.partition(dists, kth=2)[:, :2]
 
-    a = d2min[:,1]
-    b = d2min[:,0]
-    s = a/b
+    a = d2min[:, 1]
+    b = d2min[:, 0]
+    s = a / b
 
     if score_method == 'median':
         score = np.median(s)
@@ -88,26 +90,26 @@ def median_score(coords, centroids, score_method):
 
     return score
 
+
 def cluster_types(labels):
     _, counts = np.unique(labels, return_counts=True)
-    thresh = 0.05*np.mean(counts)
-    counts = np.rint(counts/thresh)*thresh
+    thresh = 0.05 * np.mean(counts)
+    counts = np.rint(counts / thresh) * thresh
     var = np.std(counts)
     ntypes = np.unique(counts).shape[0]
     return var, ntypes
+
 
 def plotScores(pdb, n_range, scores, vars, ntypes):
     import matplotlib
     import matplotlib.pyplot as plt
     import numpy as np
 
-
-
     font = {'family': 'sans-serif',
             'weight': 'normal',
             'size': 10}
 
-    #_, _, title = getPDB(pdb)
+    # _, _, title = getPDB(pdb)
     title = pdb
 
     matplotlib.rc('font', **font)
@@ -121,7 +123,7 @@ def plotScores(pdb, n_range, scores, vars, ntypes):
     ax[1].scatter(n_range, ntypes, marker='D', s=15)
     ax[2].scatter(n_range, vars)
     ax[2].plot(n_range, vars)
-    ax[0].axvline(x=n_range[np.argmax(scores)], label='Best Score = ' + str(n_range[np.argmax(scores)]) , color='black')
+    ax[0].axvline(x=n_range[np.argmax(scores)], label='Best Score = ' + str(n_range[np.argmax(scores)]), color='black')
     ax[1].axvline(x=n_range[np.argmax(scores)], label='Best Score', color='black')
     ax[2].axvline(x=n_range[np.argmax(scores)], label='Best Score', color='black')
     nc = str(n_range[np.argmax(scores)])

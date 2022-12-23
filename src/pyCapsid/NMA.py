@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def modeCalc(hess, n_modes, eigmethod, model):
     import time
     print('Calculating Normal Modes')
@@ -44,14 +45,14 @@ def modeCalc(hess, n_modes, eigmethod, model):
         from cupyx.scipy.sparse.linalg import LinearOperator, spilu
 
         sparse_gpu = cp.sparse.csr_matrix(mat.astype(cp.float32))
-        epredict = cp.random.rand(n_dim, n_modes + 6, dtype = cp.float32)
+        epredict = cp.random.rand(n_dim, n_modes + 6, dtype=cp.float32)
 
         lu = spilu(sparse_gpu, fill_factor=50)  # LU decomposition
         M = LinearOperator(mat.shape, lu.solve)
         print('gpu eigen')
 
-        evals, evecs = clobpcg(sparse_gpu, epredict, M=M,  largest=False, tol=0, verbosityLevel=0)
-        if model=='anm':
+        evals, evecs = clobpcg(sparse_gpu, epredict, M=M, largest=False, tol=0, verbosityLevel=0)
+        if model == 'anm':
             evals = cp.asnumpy(evals[6:])
             evecs = cp.asnumpy(evecs[:, 6:])
         else:
@@ -62,11 +63,11 @@ def modeCalc(hess, n_modes, eigmethod, model):
         import cupyx.scipy.sparse as cpsp
         import cupyx.scipy.sparse.linalg as cpsp_la
         sigma = 1e-10
-        sparse_gpu_shifted = cp.sparse.csr_matrix((mat - sigma*sparse.eye(mat.shape[0])).astype(cp.float32))
-        #mat_shifted = sparse.csc_matrix(mat - sigma*sparse.eye(mat.shape[0]))
-        #lu = sparse.linalg.splu(mat_shifted)
+        sparse_gpu_shifted = cp.sparse.csr_matrix((mat - sigma * sparse.eye(mat.shape[0])).astype(cp.float32))
+        # mat_shifted = sparse.csc_matrix(mat - sigma*sparse.eye(mat.shape[0]))
+        # lu = sparse.linalg.splu(mat_shifted)
         A_gpu_LU = cpsp_la.splu(sparse_gpu_shifted)  # LU decomposition
-        #A_gpu_LO = cpsp_la.LinearOperator(mat_shifted.shape, lu.solve)  # Linear Operator
+        # A_gpu_LO = cpsp_la.LinearOperator(mat_shifted.shape, lu.solve)  # Linear Operator
         A_gpu_LO = cpsp_la.LinearOperator(sparse_gpu_shifted.shape, A_gpu_LU.solve)
 
         eigenvalues_gpu, eigenstates_gpu = cpsp_la.eigsh(A_gpu_LO, k=n_modes, which='LA', tol=0)

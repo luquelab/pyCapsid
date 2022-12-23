@@ -2,7 +2,9 @@ import matplotlib.pyplot as plt
 import numba as nb
 import numpy as np
 
-def buildENM(calphas, coords, cutoff=10, model='anm', cbeta=False, gfunc = 'power', baseDist=1, d_power = 0, backbone=False, k_backbone = 1, l_backbone=1):
+
+def buildENM(calphas, coords, cutoff=10, model='anm', cbeta=False, gfunc='power', baseDist=1, d_power=0, backbone=False,
+             k_backbone=1, l_backbone=1):
     from scipy import sparse
     import numpy as np
     from sklearn.neighbors import BallTree, radius_neighbors_graph, kneighbors_graph
@@ -15,7 +17,7 @@ def buildENM(calphas, coords, cutoff=10, model='anm', cbeta=False, gfunc = 'powe
     dists = distGraph.tocoo().copy()
     dists.sum_duplicates()
 
-    kirch = kirchGamma(dists, gfunc=gfunc, bd= baseDist, d2=d_power)
+    kirch = kirchGamma(dists, gfunc=gfunc, bd=baseDist, d2=d_power)
 
     if backbone:
         kirch = backbonePrody(calphas, kirch.tolil(), kbb, s=bblen)
@@ -25,15 +27,14 @@ def buildENM(calphas, coords, cutoff=10, model='anm', cbeta=False, gfunc = 'powe
     kirch.sum_duplicates()
     kirch = kirch.tocsr()
 
-
-    if model=='anm':
+    if model == 'anm':
         kc = kirch.tocoo().copy()
         kc.sum_duplicates()
         hData = hessCalc(kc.row, kc.col, kirch.data, coords)
         indpt = kirch.indptr
         inds = kirch.indices
-        hessian = sparse.bsr_matrix((hData, inds, indpt), shape=(dof,dof)).tocsr()
-        hessian = fanm*hessian + (1-fanm)*sparse.kron(kirch, np.identity(3))
+        hessian = sparse.bsr_matrix((hData, inds, indpt), shape=(dof, dof)).tocsr()
+        hessian = fanm * hessian + (1 - fanm) * sparse.kron(kirch, np.identity(3))
     else:
         hessian = kirch.copy()
 
@@ -44,16 +45,14 @@ def buildENM(calphas, coords, cutoff=10, model='anm', cbeta=False, gfunc = 'powe
     check_symmetric(kirch, raise_warning=True, tol=1e-5)
     return kirch, hessian
 
-def kirchGamma(dists, **kwargs):
 
+def kirchGamma(dists, **kwargs):
     if kwargs['gfunc'] == 'power':
-        dists.data = -1/((dists.data/kwargs['bd'])**kwargs['d2'])
+        dists.data = -1 / ((dists.data / kwargs['bd']) ** kwargs['d2'])
     elif kwargs['gfunc'] == 'exp':
-        dists.data = -np.exp(((dists.data/kwargs['bd']) ** kwargs['d2']))
+        dists.data = -np.exp(((dists.data / kwargs['bd']) ** kwargs['d2']))
     else:
         dists.data = -np.ones_like(dists.data)
-
-
 
     return dists
 
@@ -62,18 +61,14 @@ def kirchGamma(dists, **kwargs):
 def buildBackbone(bblen, bbgamma, kirch, chain_starts):
     for i in range(len(chain_starts)):
         start = chain_starts[i]
-        stop = chain_starts[i+1] - 1
-        for j in range(start, stop-bblen):
-            ij  = start + j
-            for k in range(1,bblen):
-                kirch[ij, ij + k] = bbgamma/k
-                kirch[ij + k, ij] = bbgamma/k
+        stop = chain_starts[i + 1] - 1
+        for j in range(start, stop - bblen):
+            ij = start + j
+            for k in range(1, bblen):
+                kirch[ij, ij + k] = bbgamma / k
+                kirch[ij + k, ij] = bbgamma / k
 
     return kirch
-
-
-
-
 
 
 def buildMassesCoords(atoms):
@@ -81,7 +76,7 @@ def buildMassesCoords(atoms):
     bfs = []
     masses = []
 
-    #print('segments:', atoms.numSegments())
+    # print('segments:', atoms.numSegments())
 
     for chain in atoms.iterChains():
         for res in chain.iterResidues():
@@ -91,39 +86,38 @@ def buildMassesCoords(atoms):
             bfactor = np.mean(res.getBetas())
             bfs.append(bfactor)
 
-            #coord = res['CA'].getCoords()
-            #coords.append(coord)
+            # coord = res['CA'].getCoords()
+            # coords.append(coord)
 
     return np.asarray(bfs), np.asarray(masses)
-
 
 
 @nb.njit()
 def cooOperation(row, col, data, func, arg):
     r = np.copy(data)
     for n, (i, j, v) in enumerate(zip(row, col, data)):
-        if i==j:
+        if i == j:
             continue
-        r[n] = func(i,j,v, arg)
+        r[n] = func(i, j, v, arg)
     return r
-
 
 
 @nb.njit()
 def hessCalc(row, col, kGamma, coords):
     hData = np.zeros((row.shape[0], 3, 3))
-    dinds = np.nonzero(row==col)[0]
-    for k, (i,j) in enumerate(zip(row,col)):
-        if i==j:
+    dinds = np.nonzero(row == col)[0]
+    for k, (i, j) in enumerate(zip(row, col)):
+        if i == j:
             continue
         dvec = coords[j] - coords[i]
         d2 = np.dot(dvec, dvec)
         g = kGamma[k]
-        hblock = np.outer(dvec, dvec) * (g / d2) # + (1-fanm)*np.identity(3)*g
-        hData[k,:,:] = hblock
+        hblock = np.outer(dvec, dvec) * (g / d2)  # + (1-fanm)*np.identity(3)*g
+        hData[k, :, :] = hblock
         hData[dinds[i]] += -hblock
-        #hData[dinds[j]] += -hblock
+        # hData[dinds[j]] += -hblock
     return hData
+
 
 def backbonePrody(calphas, kirch, k, s):
     k = -k
@@ -135,39 +129,37 @@ def backbonePrody(calphas, kirch, k, s):
     # kirch[0,1:3] = -k
     # kirch[1:3, 0] = -k
     nch = 0
-    #kbbs = np.array([k,k/2,k/4])[:s]
+    # kbbs = np.array([k,k/2,k/4])[:s]
     for i, ca in enumerate(calphas.iterAtoms()):
         if count == 0:
-            for j in range(2*s):
-                kirch[i,i+j+1] = k/(j+1)
-                kirch[i+j+1, i] = k / (j+1)
+            for j in range(2 * s):
+                kirch[i, i + j + 1] = k / (j + 1)
+                kirch[i + j + 1, i] = k / (j + 1)
             count += 1
             continue
-        elif count<s:
+        elif count < s:
             for j in range(count):
-                kirch[i, i-j-1] = k/(j+1)
-                kirch[i-j-1, i] = k / (j+1)
-            for j in range(2*s - count):
-                kirch[i,i+j+1] = k/(j+1)
-                kirch[i+j+1, i] = k / (j+1)
+                kirch[i, i - j - 1] = k / (j + 1)
+                kirch[i - j - 1, i] = k / (j + 1)
+            for j in range(2 * s - count):
+                kirch[i, i + j + 1] = k / (j + 1)
+                kirch[i + j + 1, i] = k / (j + 1)
             count += 1
             continue
         if ca.getChid() == ch0 and ca.getSegname() == seg0:
             for j in range(s):
-                kirch[i,i-j-1] = k/(j+1)
-                kirch[i - j - 1,i] = k / (j + 1)
+                kirch[i, i - j - 1] = k / (j + 1)
+                kirch[i - j - 1, i] = k / (j + 1)
             count += 1
         else:
             chid += 1
-            #print(ch0, seg0, 'done')
+            # print(ch0, seg0, 'done')
             ch0 = ca.getChid()
             seg0 = ca.getSegname()
             count = 0
             nch += 1
     print(nch)
     return kirch.tocoo()
-
-
 
 
 def betaCarbonModel(calphas):
@@ -199,9 +191,8 @@ def betaCarbonModel(calphas):
     kirch.sum_duplicates()
     kirch = kirch.tocsr()
 
-
     btree = BallTree(betaCoords)
-    betaKirch = radius_neighbors_graph(btree, cutoff, mode='distance',  n_jobs=-1).tocoo()
+    betaKirch = radius_neighbors_graph(btree, cutoff, mode='distance', n_jobs=-1).tocoo()
     betaKirch.eliminate_zeros()
     betaKirch = kirchGamma(betaKirch.tocoo(), bfactors, d2=d2)
     dg = np.array(betaKirch.sum(axis=0))
@@ -234,7 +225,8 @@ def betaCarbonModel(calphas):
     kbc = betaKirch.tocoo().copy()
     kbc.sum_duplicates()
     row, col = (kbc.row, kbc.col)
-    hbrow, hbcol, hbdata, kbrow, kbcol, kbdata = bbHess(row, col, betaCoords, nobetas, bvals, aBetas, betaKirch.data, fanm)
+    hbrow, hbcol, hbdata, kbrow, kbcol, kbdata = bbHess(row, col, betaCoords, nobetas, bvals, aBetas, betaKirch.data,
+                                                        fanm)
     hbb = sparse.coo_matrix((hbdata, (hbrow, hbcol)), shape=(dof, dof)).tocsr()
     kbb = sparse.coo_matrix((kbdata, (kbrow, kbcol)), shape=(n_atoms, n_atoms)).tocsr()
     hbb.eliminate_zeros()
@@ -243,30 +235,30 @@ def betaCarbonModel(calphas):
     kbb.sum_duplicates()
 
     print('ab Hess')
-    #abKirch = kirchGamma(abKirch.tocoo(), bfactors, d2=d2).tocoo()
+    # abKirch = kirchGamma(abKirch.tocoo(), bfactors, d2=d2).tocoo()
     abKirch.eliminate_zeros()
     abKirch.sum_duplicates()
     row, col, dat = (abKirch.row, abKirch.col, abKirch.data)
 
-    hrow, hcol, habData, krow, kcol, kabData = abHessOnly(row, col, dat, betaCoords, coords, nobetas, bvals, aBetas, fanm)
-    hab = sparse.coo_matrix((habData, (hrow, hcol)), shape=(dof,dof)).tocsr()
+    hrow, hcol, habData, krow, kcol, kabData = abHessOnly(row, col, dat, betaCoords, coords, nobetas, bvals, aBetas,
+                                                          fanm)
+    hab = sparse.coo_matrix((habData, (hrow, hcol)), shape=(dof, dof)).tocsr()
     kab = sparse.coo_matrix((kabData, (krow, kcol)), shape=(n_atoms, n_atoms)).tocsr()
-
 
     from sklearn.utils.validation import check_symmetric
     check_symmetric(haa, raise_exception=True, tol=1e-5)
     check_symmetric(hbb, raise_exception=True, tol=1e-5)
     check_symmetric(hab, raise_exception=True, tol=1e-5)
     print(kirch.shape, kbb.shape, kab.shape)
-    hess = aaGamma*haa + bbGamma*hbb + abGamma*hab
+    hess = aaGamma * haa + bbGamma * hbb + abGamma * hab
 
     kirchoff = kirch * aaGamma + kbb * bbGamma + kab * abGamma
     check_symmetric(hess, raise_warning=True, tol=1e-5)
     print(hess.data)
     hess.eliminate_zeros()
 
-    start = 3*0
-    stop = 3*30
+    start = 3 * 0
+    stop = 3 * 30
 
     fig, ax = plt.subplots()
     mat = ax.matshow(haa[start:stop, start:stop].todense())
@@ -293,19 +285,18 @@ def betaCarbonModel(calphas):
     plt.show()
     checkHessStrength(kirchoff, hess)
 
-
     return kirchoff, hess
 
+
 def checkHessStrength(k, h):
-    hd = h.diagonal().reshape((-1,3))
+    hd = h.diagonal().reshape((-1, 3))
     kd = k.diagonal()
-    hd = np.sum(hd,axis=-1)
+    hd = np.sum(hd, axis=-1)
     print(np.min(hd))
     print(hd)
     print(kd)
-    print('total connections', np.sum(hd),np.sum(kd))
+    print('total connections', np.sum(hd), np.sum(kd))
     print('matrix sum', h.sum())
-
 
 
 # @nb.njit()
@@ -321,23 +312,24 @@ def buildBetas(coords, calphas):
     seg0 = calphas[0].getSegname()
     nch = 0
     for i, ca in enumerate(calphas.iterAtoms()):
-        if ca.getResname()=='GLY':
-            #bcoords[i, :] = coords[i, :]
+        if ca.getResname() == 'GLY':
+            # bcoords[i, :] = coords[i, :]
             noBetas.append(i)
             bvals.append(0)
-            #print('nobeta', i)
+            # print('nobeta', i)
             count += 1
-        elif count==0 or i==na-1:
-            #bcoords[i, :] = coords[i, :]
+        elif count == 0 or i == na - 1:
+            # bcoords[i, :] = coords[i, :]
             aBetas.append(i)
-            #noBetas.append(i)
-           # print('abeta', i)
+            # noBetas.append(i)
+            # print('abeta', i)
             # b = 1/np.linalg.norm(coords[i, :])
             bvals.append(1)
             count += 1
-        elif ca.getChid() == ch0 and ca.getSegname() == seg0 and calphas[i-1].getChid() == ch0 and calphas[i-1].getSegname() == seg0 and calphas[i+1].getChid() == ch0 and calphas[i+1].getSegname() == seg0:
+        elif ca.getChid() == ch0 and ca.getSegname() == seg0 and calphas[i - 1].getChid() == ch0 and calphas[
+            i - 1].getSegname() == seg0 and calphas[i + 1].getChid() == ch0 and calphas[i + 1].getSegname() == seg0:
             r = 2 * coords[i, :] - coords[i - 1, :] - coords[i + 1, :]
-            b = 1/np.linalg.norm(r)
+            b = 1 / np.linalg.norm(r)
             bvals.append(b)
             bcoords[i, :] = coords[i, :] + 3.0 * r * b
             count += 1
@@ -355,15 +347,12 @@ def buildBetas(coords, calphas):
     return bcoords, np.array(bvals), np.array(noBetas), np.array(aBetas)
 
 
-
-
 @nb.njit()
 def bbHessOnly(row, col, bcoords, nobetas, kGamma):
-
     hData = np.zeros((row.shape[0], 3, 3))
     dinds = np.nonzero(row == col)[0]
     for k, (i, j) in enumerate(zip(row, col)):
-        if abs(i - j) <= 1 or np.any(nobetas==i) or np.any(nobetas==j):
+        if abs(i - j) <= 1 or np.any(nobetas == i) or np.any(nobetas == j):
             continue
 
         dvec = bcoords[j] - bcoords[i]
@@ -376,9 +365,9 @@ def bbHessOnly(row, col, bcoords, nobetas, kGamma):
 
     return hData
 
+
 @nb.njit()
 def bbHess(row, col, bcoords, nobetas, bvals, abetas, kGamma, fanm):
-
     nrow = []
     ncol = []
     hData = []
@@ -387,51 +376,49 @@ def bbHess(row, col, bcoords, nobetas, bvals, abetas, kGamma, fanm):
     kData = []
     n = bcoords.shape[0]
 
-    for k, (i,j) in enumerate(zip(row, col)):
-        if np.any(nobetas == j) or np.any(nobetas==i) or abs(i-j) <= 1:
+    for k, (i, j) in enumerate(zip(row, col)):
+        if np.any(nobetas == j) or np.any(nobetas == i) or abs(i - j) <= 1:
             continue
         rvec = bcoords[i] - bcoords[j]
         d2 = np.dot(rvec, rvec)
         g = kGamma[k]
         bi = bvals[i]
         bj = bvals[j]
-        hblock = -(fanm*np.outer(rvec, rvec)+ (1-fanm)*np.identity(3)) * (g / d2)/2  # + (1-fanm)*np.identity(3)*g
-        ijs = (3*i, 3*i+3, 3*i-3, 3*j, 3*j+3, 3*j-3)
-
-
+        hblock = -(fanm * np.outer(rvec, rvec) + (1 - fanm) * np.identity(3)) * (
+                    g / d2) / 2  # + (1-fanm)*np.identity(3)*g
+        ijs = (3 * i, 3 * i + 3, 3 * i - 3, 3 * j, 3 * j + 3, 3 * j - 3)
 
         if np.any(j == abetas):
-            cjs = (-1,0,0)
+            cjs = (-1, 0, 0)
         else:
-            cjs = (-(1 + 6 * bj),3 * bj, 3 * bj)
+            cjs = (-(1 + 6 * bj), 3 * bj, 3 * bj)
 
         if np.any(i == abetas):
-            cis = (1,0,0)
+            cis = (1, 0, 0)
         else:
-            cis = ((1 + 6 * bi),-3 * bi, -3 * bi)
+            cis = ((1 + 6 * bi), -3 * bi, -3 * bi)
         cs = cis + cjs
 
-
-        for ci, ii in zip(cs,ijs):
-            if ci==0:
+        for ci, ii in zip(cs, ijs):
+            if ci == 0:
                 continue
-            for cj, jj in zip(cs,ijs):
-                if cj==0:
+            for cj, jj in zip(cs, ijs):
+                if cj == 0:
                     continue
-                krow.append(int(ii/3))
+                krow.append(int(ii / 3))
                 kcol.append(int(jj / 3))
-                kData.append(-ci*cj*g)
+                kData.append(-ci * cj * g)
                 for l in range(3):
                     for m in range(3):
-                        nrow.append(ii+l)
-                        ncol.append(jj+m)
-                        hData.append(ci*cj*hblock[l,m])
+                        nrow.append(ii + l)
+                        ncol.append(jj + m)
+                        hData.append(ci * cj * hblock[l, m])
 
     return nrow, ncol, hData, krow, kcol, kData
 
+
 @nb.njit()
 def abHessOnly(row, col, kGamma, bcoords, coords, nobetas, bvals, abetas, fanm):
-
     nrow = []
     ncol = []
     hData = []
@@ -439,43 +426,43 @@ def abHessOnly(row, col, kGamma, bcoords, coords, nobetas, bvals, abetas, fanm):
     krow = []
     kcol = []
     kData = []
-    for k, (i,j) in enumerate(zip(row, col)):
-        if np.any(nobetas == j) or abs(i-j) <= 1:
+    for k, (i, j) in enumerate(zip(row, col)):
+        if np.any(nobetas == j) or abs(i - j) <= 1:
             continue
         rvec = coords[i] - bcoords[j]
         d2 = np.dot(rvec, rvec)
         g = kGamma[k]
         b = bvals[j]
-        hblock = -(fanm*np.outer(rvec, rvec) + (1-fanm)*np.identity(3)) * (g / d2)
+        hblock = -(fanm * np.outer(rvec, rvec) + (1 - fanm) * np.identity(3)) * (g / d2)
 
-        ijs = (3*i, 3*j, 3*j+3, 3*j-3)
-
+        ijs = (3 * i, 3 * j, 3 * j + 3, 3 * j - 3)
 
         if np.any(j == abetas):
-            cjs = (-1.,0,0)
+            cjs = (-1., 0, 0)
         else:
-            cjs = (-(1 + 6 * b),3 * b, 3 * b)
+            cjs = (-(1 + 6 * b), 3 * b, 3 * b)
 
         cis = (1.,)
 
         cs = cis + cjs
 
-        for ci, ii in zip(cs,ijs):
-            if ci==0:
+        for ci, ii in zip(cs, ijs):
+            if ci == 0:
                 continue
-            for cj, jj in zip(cs,ijs):
-                if cj==0.:
+            for cj, jj in zip(cs, ijs):
+                if cj == 0.:
                     continue
                 krow.append(int(ii / 3))
                 kcol.append(int(jj / 3))
                 kData.append(-ci * cj * g)
                 for l in range(3):
                     for m in range(3):
-                        nrow.append(ii+l)
-                        ncol.append(jj+m)
-                        hData.append(ci*cj*hblock[l,m])
+                        nrow.append(ii + l)
+                        ncol.append(jj + m)
+                        hData.append(ci * cj * hblock[l, m])
 
     return nrow, ncol, hData, krow, kcol, kData
+
 
 def buildBetaTransform(natoms, bvals, nobetas, aBetas):
     from scipy import sparse
@@ -490,10 +477,10 @@ def buildBetaTransform(natoms, bvals, nobetas, aBetas):
             else:
                 b = bvals[i]
                 for j in range(3):
-                    ind = 3*i
-                    bT[ind+j,ind+j] = 1 + 6*b
-                    bT[ind + j, ind + j-3] = -3*b
-                    bT[ind + j, ind + j + 3] = -3*b
+                    ind = 3 * i
+                    bT[ind + j, ind + j] = 1 + 6 * b
+                    bT[ind + j, ind + j - 3] = -3 * b
+                    bT[ind + j, ind + j + 3] = -3 * b
     return bT.tocsr()
 
 
@@ -506,9 +493,9 @@ def addSulfideBonds(sulfs, kirch):
     sNodes = sulfs.getData('nodeid')
     kirch = kirch.tocsr()
     for i, n in enumerate(sNodes):
-        neighbors = np.nonzero(adjacency[i,:]==1)
+        neighbors = np.nonzero(adjacency[i, :] == 1)
         print(neighbors)
-        kirch[i, neighbors] = kirch[i, neighbors]*100
+        kirch[i, neighbors] = kirch[i, neighbors] * 100
 
     return kirch.tocoo()
 
@@ -525,6 +512,7 @@ def addIonBonds(atoms, kirch, dists):
 
     return kirch
 
+
 def buildChemENM(capsid):
     from scipy import sparse
     import numpy as np
@@ -532,7 +520,7 @@ def buildChemENM(capsid):
     import biotite.structure as struc
     calphas = capsid[capsid.atom_name == 'CA']
     print("Number of protein residues:", struc.get_residue_count(capsid))
-    coords = calphas.coord #struc.apply_residue_wise(capsid, capsid.coord, np.average, axis=0)
+    coords = calphas.coord  # struc.apply_residue_wise(capsid, capsid.coord, np.average, axis=0)
     n_atoms = coords.shape[0]
 
     from bondStrengths import detect_disulfide_bonds
@@ -547,7 +535,7 @@ def buildChemENM(capsid):
     hbonds = hbondSites(capsid)
     print(hbonds.shape[0])
 
-    print('# Atoms ',n_atoms)
+    print('# Atoms ', n_atoms)
     dof = n_atoms * 3
 
     tree = BallTree(coords)
@@ -562,37 +550,39 @@ def buildChemENM(capsid):
     kirch.sum_duplicates()
     print(kirch.data)
 
-    if model=='anm':
+    if model == 'anm':
         kc = kirch.tocoo().copy()
         kc.sum_duplicates()
         hData = hessCalc(kc.row, kc.col, kirch.data, coords)
         indpt = kirch.indptr
         inds = kirch.indices
-        hessian = sparse.bsr_matrix((hData, inds, indpt), shape=(dof,dof)).tocsr()
-        hessian = fanm*hessian + (1-fanm)*sparse.kron(kirch, np.identity(3))
+        hessian = sparse.bsr_matrix((hData, inds, indpt), shape=(dof, dof)).tocsr()
+        hessian = fanm * hessian + (1 - fanm) * sparse.kron(kirch, np.identity(3))
     else:
         hessian = kirch.copy()
     print('done constructing matrix')
     return kirch, hessian
 
+
 def kirchChem(kirch, hbonds, sulfbonds, salts):
     kg = kirch.copy()
-    kg.data = -1/kg.data**2
+    kg.data = -1 / kg.data ** 2
 
     for ij in hbonds:
         i, j = (ij[0], ij[1])
-        kg[i,j] = -10
+        kg[i, j] = -10
 
     for ij in salts:
         i, j = (ij[0], ij[1])
-        kg[i,j] = -10
+        kg[i, j] = -10
 
     for ij in sulfbonds:
         i, j = (ij[0], ij[1])
-        kg[i,j] = -100
+        kg[i, j] = -100
 
-    kg.data = np.where(kg.data<=-1/(3**2), -100, kg.data)
+    kg.data = np.where(kg.data <= -1 / (3 ** 2), -100, kg.data)
     return kg
+
 
 def bondAngles(ivec, jvec, kvec):
     rij = jvec - ivec
@@ -600,7 +590,7 @@ def bondAngles(ivec, jvec, kvec):
     dij = np.linalg.norm(rij)
     djk = np.linalg.norm(rij)
     G = np.dot(rij, rjk) / (dij * djk)
-    rblock = np.zeros((3,3))
+    rblock = np.zeros((3, 3))
     for i in range(3):
         for j in range(3):
-            rblock[i,j]
+            rblock[i, j]
