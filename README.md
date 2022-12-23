@@ -1,16 +1,15 @@
 # pyCapsid
 
 ## WHAT
-This repository provides the default structure for projects in the Luque Lab.
+A set of computational tools written in python for the analysis of viral capsids
 
 ## WHO
 The template was originally concived by Antoni Luque based on recommendations from Noble PLoS Comp Biol 2009, Wilson et al PLoS Comp Biol 2017, and Briney "Data Management for Researchers" (2015), Hunt and Thomas "The Pragmatic Programmer: Your Journey to Mastery" (2019 2nd ed).
 
 ## WHEN
 This is an evolving repository
-Started: 2021-05-10
+Started: 2022-10-24
 
-End: ...
 
 ## FILES & FOLDERS
 FOLDER: /bin
@@ -26,6 +25,16 @@ FOLDER: /results
 --> This folder contains the results, performance analysis, and commented references associated with the project.
 
 FOLDER: /src
---> This folder contains source code files that require compilation.
+--> This folder contains source code of the package.
 
 The syntax of markdown files (.md) is CommonMark unless specified otherwise (https://commonmark.org/help/)
+
+## Install
+To install using pip:
+~~~
+pip install pyCapsid
+~~~
+
+## Examples
+An example jupyter notebook can be found in /notebooks/example_notebook.ipynb
+
