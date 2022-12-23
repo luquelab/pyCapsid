@@ -1,139 +1,131 @@
-import numpy as np
 import numba as nb
+import numpy as np
 
-#@nb.njit()
-def fastFlucts(evals, evecs, n_modes, is3d):
-    n_d = evecs.shape[0]
-    flucts = np.zeros(n_d)
-    for i in range(n_modes):
-        flucts += 1/evals[i]*evecs[:,i]**2
-    if is3d:
-        return np.reshape(flucts, (-1, 3)).sum(axis=-1)
-    else:
-        return flucts
+def calcCovMat(evals, evecs, n_modes, coords, fluct_cutoff, is3d=True):
+    from scipy import sparse
+    from sklearn.neighbors import BallTree, radius_neighbors_graph
 
+    n_modes = int(n_modes)
+    print(n_modes)
+    print('Direct Calculation Method')
 
-#@nb.njit()
-def checkIcoFlucts(flucts):
-    F = np.reshape(flucts, (60,-1))
-    devs = np.ptp(F, axis=0)
-    d = np.max(devs)
-    #print('Maximum deviation from icosahedral: ', np.max(devs))
-    return d
-
-
-
-
-def springFit(bfactors, sqFlucts):
-    import statsmodels.api as sm
-
-    intercept = False
-    if intercept:
-        sqFlucts = sm.add_constant(sqFlucts)
-    M = sm.RLM(bfactors, sqFlucts, M=sm.robust.norms.HuberT())
-    results = M.fit()
-    print(results.summary())
-    a = results.params[-1]
-    stderr = results.bse * np.sqrt(bfactors.shape[0])
-    pv = results.pvalues
-    ci = results.conf_int(alpha=0.1)
-
-    if intercept:
-        b = results.params[0]
-    else:
-        b = 0
-
-    return a, b, stderr, ci, pv
-
-
-
-def fluctModes(evals, evecs, bfactors, is3d):
-    coeffs = []
-    ico_devs = []
-
-    for n_modes in range(1, len(evals)):
-        flucts = fastFlucts(evals, evecs, n_modes, is3d)
-        cc = np.corrcoef(bfactors,flucts)[1,0]
-        icodev = checkIcoFlucts(flucts)
-        coeffs.append(cc)
-        ico_devs.append(icodev)
-    return coeffs, ico_devs
-
-
-def fitBfactors(evals, evecs, bfactors, is3d, fitModes=False, plotModes=False, forceIco=False, icotol=0.002):
-    n_modes = evals.shape[0]
-    if fitModes:
-        coeffs, ico_devs = fluctModes(evals, evecs, bfactors, is3d)
-
-        if plotModes:
-            plotByMode(np.arange(1, n_modes), coeffs, 'CC')
-            plotByMode(np.arange(1, n_modes), ico_devs, 'Icosahedral Deviation')
-
-        if forceIco:
-            icoI = np.nonzero(np.array(ico_devs) < icotol)
-            n_m = np.argmax(np.array(coeffs)[icoI])
-            coeff = np.array(coeffs)[icoI][n_m]
-            ico_dev = np.array(ico_devs)[icoI][n_m]
-        else:
-            n_m = np.argmax(coeffs)
-            coeff = coeffs[n_m]
-            ico_dev = ico_devs[n_m]
-
-        flucts = fastFlucts(evals, evecs, n_m, is3d)
-    else:
-        flucts = fastFlucts(evals, evecs, n_modes, is3d)
-        coeff = np.corrcoef(bfactors, flucts)[1, 0]
-        ico_dev = checkIcoFlucts(flucts)
-
-    k, intercept, stderr, ci, pv = springFit(bfactors, flucts[:, np.newaxis])
-
-    bfactors_predicted = k*flucts + intercept
-
-    return coeff, k, intercept, bfactors_predicted, ci, pv, ico_dev
-
-def plotByMode(mode_indices, data, datalabel):
-    import matplotlib.pyplot as plt
-    print('WHAT')
-    fig, ax = plt.subplots(1, 1)
-    ax.plot(mode_indices, data)
-    # ax[0].vlines(nModes, np.min(coeffs), np.max(coeffs))
-    ax.set_xlabel('Number Of Modes')
-    ax.set_ylabel(datalabel)
-    fig.suptitle(datalabel + ' vs number of low frequency modes')
-    plt.show()
-
-def plotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=False, plotModes=False, forceIco=False, icotol=0.002):
-
-    coeff, k, intercept, bfactors_predicted, ci, pv, ico_dev = fitBfactors(evals, evecs, bfactors, is3d, fitModes,
-                                                                           plotModes, forceIco, icotol)
-    print(ci)
-    ci = np.abs(ci[0][0] - ci[0][1])
-    gamma = (8 * np.pi ** 2) / k
+    tree = BallTree(coords)
+    adj = radius_neighbors_graph(tree, fluct_cutoff, mode='connectivity', n_jobs=-1).tocoo()
+    adj.setdiag(1)
+    row, col = adj.row, adj.col
 
     if is3d:
-        gamma = gamma / 3
+        data = con_c(evals, evecs, row, col)
+        covariance = sparse.coo_matrix((data, (row, col)), shape=adj.shape)
+    else:
+        data = gCon_c(evals, evecs, row, col)
+        covariance = sparse.coo_matrix((data, (row, col)), shape=adj.shape)
 
+    return covariance
+
+
+def calcDistFlucts(evals, evecs, n_modes, coords, fluct_cutoff, is3d=True):
+    from scipy import sparse
+
+    covariance = calcCovMat(evals, evecs, n_modes, coords, fluct_cutoff, is3d)
+    c_diag = covariance.diagonal()
+    row, col, c_data = (covariance.row, covariance.col, covariance.data)
+    print('diag: ', c_diag)
+    print('data: ', c_data)
+
+    fluct_data = distFluctFromCov(c_diag, c_data, row, col)
+    print(fluct_data)
+
+    dist_flucts = sparse.coo_matrix((fluct_data, (row, col)), shape=covariance.shape)
+
+    return dist_flucts
+
+
+
+@nb.njit()
+def con_c(evals, evecs, row, col):
+    data = []
+    for k in range(row.shape[0]):
+        i, j = (row[k], col[k])
+        data.append(cov(evals, evecs, i, j))
+    return np.array(data)
+
+@nb.njit()
+def gCon_c(evals, evecs, row, col):
+    data = []
+    for k in range(row.shape[0]):
+        i, j = (row[k], col[k])
+        c = gCov(evals, evecs, i, j)
+        data.append(c)
+    return np.array(data)
+
+@nb.njit(parallel=True)
+def cov(evals, evecs, i, j):
+    # Calculates the covariance between two residues in ANM. Takes the trace of block so no anisotropy info.
+    # Commented section would compute normalized covariances
+    n_e = evals.shape[0]
+    # n_d = evecs.shape[1]
+    tr1 = 0
+    #tr2 = 0
+    #tr3 = 0
+    for n in nb.prange(n_e):
+        l = evals[n]
+        tr1 += 1 / l * (evecs[3 * i, n] * evecs[3 * j, n] + evecs[3 * i + 1, n] * evecs[3 * j + 1, n] + evecs[
+            3 * i + 2, n] * evecs[3 * j + 2, n])
+        # tr2 += 1 / l * (evecs[3 * i, n] * evecs[3 * i, n] + evecs[3 * i + 1, n] * evecs[3 * i + 1, n] + evecs[
+        #     3 * i + 2, n] * evecs[3 * i + 2, n])
+        # tr3 += 1 / l * (evecs[3 * j, n] * evecs[3 * j, n] + evecs[3 * j + 1, n] * evecs[3 * j + 1, n] + evecs[
+        #     3 * j + 2, n] * evecs[3 * j + 2, n])
+    cov = tr1#  / np.sqrt(tr2 * tr3)
+    return cov
+
+@nb.njit(parallel=False)
+def gCov(evals, evecs, i, j):
+    # Calculates the covariance between two residues in GNM
+    n_e = evals.shape[0]
+    c = 0
+    for n in range(n_e):
+        l = evals[n]
+        c += 1 / l * (evecs[i, n] * evecs[j, n])
+    return c
+
+@nb.njit()
+def distFluctFromCov(c_diag, c_data, row, col):
+    d_data = []
+    for k in range(row.shape[0]):
+        i, j = (row[k], col[k])
+        d = np.abs(c_diag[i] + c_diag[j] - 2 * c_data[k])
+        d_data.append(d)
+    return np.array(d_data)
+
+def fluctPlot(d, title, pdb):
     import matplotlib.pyplot as plt
+    print('Plotting Fluctuation Histogram')
     import matplotlib
     fig, ax = plt.subplots(1, 1, figsize=(10, 5))
     font = {'family': 'sans-serif',
             'weight': 'normal',
             'size': 11}
     matplotlib.rc('font', **font)
-
-
-    n_asym = int(bfactors.shape[0] / 60)
-
-    ax.plot(np.arange(bfactors.shape[0])[:n_asym], bfactors[:n_asym], label='b-factors (Experimental)')
-    ax.plot(np.arange(bfactors_predicted.shape[0])[:n_asym], bfactors_predicted[:n_asym], label='b-factors (Predicted)')
-    ax.set_ylabel(r'$Å^{2}$', fontsize=12)
-    ax.set_xlabel('Residue Number', fontsize=12)
+    print('Plotting')
+    ax.set_ylabel('Density', fontsize=12)
+    ax.set_xlabel('$A^{2}$', fontsize=12)
     ax.tick_params(axis='y', labelsize=8)
     ax.tick_params(axis='x', labelsize=8)
-
     ax.legend()
     fig.suptitle(
-        'Experimental vs Predicted b-factors: ' + ' (' + pdb + ')' + "\n" + r' $\gamma = $' + "{:.3e}".format(
-            gamma) + r'$\pm$' + "{:.3e}".format(ci) + r'$ \frac{dyn}{cm}$' + '  CC = ' + "{:.3f}".format(
-            coeff), fontsize=12)
+        'Histogram Of Pairwise Fluctuations: ' + title + ' (' + pdb + ')', fontsize=12)
+
+    ax.hist(d.data, bins='fd', histtype='stepfilled', density=True)
+    fig.tight_layout()
     plt.show()
+
+def fluctToSims(d):
+    from scipy import sparse
+    d_bar = np.mean(np.sqrt(d.data))
+    print('RMS distance fluctuations: ', d_bar)
+    sigma = 1 / (2 * d_bar ** 2)
+    data = d.data
+    data = np.exp(-sigma*data ** 2)
+    sims = sparse.coo_matrix((data, (d.row, d.col)), shape=d.shape)
+    return sims

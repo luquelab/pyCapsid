@@ -22,6 +22,7 @@ setup(
         'scipy',
         'matplotlib',
         'numba'
+        'statsmodels'
     ],
     tests_require=[
         'matplotlib',  # Need to create tests to determine this
