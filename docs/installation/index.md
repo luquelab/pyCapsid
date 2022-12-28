@@ -11,7 +11,5 @@ Via pip:
 pip install pyCapsid
 ~~~~
 
-Via conda:
-~~~~
-conda install -c conda-forge pyCapsid
-~~~~
+Via conda: 
+(Coming soon)
