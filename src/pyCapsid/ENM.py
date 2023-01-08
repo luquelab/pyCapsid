@@ -3,7 +3,7 @@ import numba as nb
 import numpy as np
 
 
-def buildENM(calphas, coords, cutoff=10, model='anm', cbeta=False, gfunc='power', baseDist=1, d_power=0, backbone=False,
+def buildENM(calphas, coords, cutoff=10, model='anm', fanm=1, cbeta=False, gfunc='power', base_dist=1, d_power=0, backbone=False,
              k_backbone=1, l_backbone=1):
     from scipy import sparse
     import numpy as np
@@ -17,7 +17,7 @@ def buildENM(calphas, coords, cutoff=10, model='anm', cbeta=False, gfunc='power'
     dists = distGraph.tocoo().copy()
     dists.sum_duplicates()
 
-    kirch = kirchGamma(dists, gfunc=gfunc, bd=baseDist, d2=d_power)
+    kirch = kirchGamma(dists, gfunc=gfunc, bd=base_dist, d2=d_power)
 
     if backbone:
         kirch = backbonePrody(calphas, kirch.tolil(), kbb, s=bblen)
