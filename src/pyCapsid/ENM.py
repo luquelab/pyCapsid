@@ -4,7 +4,7 @@ import numpy as np
 
 
 def buildENM(calphas, coords, cutoff=10, model='anm', fanm=1, cbeta=False, gfunc='power', base_dist=1, d_power=0, backbone=False,
-             k_backbone=1, l_backbone=1):
+             k_backbone=1, l_backbone=1, chain_starts=np.array([0,0])):
     from scipy import sparse
     import numpy as np
     from sklearn.neighbors import BallTree, radius_neighbors_graph, kneighbors_graph
@@ -20,7 +20,7 @@ def buildENM(calphas, coords, cutoff=10, model='anm', fanm=1, cbeta=False, gfunc
     kirch = kirchGamma(dists, gfunc=gfunc, bd=base_dist, d2=d_power)
 
     if backbone:
-        kirch = backbonePrody(calphas, kirch.tolil(), kbb, s=bblen)
+        kirch = buildBackbone(l_backbone, k_backbone, kirch, chain_starts)
 
     dg = np.array(kirch.sum(axis=0))
     kirch.setdiag(-dg[0])
