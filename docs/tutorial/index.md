@@ -6,8 +6,8 @@ nav_order: 3
 
 # Tutorial Notebook
 
-An example notebook is provided in the notebooks folder. To run this notebook and visualize the results we recommend
-following this tutorial.
+An example notebook is provided in the notebooks folder (https://github.com/luquelab/pyCapsid/tree/main/notebooks). 
+This tutorial covers what is necessary to run the notebook.
 
 First, create a new virtual environment using conda and then activate it.
 
