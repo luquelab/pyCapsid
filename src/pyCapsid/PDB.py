@@ -1,18 +1,34 @@
-def getCapsid(pdb, dir='.', pdbx=False, local=False, chains='', chains_clust=''):
+def getCapsid(pdb, dir='.', pdbx=False, local=False, save=False, chains='', chains_clust=''):
+    """Downloads and opens molecular data from a PDB entry or loads data from a local file.
+
+    :arg pdb: PDB id of entry to download. Can also be the name of a local file
+    :arg dir: Target directory where download will be placed
+    :arg pdbx: Whether the target structure should be acquired in pdbx/mmcif format
+    :arg local: Whether to instead load a local file
+    :arg save: Whether to save a copy of the complete assembly as pdb/pdbx. This is necessary if visualizing an assembly
+    in external software.
+    :arg chains: List of chains from the entry to include in the ENM model
+    :arg chains_clust: List of chains that will be assigned to quasi-rigid clusters. Must be a subset of 'chains'
+    """
     if local:
         filename = dir + pdb
     else:
         filename = downloadPDB(pdb, dir, pdbx)
 
     if pdbx:
-        capsid, calphas, coords, bfactors, title = loadPDBx(filename, pdb)
+        capsid, calphas, coords, bfactors, chain_starts, title = loadPDBx(filename, pdb, save)
     else:
-        capsid, calphas, coords, bfactors, title = loadPDB(filename, pdb)
+        capsid, calphas, coords, bfactors, chain_starts, title = loadPDB(filename, pdb, save)
 
-    return capsid, calphas, coords, bfactors, title
+    return capsid, calphas, coords, bfactors, chain_starts, title
 
 
 def downloadPDB(pdb, dir='.', pdbx=False):
+    """Downloads pdb and returns the filename
+        :arg pdb: PDB id of entry to download. Can also be the name of a local file
+        :arg dir: Target directory where download will be placed
+        :arg pdbx: Whether the target structure should be acquired in pdbx/mmcif format
+    """
     from biotite.database.rcsb import fetch
     if pdbx:
         filename = fetch(pdb, target_path=dir, format='pdbx', overwrite=False, verbose=True)
@@ -22,7 +38,13 @@ def downloadPDB(pdb, dir='.', pdbx=False):
     return filename
 
 
-def loadPDBx(filename, pdb):
+def loadPDBx(filename, pdb, save):
+    """Loads PDBx data from a file
+        :arg filename: Name of local file
+        :arg pdb: PDB id of entry
+        :arg save: Whether to save a copy of the complete assembly as pdb/pdbx. This is necessary if visualizing an assembly
+        in external software.
+        """
     import biotite.structure as struc
     import biotite.structure.io.pdbx as pdbx
     import biotite.structure.io as strucio
@@ -40,35 +62,41 @@ def loadPDBx(filename, pdb):
     calphas = capsid[capsid.atom_name == 'CA']
     coords = calphas.coord
 
-    if not os.path.exists(pdb + '_ca.pdbx'):
-        print('Writing calphas PDBx')
-        strucio.save_structure(pdb + '_ca.pdbx', calphas)
-    if not os.path.exists(pdb + '_capsid.pdbx'):
-        print('Writing complete capsid PDBx')
+    if save:
+        print('Saving complete capsid PDBx')
         strucio.save_structure(pdb + '_capsid.pdbx', capsid)
 
-    chains = struc.get_chain_starts(calphas)
+    chain_starts = struc.get_chain_starts(calphas)
 
-    return capsid, calphas, coords, calphas.b_factor, chains, title
+    return capsid, calphas, coords, calphas.b_factor, chain_starts, title
 
 
-def loadPDB(filename, pdb):
+def loadPDB(filename, pdb, save):
+    """Loads PDBx data from a file
+    :arg filename: Name of local file
+    :arg pdb: PDB id of entry
+    :arg save: Whether to save a copy of the complete assembly as pdb/pdbx
+    """
     from prody import parsePDB, writePDB
     import os
 
-    capsid, header = parsePDB(filename, header=True, biomol=True, secondary=True, extend_biomol=True)
+    capsid, header = parsePDB(filename, header=True, biomol=True, extend_biomol=True)
+    asym_unit = parsePDB(filename)  # Maybe need a check to see if assembly
 
     if type(capsid) is list:
         capsid = capsid[0]
-    ENM_capsid = capsid.select('protein').copy()
 
+    ENM_capsid = capsid.select('protein').copy()
     calphas = ENM_capsid.select('calpha')
+
+    ENM_capsid_asym = asym_unit.select('protein').copy()
+    calphas_asym = ENM_capsid_asym.select('calpha').copy()
+
+    chain_starts = getProdyChainStarts(calphas_asym)
+
     print('Number Of Residues: ', calphas.getCoords().shape[0])
 
-    if not os.path.exists(pdb + '_ca.pdb'):
-        print('Writing calphas PDB')
-        writePDB(pdb + '_ca.pdb', calphas, hybrid36=True)
-    if not os.path.exists(pdb + '_capsid.pdb'):
+    if save:
         print('Writing complete capsid PDB')
         writePDB(pdb + '_capsid.pdb', ENM_capsid, hybrid36=True)
 
@@ -77,28 +105,42 @@ def loadPDB(filename, pdb):
     else:
         title = pdb
 
-    return ENM_capsid, calphas, calphas.getCoords(), calphas.getBetas(), title
+    return ENM_capsid, calphas, calphas.getCoords(), calphas.getBetas(), chain_starts, title
 
 
-def buildMassesCoords(atoms):
-    print(atoms[0])
-    bfs = []
-    masses = []
-    prot_ids = []
+def getProdyChainStarts(calphas_asym, n_units=60):
+    import numpy as np
+    n_asym = calphas_asym.numAtoms()
+    n_chains = calphas_asym.numChains()
+    chains = calphas_asym.getChids()
+    chaindiff = np.where(chains[:-1] != chains[1:])[0]
+    chain_starts = []
+    for i in range(n_units):
+        start = n_asym * i
+        chain_starts.append(start)
+        for c in chaindiff:
+            chain_starts.append(start + c)
 
-    # print('segments:', atoms.numSegments())
+    chain_starts.append(n_asym*n_units)
 
-    for pn, chain in enumerate(atoms.iterChains()):
-        print('Chain Id ' + pn + ':' + chain.getChid())
-        prot_ids.append(pn)
-        for res in chain.iterResidues():
-            mass = np.sum(res.getMasses())
-            masses.append(mass)
+    return np.array(chain_starts)
 
-            bfactor = np.mean(res.getBetas())
-            bfs.append(bfactor)
 
-            # coord = res['CA'].getCoords()
-            # coords.append(coord)
-
-    return np.asarray(bfs), np.asarray(masses), np.asarray(pn)
+# def buildMassesCoords(atoms):
+#     print(atoms[0])
+#     bfs = []
+#     masses = []
+#     prot_ids = []
+#
+#
+#     for pn, chain in enumerate(atoms.iterChains()):
+#         print('Chain Id ' + pn + ':' + chain.getChid())
+#         prot_ids.append(pn)
+#         for res in chain.iterResidues():
+#             mass = np.sum(res.getMasses())
+#             masses.append(mass)
+#
+#             bfactor = np.mean(res.getBetas())
+#             bfs.append(bfactor)
+#
+#     return np.asarray(bfs), np.asarray(masses), np.asarray(pn)

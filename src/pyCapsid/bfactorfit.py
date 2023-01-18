@@ -130,9 +130,8 @@ def plotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=False, plotMod
 
     ax.legend()
     fig.suptitle(
-        'Experimental vs Predicted b-factors: ' + ' (' + pdb + ')' + "\n" + r' $\gamma = $' + "{:.3e}".format(
-            gamma) + r'$\pm$' + "{:.3e}".format(ci) + r'$ \frac{dyn}{cm}$' + '  CC = ' + "{:.3f}".format(
-            coeff), fontsize=12)
+        (fr"Experimental vs Predicted b-factors: ({pdb})" + '\n' + fr"$\gamma = $ {gamma:.2e} $\pm$ {ci:.2e} "
+    fr"$\frac{{k_b T}}{{Å^{2}}}$ CC = {coeff:.2f} Icosahedral deviation = {ico_dev:.2f}"), fontsize=12)
     plt.show()
 
     return coeff, k, intercept, bfactors_predicted, ci, pv, ico_dev, nmodes
