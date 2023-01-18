@@ -11,7 +11,9 @@ pip install pyCapsid
 ~~~~
 
 Via conda: 
-(Coming soon)
+~~~~
+conda install -c colintravisbrown -c conda-forge pycapsid
+~~~~
 
 ## Documentation
 Documentation is provided on our github pages site: [https://luquelab.github.io/pyCapsid/](https://luquelab.github.io/pyCapsid/)

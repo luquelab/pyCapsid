@@ -25,9 +25,10 @@ def getCapsid(pdb, dir='.', pdbx=False, local=False, save=False, chains='', chai
 
 def downloadPDB(pdb, dir='.', pdbx=False):
     """Downloads pdb and returns the filename
-        :arg pdb: PDB id of entry to download. Can also be the name of a local file
-        :arg dir: Target directory where download will be placed
-        :arg pdbx: Whether the target structure should be acquired in pdbx/mmcif format
+
+    :arg pdb: PDB id of entry to download. Can also be the name of a local file
+    :arg dir: Target directory where download will be placed
+    :arg pdbx: Whether the target structure should be acquired in pdbx/mmcif format
     """
     from biotite.database.rcsb import fetch
     if pdbx:
@@ -40,10 +41,11 @@ def downloadPDB(pdb, dir='.', pdbx=False):
 
 def loadPDBx(filename, pdb, save):
     """Loads PDBx data from a file
-        :arg filename: Name of local file
-        :arg pdb: PDB id of entry
-        :arg save: Whether to save a copy of the complete assembly as pdb/pdbx. This is necessary if visualizing an assembly
-        in external software.
+
+    :arg filename: Name of local file
+    :arg pdb: PDB id of entry
+    :arg save: Whether to save a copy of the complete assembly as pdb/pdbx. This is necessary if visualizing an assembly
+    in external software.
         """
     import biotite.structure as struc
     import biotite.structure.io.pdbx as pdbx
@@ -73,6 +75,7 @@ def loadPDBx(filename, pdb, save):
 
 def loadPDB(filename, pdb, save):
     """Loads PDBx data from a file
+
     :arg filename: Name of local file
     :arg pdb: PDB id of entry
     :arg save: Whether to save a copy of the complete assembly as pdb/pdbx
