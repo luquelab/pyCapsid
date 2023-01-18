@@ -9,6 +9,7 @@
 #{% set data = load_setup_py_data() %}
 
 package:
+  noarch: python
   name: pycapsid
   version: 0.0.5
 
@@ -59,7 +60,7 @@ test:
   # Some packages might need a `test/commands` key to check CLI.
   # List all the packages/modules that `run_test.py` imports.
   imports:
-    - pycapsid
+    - pyCapsid
   # For python packages, it is useful to run pip check. However, sometimes the
   # metadata used by pip is out of date. Thus this section is optional if it is
   # failing.
