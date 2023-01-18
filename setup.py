@@ -2,7 +2,7 @@
 
 from setuptools import find_packages
 from setuptools import setup
-long_description = open(README.md).read()
+long_description = open("README.md").read()
 setup(
     name='pyCapsid',
     version='0.0.5',
