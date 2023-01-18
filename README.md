@@ -17,8 +17,8 @@ Via conda:
 Documentation is provided on our github pages site: [https://luquelab.github.io/pyCapsid/](https://luquelab.github.io/pyCapsid/)
 
 ## Examples
-An example jupyter notebook can be found in /notebooks/example_notebook.ipynb
-
+An example notebook is provided in the [notebooks folder](https://github.com/luquelab/pyCapsid/tree/main/notebooks).
+An accompanying tutorial is provided in the documentation.
 
 ## Project History
 This is an evolving repository
