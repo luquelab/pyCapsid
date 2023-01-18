@@ -10,9 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: Install git
-      run: |
-        conda install -c anaconda git
     - name: publish-to-conda
       uses: fcakyon/conda-publish-action@master
       with:
