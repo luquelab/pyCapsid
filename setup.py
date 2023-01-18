@@ -2,11 +2,13 @@
 
 from setuptools import find_packages
 from setuptools import setup
-
+long_description = open(README.md).read()
 setup(
     name='pyCapsid',
     version='0.0.5',
     description='A set of computational tools written in python for the analysis of viral capsids',
+    long_description =long_description,
+    long_description_content_type='text/markdown',
     author='Luque Lab, Colin Brown, Anuradha Agarwal',
     author_email='colintravisbrown@gmail.com',
     license='MIT License',
