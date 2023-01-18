@@ -2,6 +2,16 @@ import numba as nb
 import numpy as np
 
 def modeCalc(hess, kirch, n_modes, eigmethod='eigsh', gnm=False):
+    """
+
+    :param hess:
+    :param kirch:
+    :param n_modes:
+    :param eigmethod:
+    :param gnm:
+    :returns:
+        - x -
+    """
     import time
     print('Calculating Normal Modes')
     start = time.time()
