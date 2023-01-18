@@ -21,7 +21,7 @@
 title: pyCapsid Documentation
 email: colintravisbrown@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  pyCapsid Documentation. Preliminary version.
+  pyCapsid Documentation
 baseurl: "/pyCapsid" # the subpath of your site, e.g. /blog
 #url: "" # the base hostname & protocol for your site, e.g. http://example.com
 # twitter_username: jekyllrb

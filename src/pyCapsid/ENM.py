@@ -3,8 +3,32 @@ import numba as nb
 import numpy as np
 
 
-def buildENM(calphas, coords, cutoff=10, model='anm', fanm=1, cbeta=False, gfunc='power', base_dist=1, d_power=0, backbone=False,
-             k_backbone=1, l_backbone=1, chain_starts=np.array([0,0])):
+def buildDefaultUENM(coords):
+    cutoff = 7.5
+    fanm = 0.1
+    d_power=2
+    kirch, hess = buildENM(coords, cutoff=cutoff, fanm=fanm, d_power=d_power)
+    return kirch, hess
+
+
+def buildENM(coords, cutoff=10, gnm=False, fanm=1, wfunc='power', base_dist=1, d_power=0, backbone=False,
+             k_backbone=1, l_backbone=1, chain_starts=None):
+
+    """Builds a hessian matrix representing an ENM based on the provided parameters.
+
+        :arg coords: Cartesian of alpha carbon (or choice of representation) atoms
+        :arg cutoff: Cutoff distance for long range interactions in the ENM
+        :arg gnm: Whether to use only the kirchhoff matrix (Isotropic GNM), otherwise use full hessian
+        :arg fanm: Parameter representing degree of anisotropy for U-ENM
+        :arg wfunc: Weight function to assign spring constant based on distance. Use 'power' or 'exp'
+        :arg base_dist: In wfunc, divide distance by the base_distance
+        :arg d_power: In wfunc, use this power of the distance
+        :arg backbone: Whether to use stronger interactions for residues connected along the backbone
+        :arg k_backbone: Relative strength of backbone interaction
+        :arg l_backbone: How many steps along the backbone to give stronger interactions
+        :arg chain_starts: Used for defining backbone interactions
+        """
+
     from scipy import sparse
     import numpy as np
     from sklearn.neighbors import BallTree, radius_neighbors_graph, kneighbors_graph
@@ -17,19 +41,25 @@ def buildENM(calphas, coords, cutoff=10, model='anm', fanm=1, cbeta=False, gfunc
     dists = distGraph.tocoo().copy()
     dists.sum_duplicates()
 
-    kirch = kirchGamma(dists, gfunc=gfunc, bd=base_dist, d2=d_power)
+    kirch = kirchGamma(dists, gfunc=wfunc, bd=base_dist, d2=d_power).tolil()
 
     if backbone:
-        kirch = buildBackbone(l_backbone, k_backbone, kirch, chain_starts)
+        try:
+            c = chain_starts[0]
+        except:
+            print('Must provide an array of chain starts')
+        buildBackbone(l_backbone, k_backbone, kirch, chain_starts)
 
+    kirch = kirch.tocsr()
     dg = np.array(kirch.sum(axis=0))
+    print(dg)
+    print(dg.max())
     kirch.setdiag(-dg[0])
     kirch.sum_duplicates()
     kirch = kirch.tocsr()
 
-    if model == 'anm':
+    if not gnm:
         kc = kirch.tocoo().copy()
-        kc.sum_duplicates()
         hData = hessCalc(kc.row, kc.col, kirch.data, coords)
         indpt = kirch.indptr
         inds = kirch.indices
@@ -57,50 +87,18 @@ def kirchGamma(dists, **kwargs):
     return dists
 
 
-# need to test this version
 def buildBackbone(bblen, bbgamma, kirch, chain_starts):
-    for i in range(len(chain_starts)):
+    for i in range(len(chain_starts)-1):
         start = chain_starts[i]
-        stop = chain_starts[i + 1] - 1
-        for j in range(start, stop - bblen):
+        stop = chain_starts[i + 1]
+        for j in range(stop - start):
             ij = start + j
-            for k in range(1, bblen):
-                kirch[ij, ij + k] = bbgamma / k
-                kirch[ij + k, ij] = bbgamma / k
-
-    return kirch
-
-
-def buildMassesCoords(atoms):
-    print(atoms[0])
-    bfs = []
-    masses = []
-
-    # print('segments:', atoms.numSegments())
-
-    for chain in atoms.iterChains():
-        for res in chain.iterResidues():
-            mass = np.sum(res.getMasses())
-            masses.append(mass)
-
-            bfactor = np.mean(res.getBetas())
-            bfs.append(bfactor)
-
-            # coord = res['CA'].getCoords()
-            # coords.append(coord)
-
-    return np.asarray(bfs), np.asarray(masses)
-
-
-@nb.njit()
-def cooOperation(row, col, data, func, arg):
-    r = np.copy(data)
-    for n, (i, j, v) in enumerate(zip(row, col, data)):
-        if i == j:
-            continue
-        r[n] = func(i, j, v, arg)
-    return r
-
+            for k in range(1, bblen + 1):
+                neighbor = ij - k
+                if neighbor < start:
+                    continue
+                kirch[ij, neighbor] = -bbgamma / k
+                kirch[neighbor, ij] = -bbgamma / k
 
 @nb.njit()
 def hessCalc(row, col, kGamma, coords):
@@ -112,54 +110,22 @@ def hessCalc(row, col, kGamma, coords):
         dvec = coords[j] - coords[i]
         d2 = np.dot(dvec, dvec)
         g = kGamma[k]
-        hblock = np.outer(dvec, dvec) * (g / d2)  # + (1-fanm)*np.identity(3)*g
+        hblock = np.outer(dvec, dvec) * (g / d2)
         hData[k, :, :] = hblock
         hData[dinds[i]] += -hblock
         # hData[dinds[j]] += -hblock
     return hData
 
 
-def backbonePrody(calphas, kirch, k, s):
-    k = -k
-    nr = calphas.numAtoms()
-    count = 0
-    chid = 0
-    ch0 = calphas[0].getChid()
-    seg0 = calphas[0].getSegname()
-    # kirch[0,1:3] = -k
-    # kirch[1:3, 0] = -k
-    nch = 0
-    # kbbs = np.array([k,k/2,k/4])[:s]
-    for i, ca in enumerate(calphas.iterAtoms()):
-        if count == 0:
-            for j in range(2 * s):
-                kirch[i, i + j + 1] = k / (j + 1)
-                kirch[i + j + 1, i] = k / (j + 1)
-            count += 1
-            continue
-        elif count < s:
-            for j in range(count):
-                kirch[i, i - j - 1] = k / (j + 1)
-                kirch[i - j - 1, i] = k / (j + 1)
-            for j in range(2 * s - count):
-                kirch[i, i + j + 1] = k / (j + 1)
-                kirch[i + j + 1, i] = k / (j + 1)
-            count += 1
-            continue
-        if ca.getChid() == ch0 and ca.getSegname() == seg0:
-            for j in range(s):
-                kirch[i, i - j - 1] = k / (j + 1)
-                kirch[i - j - 1, i] = k / (j + 1)
-            count += 1
-        else:
-            chid += 1
-            # print(ch0, seg0, 'done')
-            ch0 = ca.getChid()
-            seg0 = ca.getSegname()
-            count = 0
-            nch += 1
-    print(nch)
-    return kirch.tocoo()
+
+# @nb.njit()
+# def cooOperation(row, col, data, func, arg):
+#     r = np.copy(data)
+#     for n, (i, j, v) in enumerate(zip(row, col, data)):
+#         if i == j:
+#             continue
+#         r[n] = func(i, j, v, arg)
+#     return r
 
 
 def betaCarbonModel(calphas):
@@ -464,133 +430,3 @@ def abHessOnly(row, col, kGamma, bcoords, coords, nobetas, bvals, abetas, fanm):
     return nrow, ncol, hData, krow, kcol, kData
 
 
-def buildBetaTransform(natoms, bvals, nobetas, aBetas):
-    from scipy import sparse
-    dof = 3 * natoms
-    bT = sparse.lil_matrix((dof, dof))
-    for i in range(natoms):
-        if i not in nobetas:
-            if i in aBetas:
-                for j in range(3):
-                    ind = 3 * i
-                    bT[ind + j, ind + j] = 1
-            else:
-                b = bvals[i]
-                for j in range(3):
-                    ind = 3 * i
-                    bT[ind + j, ind + j] = 1 + 6 * b
-                    bT[ind + j, ind + j - 3] = -3 * b
-                    bT[ind + j, ind + j + 3] = -3 * b
-    return bT.tocsr()
-
-
-def addSulfideBonds(sulfs, kirch):
-    sCoords = sulfs.getCoords()
-    from sklearn.neighbors import BallTree, radius_neighbors_graph
-    tree = BallTree(sCoords)
-    adjacency = radius_neighbors_graph(tree, 3.0, n_jobs=-1)
-    print(adjacency.nnz)
-    sNodes = sulfs.getData('nodeid')
-    kirch = kirch.tocsr()
-    for i, n in enumerate(sNodes):
-        neighbors = np.nonzero(adjacency[i, :] == 1)
-        print(neighbors)
-        kirch[i, neighbors] = kirch[i, neighbors] * 100
-
-    return kirch.tocoo()
-
-
-def addIonBonds(atoms, kirch, dists):
-    anion = atoms.select('resname ASP GLU')
-    cation = atoms.select('resname ASP GLU')
-
-    for i, at in enumerate(atoms.iterAtoms()):
-        if at.getData('resname') == 'ASP or GLU':
-            neighbors = dists[i, :] <= 4
-            print(np.count_nonzero(neighbors))
-            kirch[i, neighbors] = kirch[i, neighbors] * 100
-
-    return kirch
-
-
-def buildChemENM(capsid):
-    from scipy import sparse
-    import numpy as np
-    from sklearn.neighbors import BallTree, radius_neighbors_graph, kneighbors_graph
-    import biotite.structure as struc
-    calphas = capsid[capsid.atom_name == 'CA']
-    print("Number of protein residues:", struc.get_residue_count(capsid))
-    coords = calphas.coord  # struc.apply_residue_wise(capsid, capsid.coord, np.average, axis=0)
-    n_atoms = coords.shape[0]
-
-    from bondStrengths import detect_disulfide_bonds
-    sulfs = detect_disulfide_bonds(capsid)
-    print(sulfs.shape[0])
-
-    from bondStrengths import detect_salt_bridges
-    salts = detect_salt_bridges(capsid)
-    print(salts.shape)
-
-    from bondStrengths import hbondSites
-    hbonds = hbondSites(capsid)
-    print(hbonds.shape[0])
-
-    print('# Atoms ', n_atoms)
-    dof = n_atoms * 3
-
-    tree = BallTree(coords)
-    kirch = radius_neighbors_graph(tree, 7.5, mode='distance', n_jobs=-1)
-    kc = kirch.tocoo().copy()
-    kc.sum_duplicates()
-    kirch = kirchChem(kc.tocsr(), hbonds, sulfs, salts)
-    # kirch = betaTestKirch(coords)
-    print('nonzero values: ', kirch.nnz)
-    dg = np.array(kirch.sum(axis=0))
-    kirch.setdiag(-dg[0])
-    kirch.sum_duplicates()
-    print(kirch.data)
-
-    if model == 'anm':
-        kc = kirch.tocoo().copy()
-        kc.sum_duplicates()
-        hData = hessCalc(kc.row, kc.col, kirch.data, coords)
-        indpt = kirch.indptr
-        inds = kirch.indices
-        hessian = sparse.bsr_matrix((hData, inds, indpt), shape=(dof, dof)).tocsr()
-        hessian = fanm * hessian + (1 - fanm) * sparse.kron(kirch, np.identity(3))
-    else:
-        hessian = kirch.copy()
-    print('done constructing matrix')
-    return kirch, hessian
-
-
-def kirchChem(kirch, hbonds, sulfbonds, salts):
-    kg = kirch.copy()
-    kg.data = -1 / kg.data ** 2
-
-    for ij in hbonds:
-        i, j = (ij[0], ij[1])
-        kg[i, j] = -10
-
-    for ij in salts:
-        i, j = (ij[0], ij[1])
-        kg[i, j] = -10
-
-    for ij in sulfbonds:
-        i, j = (ij[0], ij[1])
-        kg[i, j] = -100
-
-    kg.data = np.where(kg.data <= -1 / (3 ** 2), -100, kg.data)
-    return kg
-
-
-def bondAngles(ivec, jvec, kvec):
-    rij = jvec - ivec
-    rjk = kvec - jvec
-    dij = np.linalg.norm(rij)
-    djk = np.linalg.norm(rij)
-    G = np.dot(rij, rjk) / (dij * djk)
-    rblock = np.zeros((3, 3))
-    for i in range(3):
-        for j in range(3):
-            rblock[i, j]
