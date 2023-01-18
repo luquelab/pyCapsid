@@ -26,9 +26,6 @@ setup(
         'numba',
         'statsmodels'
     ],
-    tests_require=[
-        'matplotlib',  # Need to create tests to determine this
-    ],
     classifiers=[
         'Development Status :: 1 - Planning',
         'Intended Audience :: Science/Research',
