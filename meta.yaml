@@ -6,12 +6,11 @@
 # Jinja variables help maintain the recipe as you'll update the version only here.
 # Using the name variable with the URL in line 14 is convenient
 # when copying and pasting from another recipe, but not really needed.
-{% set name = "TestPackage" %}
-{% set version = "0.0.1" %}
+{% set data = load_setup_py_data() %}
 
 package:
-  name: {{ name|lower }}
-  version: {{ version }}
+  name: {{ pycapsid }}
+  version: {{ data['version'] }}
 
 source:
   path: ./
