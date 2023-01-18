@@ -1,12 +1,26 @@
 # pyCapsid
 
-## WHAT
-A set of computational tools written in python for the analysis of viral capsids
+## Description
+A python package for identification of dominant motions and rigid domains of protein shells using Elastic Network Models.
 
-## WHO
-The template was originally concived by Antoni Luque based on recommendations from Noble PLoS Comp Biol 2009, Wilson et al PLoS Comp Biol 2017, and Briney "Data Management for Researchers" (2015), Hunt and Thomas "The Pragmatic Programmer: Your Journey to Mastery" (2019 2nd ed).
+## Installation
+The package requires python < 3.11, we reccomend python 3.10.
+Via pip:
+~~~~
+pip install pyCapsid
+~~~~
 
-## WHEN
+Via conda: 
+(Coming soon)
+
+## Documentation
+Documentation is provided on our github pages site: [https://luquelab.github.io/pyCapsid/](https://luquelab.github.io/pyCapsid/)
+
+## Examples
+An example jupyter notebook can be found in /notebooks/example_notebook.ipynb
+
+
+## Project History
 This is an evolving repository
 Started: 2022-10-24
 
@@ -29,12 +43,5 @@ FOLDER: /src
 
 The syntax of markdown files (.md) is CommonMark unless specified otherwise (https://commonmark.org/help/)
 
-## Install
-To install using pip:
-~~~
-pip install pyCapsid
-~~~
 
-## Examples
-An example jupyter notebook can be found in /notebooks/example_notebook.ipynb
 
