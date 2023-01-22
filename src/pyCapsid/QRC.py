@@ -1,3 +1,5 @@
+"""Module with functions for identifying quasi-rigid clusters given a distance fluctuation matrix, either calculated using
+ENM or provided."""
 import numpy as np
 
 
@@ -77,7 +79,7 @@ def cluster_embedding(n_range, maps, method='kmeans', score_method='median'):
 
 # Adapted from sklearn. May need to change later.
 def discretize(
-        vectors, n_clusters=10, *, copy=False, max_svd_restarts=300, n_iter_max=2000, random_state=None
+        vectors, *, copy=False, max_svd_restarts=300, n_iter_max=2000, random_state=None
 ):
     """Search for a partition matrix which is closest to the eigenvector embedding.
     This implementation was proposed in [1]_.
@@ -205,28 +207,28 @@ def discretize(
 
 
 # Also adapted from sklearn, similar method???
-def cluster_qr(vectors):
-    from scipy.linalg import svd, qr
-    """Find the discrete partition closest to the eigenvector embedding.
-        This implementation was proposed in [1]_.
-    .. versionadded:: 1.1
-        Parameters
-        ----------
-        vectors : array-like, shape: (n_samples, n_clusters)
-            The embedding space of the samples.
-        Returns
-        -------
-        labels : array of integers, shape: n_samples
-            The cluster labels of vectors.
-        References
-        ----------
-        .. [1] :doi:`Simple, direct, and efficient multi-way spectral clustering, 2019
-            Anil Damle, Victor Minden, Lexing Ying
-            <10.1093/imaiai/iay008>`
-    """
-
-    k = vectors.shape[1]
-    _, _, piv = qr(vectors.T, pivoting=True)
-    ut, _, v = svd(vectors[piv[:k], :].T)
-    vectors = abs(np.dot(vectors, np.dot(ut, v.conj())))
-    return vectors.argmax(axis=1)
+# def cluster_qr(vectors):
+#     from scipy.linalg import svd, qr
+#     """Find the discrete partition closest to the eigenvector embedding.
+#         This implementation was proposed in [1]_.
+#     .. versionadded:: 1.1
+#         Parameters
+#         ----------
+#         vectors : array-like, shape: (n_samples, n_clusters)
+#             The embedding space of the samples.
+#         Returns
+#         -------
+#         labels : array of integers, shape: n_samples
+#             The cluster labels of vectors.
+#         References
+#         ----------
+#         .. [1] :doi:`Simple, direct, and efficient multi-way spectral clustering, 2019
+#             Anil Damle, Victor Minden, Lexing Ying
+#             <10.1093/imaiai/iay008>`
+#     """
+#
+#     k = vectors.shape[1]
+#     _, _, piv = qr(vectors.T, pivoting=True)
+#     ut, _, v = svd(vectors[piv[:k], :].T)
+#     vectors = abs(np.dot(vectors, np.dot(ut, v.conj())))
+#     return vectors.argmax(axis=1)

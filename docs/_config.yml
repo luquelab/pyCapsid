@@ -28,7 +28,7 @@ baseurl: "/pyCapsid" # the subpath of your site, e.g. /blog
 # github_username:  jekyll
 
 # Build settings
-remote_theme: pmarsceill/just-the-docs
+remote_theme: rundocs/jekyll-rtd-theme
 #theme: just-the-docs
 markdown: kramdown
 

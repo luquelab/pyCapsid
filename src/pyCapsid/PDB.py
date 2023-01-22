@@ -1,3 +1,4 @@
+"""Module with functions for downloading and dealing with PDB/PDBx files."""
 def getCapsid(pdb, dir='.', pdbx=False, local=False, save=False, chains='', chains_clust=''):
     """Downloads and opens molecular data from a PDB entry or loads data from a local file.
 
@@ -5,8 +6,7 @@ def getCapsid(pdb, dir='.', pdbx=False, local=False, save=False, chains='', chai
     :arg dir: Target directory where download will be placed
     :arg pdbx: Whether the target structure should be acquired in pdbx/mmcif format
     :arg local: Whether to instead load a local file
-    :arg save: Whether to save a copy of the complete assembly as pdb/pdbx. This is necessary if visualizing an assembly
-    in external software.
+    :arg save: Whether to save a copy of the complete assembly as pdb/pdbx. Necessary if visualizing in external software.
     :arg chains: List of chains from the entry to include in the ENM model
     :arg chains_clust: List of chains that will be assigned to quasi-rigid clusters. Must be a subset of 'chains'
     """
@@ -44,8 +44,7 @@ def loadPDBx(filename, pdb, save):
 
     :arg filename: Name of local file
     :arg pdb: PDB id of entry
-    :arg save: Whether to save a copy of the complete assembly as pdb/pdbx. This is necessary if visualizing an assembly
-    in external software.
+    :arg save: Whether to save a copy of the complete assembly as pdb/pdbx.
         """
     import biotite.structure as struc
     import biotite.structure.io.pdbx as pdbx

@@ -1,19 +1,6 @@
-import matplotlib.pyplot as plt
+"""Module with functions for building hessian matrices of different elastic network models."""
 import numba as nb
-import numpy as np
-
-
-def buildDefaultUENM(coords):
-    cutoff = 7.5
-    fanm = 0.1
-    d_power=2
-    kirch, hess = buildENM(coords, cutoff=cutoff, fanm=fanm, d_power=d_power)
-    return kirch, hess
-
-
-def buildENM(coords, cutoff=10, gnm=False, fanm=1, wfunc='power', base_dist=1, d_power=0, backbone=False,
-             k_backbone=1, l_backbone=1, chain_starts=None):
-
+def buildENM(coords, cutoff=10, gnm=False, fanm=1, wfunc='power', base_dist=1, d_power=0, backbone=False, k_backbone=1, l_backbone=1, chain_starts=None):
     """Builds a hessian matrix representing an ENM based on the provided parameters.
 
         :arg coords: Cartesian of alpha carbon (or choice of representation) atoms
@@ -28,9 +15,8 @@ def buildENM(coords, cutoff=10, gnm=False, fanm=1, wfunc='power', base_dist=1, d
         :arg l_backbone: How many steps along the backbone to give stronger interactions
         :arg chain_starts: Used for defining backbone interactions
         """
-
-    from scipy import sparse
     import numpy as np
+    from scipy import sparse
     from sklearn.neighbors import BallTree, radius_neighbors_graph, kneighbors_graph
 
     n_atoms = coords.shape[0]
@@ -147,7 +133,7 @@ def betaCarbonModel(calphas):
     kc.sum_duplicates()
     kc.eliminate_zeros()
     bfactors = calphas.getBetas()
-    kirch = kirchGamma(kc, bfactors, d2=d2)
+    kirch = kirchGamma(kc, d2=d2)
     if backboneConnect:
         kbb = backboneStrength
         kirch = backbonePrody(calphas, kirch.tolil(), kbb, s=bblen)
@@ -160,7 +146,7 @@ def betaCarbonModel(calphas):
     btree = BallTree(betaCoords)
     betaKirch = radius_neighbors_graph(btree, cutoff, mode='distance', n_jobs=-1).tocoo()
     betaKirch.eliminate_zeros()
-    betaKirch = kirchGamma(betaKirch.tocoo(), bfactors, d2=d2)
+    betaKirch = kirchGamma(betaKirch.tocoo(), d2=d2)
     dg = np.array(betaKirch.sum(axis=0))
     betaKirch.setdiag(-dg[0])
     betaKirch = betaKirch.tocsr()
@@ -169,7 +155,7 @@ def betaCarbonModel(calphas):
     akdtree = KDTree(coords)
     bkdtree = KDTree(betaCoords)
     abKirch = akdtree.sparse_distance_matrix(bkdtree, cutoff).tocoo()
-    abKirch = kirchGamma(abKirch.tocoo(), bfactors, d2=d2)
+    abKirch = kirchGamma(abKirch.tocoo(),  d2=d2)
     dg = np.array(abKirch.sum(axis=0))
     abKirch.setdiag(-dg[0])
     abKirch.eliminate_zeros()
