@@ -97,18 +97,17 @@ def discretize(
 ):
     """Search for a partition matrix which is closest to the eigenvector embedding.
     This implementation was proposed in [1]_.
-    Parameters
-    ----------
-    vectors : array-like of shape (n_samples, n_clusters)
+ 
+    :param vectors: array-like of shape (n_samples, n_clusters)
         The embedding space of the samples.
-    copy : bool, default=True
+    :param copy: bool, default=True
         Whether to copy vectors, or perform in-place normalization.
-    max_svd_restarts : int, default=30
+    :param max_svd_restarts: int, default=30
         Maximum number of attempts to restart SVD if convergence fails
-    n_iter_max : int, default=30
+    :param n_iter_max: int, default=30
         Maximum number of iterations to attempt in rotation and partition
         matrix search if machine precision convergence is not reached
-    random_state : int, RandomState instance, default=None
+    :param random_state: int, RandomState instance, default=None
         Determines random number generation for rotation matrix initialization.
         Use an int to make the randomness deterministic.
         See :term:`Glossary <random_state>`.
