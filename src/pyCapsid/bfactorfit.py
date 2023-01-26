@@ -4,6 +4,14 @@ import numba as nb
 
 # @nb.njit()
 def fastFlucts(evals, evecs, n_modes, is3d):
+    """
+
+    :param evals:
+    :param evecs:
+    :param n_modes:
+    :param is3d:
+    :return:
+    """
     n_d = evecs.shape[0]
     flucts = np.zeros(n_d)
     for i in range(n_modes):
@@ -16,6 +24,11 @@ def fastFlucts(evals, evecs, n_modes, is3d):
 
 # @nb.njit()
 def checkIcoFlucts(flucts):
+    """
+
+    :param flucts:
+    :return:
+    """
     F = np.reshape(flucts, (60, -1))
     devs = np.ptp(F, axis=0)
     d = np.max(devs)
@@ -24,6 +37,12 @@ def checkIcoFlucts(flucts):
 
 
 def springFit(bfactors, sqFlucts):
+    """
+
+    :param bfactors:
+    :param sqFlucts:
+    :return:
+    """
     import statsmodels.api as sm
 
     intercept = False
@@ -46,6 +65,14 @@ def springFit(bfactors, sqFlucts):
 
 
 def fluctModes(evals, evecs, bfactors, is3d):
+    """
+
+    :param evals:
+    :param evecs:
+    :param bfactors:
+    :param is3d:
+    :return:
+    """
     coeffs = []
     ico_devs = []
 
@@ -59,6 +86,18 @@ def fluctModes(evals, evecs, bfactors, is3d):
 
 
 def fitBfactors(evals, evecs, bfactors, is3d, fitModes=False, plotModes=False, forceIco=False, icotol=0.002):
+    """
+
+    :param evals:
+    :param evecs:
+    :param bfactors:
+    :param is3d:
+    :param fitModes:
+    :param plotModes:
+    :param forceIco:
+    :param icotol:
+    :return:
+    """
     n_modes = evals.shape[0]
     if fitModes:
         coeffs, ico_devs = fluctModes(evals, evecs, bfactors, is3d)
@@ -90,6 +129,12 @@ def fitBfactors(evals, evecs, bfactors, is3d, fitModes=False, plotModes=False, f
 
 
 def plotByMode(mode_indices, data, datalabel):
+    """
+
+    :param mode_indices:
+    :param data:
+    :param datalabel:
+    """
     import matplotlib.pyplot as plt
     fig, ax = plt.subplots(1, 1)
     ax.plot(mode_indices, data)
@@ -101,6 +146,19 @@ def plotByMode(mode_indices, data, datalabel):
 
 
 def plotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=False, plotModes=False, forceIco=False, icotol=0.002):
+    """
+
+    :param evals:
+    :param evecs:
+    :param bfactors:
+    :param pdb:
+    :param is3d:
+    :param fitModes:
+    :param plotModes:
+    :param forceIco:
+    :param icotol:
+    :return:
+    """
     coeff, k, intercept, bfactors_predicted, ci, pv, ico_dev, nmodes = fitBfactors(evals, evecs, bfactors, is3d,
                                                                                    fitModes,
                                                                                    plotModes, forceIco, icotol)
@@ -131,7 +189,8 @@ def plotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=False, plotMod
     ax.legend()
     fig.suptitle(
         (fr"Experimental vs Predicted b-factors: ({pdb})" + '\n' + fr"$\gamma = $ {gamma:.2e} $\pm$ {ci:.2e} "
-    fr"$\frac{{k_b T}}{{Å^{2}}}$ CC = {coeff:.2f} Icosahedral deviation = {ico_dev:.2f}"), fontsize=12)
+                                                                   fr"$\frac{{k_b T}}{{Å^{2}}}$ CC = {coeff:.2f} Icosahedral deviation = {ico_dev:.2f}"),
+        fontsize=12)
     plt.show()
 
     return coeff, k, intercept, bfactors_predicted, ci, pv, ico_dev, nmodes

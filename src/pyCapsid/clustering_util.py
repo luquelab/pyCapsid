@@ -4,6 +4,13 @@ import numba as nb
 
 @nb.njit()
 def calcCentroids(X, labels, n_clusters):
+    """
+
+    :param X:
+    :param labels:
+    :param n_clusters:
+    :return:
+    """
     centroids = np.zeros((labels.shape[0], n_clusters))
     n = n_clusters
     for i in range(n_clusters):
@@ -25,6 +32,13 @@ def calcCentroids(X, labels, n_clusters):
 
 @nb.njit()
 def calcCosCentroids(X, labels, n_clusters):
+    """
+
+    :param X:
+    :param labels:
+    :param n_clusters:
+    :return:
+    """
     centroids = np.zeros((n_clusters, n_clusters))
     n = n_clusters
     for i in range(n_clusters):
@@ -45,18 +59,14 @@ def calcCosCentroids(X, labels, n_clusters):
     return centroids
 
 
-# def discretize_score(coords, labels):
-#     for i in range(n_clusters):
-#         mask = (labels==i)
-#         if not np.any(mask):
-#             print('Some clusters unassigned')
-#
-#         else:
-#             clust = X[mask,:]
-#             cent = np.mean(clust, axis=0)
-#             centroids.append(cent)
-
 def median_score(coords, centroids, score_method):
+    """
+
+    :param coords:
+    :param centroids:
+    :param score_method:
+    :return:
+    """
     from sklearn.metrics import pairwise_distances
     from sklearn.preprocessing import normalize
 
@@ -92,6 +102,11 @@ def median_score(coords, centroids, score_method):
 
 
 def cluster_types(labels):
+    """
+
+    :param labels:
+    :return:
+    """
     _, counts = np.unique(labels, return_counts=True)
     thresh = 0.05 * np.mean(counts)
     counts = np.rint(counts / thresh) * thresh
@@ -101,6 +116,14 @@ def cluster_types(labels):
 
 
 def plotScores(pdb, n_range, scores, vars, ntypes):
+    """
+
+    :param pdb:
+    :param n_range:
+    :param scores:
+    :param vars:
+    :param ntypes:
+    """
     import matplotlib
     import matplotlib.pyplot as plt
     import numpy as np

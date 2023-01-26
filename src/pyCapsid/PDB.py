@@ -1,4 +1,6 @@
 """Module with functions for downloading and dealing with PDB/PDBx files."""
+
+
 def getCapsid(pdb, dir='.', pdbx=False, local=False, save=False, chains='', chains_clust=''):
     """Downloads and opens molecular data from a PDB entry or loads data from a local file.
 
@@ -111,6 +113,12 @@ def loadPDB(filename, pdb, save):
 
 
 def getProdyChainStarts(calphas_asym, n_units=60):
+    """
+
+    :param calphas_asym:
+    :param n_units:
+    :return:
+    """
     import numpy as np
     n_asym = calphas_asym.numAtoms()
     n_chains = calphas_asym.numChains()
@@ -123,10 +131,9 @@ def getProdyChainStarts(calphas_asym, n_units=60):
         for c in chaindiff:
             chain_starts.append(start + c)
 
-    chain_starts.append(n_asym*n_units)
+    chain_starts.append(n_asym * n_units)
 
     return np.array(chain_starts)
-
 
 # def buildMassesCoords(atoms):
 #     print(atoms[0])

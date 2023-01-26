@@ -4,6 +4,12 @@ import numpy as np
 
 
 def calcEmbedding(sims, n_vecs):
+    """
+
+    :param sims:
+    :param n_vecs:
+    :return:
+    """
     from sklearn.manifold import spectral_embedding
     print('Performing Spectral Embedding')
 
@@ -17,6 +23,14 @@ def calcEmbedding(sims, n_vecs):
 
 
 def cluster_embedding(n_range, maps, method='kmeans', score_method='median'):
+    """
+
+    :param n_range:
+    :param maps:
+    :param method:
+    :param score_method:
+    :return:
+    """
     print('Clustering Embedded Points')
     from sklearn.preprocessing import normalize
     if method == 'kmeans':

@@ -4,16 +4,17 @@ fluctuations, compressibility, collectivity etc."""
 import numba as nb
 import numpy as np
 
-def modeCalc(hess, kirch, n_modes, eigmethod='eigsh', gnm=False):
-    """
 
-    :param hess:
-    :param kirch:
-    :param n_modes:
-    :param eigmethod:
+def modeCalc(hess, kirch, n_modes, eigmethod='eigsh', gnm=False):
+    """Calculate the 'n_modes' lowest frequency modes of the system by calculating the smallest eigenvalues and eigenvectors
+    of the hessian matrix.
+
+    :param hess: Sparse hessian matrix
+    :param kirch: Sparse kirchhoff matrix
+    :param n_modes: Integer number of low-frequency modes to calculate.
+    :param eigmethod: Choice of method for solving the eigenvalue problem.
     :param gnm:
     :returns:
-        - x -
     """
     import time
     print('Calculating Normal Modes')
@@ -74,9 +75,17 @@ def modeCalc(hess, kirch, n_modes, eigmethod='eigsh', gnm=False):
     return evals, evecs
 
 
-
-
 def calcCovMat(evals, evecs, n_modes, coords, fluct_cutoff, is3d=True):
+    """Calculates a sparse covariance matrix from the low frequency modes.
+
+    :param evals:
+    :param evecs:
+    :param n_modes:
+    :param coords:
+    :param fluct_cutoff:
+    :param is3d:
+    :return:
+    """
     from scipy import sparse
     from sklearn.neighbors import BallTree, radius_neighbors_graph
 
@@ -100,6 +109,16 @@ def calcCovMat(evals, evecs, n_modes, coords, fluct_cutoff, is3d=True):
 
 
 def calcDistFlucts(evals, evecs, n_modes, coords, fluct_cutoff, is3d=True):
+    """Calculates a sparse covariance matrix from the low frequency modes.
+
+    :param evals:
+    :param evecs:
+    :param n_modes:
+    :param coords:
+    :param fluct_cutoff:
+    :param is3d:
+    :return:
+    """
     from scipy import sparse
 
     covariance = calcCovMat(evals, evecs, n_modes, coords, fluct_cutoff, is3d)
@@ -118,6 +137,14 @@ def calcDistFlucts(evals, evecs, n_modes, coords, fluct_cutoff, is3d=True):
 
 @nb.njit()
 def con_c(evals, evecs, row, col):
+    """
+
+    :param evals:
+    :param evecs:
+    :param row:
+    :param col:
+    :return:
+    """
     data = []
     for k in range(row.shape[0]):
         i, j = (row[k], col[k])
@@ -127,6 +154,14 @@ def con_c(evals, evecs, row, col):
 
 @nb.njit()
 def gCon_c(evals, evecs, row, col):
+    """
+
+    :param evals:
+    :param evecs:
+    :param row:
+    :param col:
+    :return:
+    """
     data = []
     for k in range(row.shape[0]):
         i, j = (row[k], col[k])
@@ -137,6 +172,14 @@ def gCon_c(evals, evecs, row, col):
 
 @nb.njit(parallel=True)
 def cov(evals, evecs, i, j):
+    """
+
+    :param evals:
+    :param evecs:
+    :param i:
+    :param j:
+    :return:
+    """
     # Calculates the covariance between two residues in ANM. Takes the trace of block so no anisotropy info.
     # Commented section would compute normalized covariances
     n_e = evals.shape[0]
@@ -158,6 +201,14 @@ def cov(evals, evecs, i, j):
 
 @nb.njit(parallel=False)
 def gCov(evals, evecs, i, j):
+    """
+
+    :param evals:
+    :param evecs:
+    :param i:
+    :param j:
+    :return:
+    """
     # Calculates the covariance between two residues in GNM
     n_e = evals.shape[0]
     c = 0
@@ -169,6 +220,14 @@ def gCov(evals, evecs, i, j):
 
 @nb.njit()
 def distFluctFromCov(c_diag, c_data, row, col):
+    """
+
+    :param c_diag:
+    :param c_data:
+    :param row:
+    :param col:
+    :return:
+    """
     d_data = []
     for k in range(row.shape[0]):
         i, j = (row[k], col[k])
@@ -178,6 +237,12 @@ def distFluctFromCov(c_diag, c_data, row, col):
 
 
 def fluctPlot(d, title, pdb):
+    """
+
+    :param d:
+    :param title:
+    :param pdb:
+    """
     import matplotlib.pyplot as plt
     print('Plotting Fluctuation Histogram')
     import matplotlib
@@ -201,6 +266,11 @@ def fluctPlot(d, title, pdb):
 
 
 def fluctToSims(d):
+    """
+
+    :param d:
+    :return:
+    """
     from scipy import sparse
     d_bar = np.mean(np.sqrt(d.data))
     print('RMS distance fluctuations: ', d_bar)

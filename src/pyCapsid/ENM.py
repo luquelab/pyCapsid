@@ -1,6 +1,9 @@
 """Module with functions for building hessian matrices of different elastic network models."""
 import numba as nb
-def buildENM(coords, cutoff=10, gnm=False, fanm=1, wfunc='power', base_dist=1, d_power=0, backbone=False, k_backbone=1, l_backbone=1, chain_starts=None):
+import numpy as np
+
+def buildENM(coords, cutoff=10, gnm=False, fanm=1, wfunc='power', base_dist=1, d_power=0, backbone=False, k_backbone=1,
+             l_backbone=1, chain_starts=None):
     """Builds a hessian matrix representing an ENM based on the provided parameters.
 
         :arg coords: Cartesian of alpha carbon (or choice of representation) atoms
@@ -14,6 +17,8 @@ def buildENM(coords, cutoff=10, gnm=False, fanm=1, wfunc='power', base_dist=1, d
         :arg k_backbone: Relative strength of backbone interaction
         :arg l_backbone: How many steps along the backbone to give stronger interactions
         :arg chain_starts: Used for defining backbone interactions
+        :return: A tuple of sparse matrices. The kirchoff matrix and the hessian matrix
+        :rtype: (scipy.sparse.csr_matrix, scipy.sparse.csr_matrix)
         """
     import numpy as np
     from scipy import sparse
@@ -63,6 +68,12 @@ def buildENM(coords, cutoff=10, gnm=False, fanm=1, wfunc='power', base_dist=1, d
 
 
 def kirchGamma(dists, **kwargs):
+    """ Calculates the kirchhoff matrix (spring constant matrix) from a sparse distance matrix.
+
+    :param dists: Sparse distance matrix
+    :param kwargs:
+    :return: The sparse kirchhoff matrix.
+    """
     if kwargs['gfunc'] == 'power':
         dists.data = -1 / ((dists.data / kwargs['bd']) ** kwargs['d2'])
     elif kwargs['gfunc'] == 'exp':
@@ -74,7 +85,14 @@ def kirchGamma(dists, **kwargs):
 
 
 def buildBackbone(bblen, bbgamma, kirch, chain_starts):
-    for i in range(len(chain_starts)-1):
+    """ Modifies the kirchhoff matrix to include backbone terms
+
+    :param bblen: The number of backbone neighbors in either direction with strengthened spring constants.
+    :param bbgamma: The relative strength to use for the backbone interactions.
+    :param kirch: The sparse kirchhoff matrix
+    :param chain_starts: Indices where protein chains begin/end.
+    """
+    for i in range(len(chain_starts) - 1):
         start = chain_starts[i]
         stop = chain_starts[i + 1]
         for j in range(stop - start):
@@ -86,8 +104,17 @@ def buildBackbone(bblen, bbgamma, kirch, chain_starts):
                 kirch[ij, neighbor] = -bbgamma / k
                 kirch[neighbor, ij] = -bbgamma / k
 
+
 @nb.njit()
 def hessCalc(row, col, kGamma, coords):
+    """
+
+    :param row:
+    :param col:
+    :param kGamma:
+    :param coords:
+    :return:
+    """
     hData = np.zeros((row.shape[0], 3, 3))
     dinds = np.nonzero(row == col)[0]
     for k, (i, j) in enumerate(zip(row, col)):
@@ -103,7 +130,6 @@ def hessCalc(row, col, kGamma, coords):
     return hData
 
 
-
 # @nb.njit()
 # def cooOperation(row, col, data, func, arg):
 #     r = np.copy(data)
@@ -115,6 +141,11 @@ def hessCalc(row, col, kGamma, coords):
 
 
 def betaCarbonModel(calphas):
+    """
+
+    :param calphas:
+    :return:
+    """
     from sklearn.neighbors import BallTree, radius_neighbors_graph
     from scipy import sparse
     coords = calphas.getCoords()
@@ -155,7 +186,7 @@ def betaCarbonModel(calphas):
     akdtree = KDTree(coords)
     bkdtree = KDTree(betaCoords)
     abKirch = akdtree.sparse_distance_matrix(bkdtree, cutoff).tocoo()
-    abKirch = kirchGamma(abKirch.tocoo(),  d2=d2)
+    abKirch = kirchGamma(abKirch.tocoo(), d2=d2)
     dg = np.array(abKirch.sum(axis=0))
     abKirch.setdiag(-dg[0])
     abKirch.eliminate_zeros()
@@ -241,6 +272,11 @@ def betaCarbonModel(calphas):
 
 
 def checkHessStrength(k, h):
+    """
+
+    :param k:
+    :param h:
+    """
     hd = h.diagonal().reshape((-1, 3))
     kd = k.diagonal()
     hd = np.sum(hd, axis=-1)
@@ -253,6 +289,12 @@ def checkHessStrength(k, h):
 
 # @nb.njit()
 def buildBetas(coords, calphas):
+    """
+
+    :param coords:
+    :param calphas:
+    :return:
+    """
     na = calphas.numAtoms()
     noBetas = []
     aBetas = []
@@ -301,6 +343,15 @@ def buildBetas(coords, calphas):
 
 @nb.njit()
 def bbHessOnly(row, col, bcoords, nobetas, kGamma):
+    """
+
+    :param row:
+    :param col:
+    :param bcoords:
+    :param nobetas:
+    :param kGamma:
+    :return:
+    """
     hData = np.zeros((row.shape[0], 3, 3))
     dinds = np.nonzero(row == col)[0]
     for k, (i, j) in enumerate(zip(row, col)):
@@ -320,6 +371,18 @@ def bbHessOnly(row, col, bcoords, nobetas, kGamma):
 
 @nb.njit()
 def bbHess(row, col, bcoords, nobetas, bvals, abetas, kGamma, fanm):
+    """
+
+    :param row:
+    :param col:
+    :param bcoords:
+    :param nobetas:
+    :param bvals:
+    :param abetas:
+    :param kGamma:
+    :param fanm:
+    :return:
+    """
     nrow = []
     ncol = []
     hData = []
@@ -337,7 +400,7 @@ def bbHess(row, col, bcoords, nobetas, bvals, abetas, kGamma, fanm):
         bi = bvals[i]
         bj = bvals[j]
         hblock = -(fanm * np.outer(rvec, rvec) + (1 - fanm) * np.identity(3)) * (
-                    g / d2) / 2  # + (1-fanm)*np.identity(3)*g
+                g / d2) / 2  # + (1-fanm)*np.identity(3)*g
         ijs = (3 * i, 3 * i + 3, 3 * i - 3, 3 * j, 3 * j + 3, 3 * j - 3)
 
         if np.any(j == abetas):
@@ -371,6 +434,19 @@ def bbHess(row, col, bcoords, nobetas, bvals, abetas, kGamma, fanm):
 
 @nb.njit()
 def abHessOnly(row, col, kGamma, bcoords, coords, nobetas, bvals, abetas, fanm):
+    """
+
+    :param row:
+    :param col:
+    :param kGamma:
+    :param bcoords:
+    :param coords:
+    :param nobetas:
+    :param bvals:
+    :param abetas:
+    :param fanm:
+    :return:
+    """
     nrow = []
     ncol = []
     hData = []
@@ -414,5 +490,3 @@ def abHessOnly(row, col, kGamma, bcoords, coords, nobetas, bvals, abetas, fanm):
                         hData.append(ci * cj * hblock[l, m])
 
     return nrow, ncol, hData, krow, kcol, kData
-
-
