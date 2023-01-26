@@ -113,7 +113,7 @@ def discretize(
         See :term:`Glossary <random_state>`.
     Returns
     -------
-    labels : array of integers, shape: n_samples
+    labels: array of integers, shape: n_samples
         The labels of the clusters.
     References
     ----------
