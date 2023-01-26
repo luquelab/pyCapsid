@@ -4,13 +4,13 @@
 def getCapsid(pdb, dir='.', pdbx=False, local=False, save=False, chains='', chains_clust=''):
     """Downloads and opens molecular data from a PDB entry or loads data from a local file.
 
-    :arg pdb: PDB id of entry to download. Can also be the name of a local file
-    :arg dir: Target directory where download will be placed
-    :arg pdbx: Whether the target structure should be acquired in pdbx/mmcif format
-    :arg local: Whether to instead load a local file
-    :arg save: Whether to save a copy of the complete assembly as pdb/pdbx. Necessary if visualizing in external software.
-    :arg chains: List of chains from the entry to include in the ENM model
-    :arg chains_clust: List of chains that will be assigned to quasi-rigid clusters. Must be a subset of 'chains'
+    :param pdb: PDB id of entry to download. Can also be the name of a local file
+    :param dir: Target directory where download will be placed
+    :param pdbx: Whether the target structure should be acquired in pdbx/mmcif format
+    :param local: Whether to instead load a local file
+    :param save: Whether to save a copy of the complete assembly as pdb/pdbx. Necessary if visualizing in external software.
+    :param chains: List of chains from the entry to include in the ENM model
+    :param chains_clust: List of chains that will be assigned to quasi-rigid clusters. Must be a subset of 'chains'
     """
     if local:
         filename = dir + pdb
@@ -28,9 +28,9 @@ def getCapsid(pdb, dir='.', pdbx=False, local=False, save=False, chains='', chai
 def downloadPDB(pdb, dir='.', pdbx=False):
     """Downloads pdb and returns the filename
 
-    :arg pdb: PDB id of entry to download. Can also be the name of a local file
-    :arg dir: Target directory where download will be placed
-    :arg pdbx: Whether the target structure should be acquired in pdbx/mmcif format
+    :param pdb: PDB id of entry to download. Can also be the name of a local file
+    :param dir: Target directory where download will be placed
+    :param pdbx: Whether the target structure should be acquired in pdbx/mmcif format
     """
     from biotite.database.rcsb import fetch
     if pdbx:
@@ -44,9 +44,9 @@ def downloadPDB(pdb, dir='.', pdbx=False):
 def loadPDBx(filename, pdb, save):
     """Loads PDBx data from a file
 
-    :arg filename: Name of local file
-    :arg pdb: PDB id of entry
-    :arg save: Whether to save a copy of the complete assembly as pdb/pdbx.
+    :param filename: Name of local file
+    :param pdb: PDB id of entry
+    :param save: Whether to save a copy of the complete assembly as pdb/pdbx.
         """
     import biotite.structure as struc
     import biotite.structure.io.pdbx as pdbx
@@ -77,9 +77,9 @@ def loadPDBx(filename, pdb, save):
 def loadPDB(filename, pdb, save):
     """Loads PDBx data from a file
 
-    :arg filename: Name of local file
-    :arg pdb: PDB id of entry
-    :arg save: Whether to save a copy of the complete assembly as pdb/pdbx
+    :param filename: Name of local file
+    :param pdb: PDB id of entry
+    :param save: Whether to save a copy of the complete assembly as pdb/pdbx
     """
     from prody import parsePDB, writePDB
     import os
