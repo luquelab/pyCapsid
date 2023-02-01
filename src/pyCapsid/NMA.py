@@ -5,23 +5,19 @@ import numba as nb
 import numpy as np
 
 
-def modeCalc(hess, kirch, n_modes, eigmethod='eigsh', gnm=False):
+def modeCalc(hess, n_modes, eigmethod='eigsh'):
     """Calculate the 'n_modes' lowest frequency modes of the system by calculating the smallest eigenvalues and eigenvectors
     of the hessian matrix.
 
     :param hess: Sparse hessian matrix
-    :param kirch: Sparse kirchhoff matrix
     :param n_modes: Integer number of low-frequency modes to calculate.
     :param eigmethod: Choice of method for solving the eigenvalue problem.
-    :param gnm:
     :returns:
     """
     import time
     print('Calculating Normal Modes')
     start = time.time()
 
-    if gnm:
-        hess = kirch
     n_dim = hess.shape[0]
 
     # if useMass:
