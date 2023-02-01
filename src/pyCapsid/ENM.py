@@ -108,7 +108,6 @@ def buildBackbone(bblen, bbgamma, kirch, chain_starts):
 @nb.njit()
 def hessCalc(row, col, kGamma, coords):
     """
-
     :param row:
     :param col:
     :param kGamma:

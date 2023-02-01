@@ -5,7 +5,7 @@ from setuptools import setup
 long_description = open("README.md").read()
 setup(
     name='pyCapsid',
-    version='0.0.7',
+    version='0.0.8',
     description='A set of computational tools written in python for the analysis of viral capsids',
     long_description =long_description,
     long_description_content_type='text/markdown',
@@ -20,7 +20,7 @@ setup(
         'prody',
         'biotite',
         'scikit-learn',
-        'numpy',
+        'numpy<1.24',
         'scipy',
         'matplotlib',
         'numba',
