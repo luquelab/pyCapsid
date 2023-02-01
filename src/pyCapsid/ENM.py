@@ -16,6 +16,7 @@ def buildENMPreset(coords, preset='ANM', **kwargs):
     :rtype: (scipy.sparse.csr_matrix, scipy.sparse.csr_matrix)
     """
     model_presets = ['ANM', 'GNM', 'U-ENM', 'bbENM']
+    print('Building hessian for model preset: ', preset)
     match preset:
         case 'ANM':
             cutoff = 15
@@ -63,17 +64,22 @@ def buildENM(coords, cutoff=10, gnm=False, fanm=1, wfunc='power', base_dist=1, d
     from scipy import sparse
     from sklearn.neighbors import BallTree, radius_neighbors_graph, kneighbors_graph
 
+    print('Model parameters: ', locals().pop('coords'))
+
     n_atoms = coords.shape[0]
     dof = n_atoms * 3
 
+    print(f'Finding neighbors within {cutoff}Å')
     tree = BallTree(coords)
     distGraph = radius_neighbors_graph(tree, cutoff, mode='distance', n_jobs=-1)
     dists = distGraph.tocoo().copy()
     dists.sum_duplicates()
 
+    print('Building kirchhoff matrix')
     kirch = kirchGamma(dists, gfunc=wfunc, bd=base_dist, d2=d_power).tolil()
 
     if backbone:
+        print('Adding backbone terms')
         try:
             c = chain_starts[0]
         except:
@@ -82,13 +88,12 @@ def buildENM(coords, cutoff=10, gnm=False, fanm=1, wfunc='power', base_dist=1, d
 
     kirch = kirch.tocsr()
     dg = np.array(kirch.sum(axis=0))
-    print(dg)
-    print(dg.max())
     kirch.setdiag(-dg[0])
     kirch.sum_duplicates()
     kirch = kirch.tocsr()
 
     if not gnm:
+        print('Building hessian matrix')
         kc = kirch.tocoo().copy()
         hData = hessCalc(kc.row, kc.col, kirch.data, coords)
         indpt = kirch.indptr
@@ -98,7 +103,7 @@ def buildENM(coords, cutoff=10, gnm=False, fanm=1, wfunc='power', base_dist=1, d
     else:
         hessian = kirch.copy()
 
-    print('done constructing matrix')
+    print('Done building model')
 
     from sklearn.utils.validation import check_symmetric
     check_symmetric(hessian, raise_warning=True, tol=1e-5)
