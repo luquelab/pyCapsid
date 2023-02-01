@@ -60,11 +60,14 @@ def buildENM(coords, cutoff=10, gnm=False, fanm=1, wfunc='power', base_dist=1, d
         :return: A tuple of sparse matrices. The kirchoff matrix and the hessian matrix
         :rtype: (scipy.sparse.csr_matrix, scipy.sparse.csr_matrix)
         """
+    params = locals()
+    params.pop('coords')
+    print('Model parameters: ', params)
+
     import numpy as np
     from scipy import sparse
     from sklearn.neighbors import BallTree, radius_neighbors_graph, kneighbors_graph
 
-    print('Model parameters: ', locals().pop('coords'))
 
     n_atoms = coords.shape[0]
     dof = n_atoms * 3
@@ -86,16 +89,14 @@ def buildENM(coords, cutoff=10, gnm=False, fanm=1, wfunc='power', base_dist=1, d
             print('Must provide an array of chain starts')
         buildBackbone(l_backbone, k_backbone, kirch, chain_starts)
 
-    kirch = kirch.tocsr()
     dg = np.array(kirch.sum(axis=0))
     kirch.setdiag(-dg[0])
-    kirch.sum_duplicates()
     kirch = kirch.tocsr()
 
     if not gnm:
         print('Building hessian matrix')
         kc = kirch.tocoo().copy()
-        hData = hessCalc(kc.row, kc.col, kirch.data, coords)
+        hData = hessCalc(kc.row, kc.col, kc.data, coords)
         indpt = kirch.indptr
         inds = kirch.indices
         hessian = sparse.bsr_matrix((hData, inds, indpt), shape=(dof, dof)).tocsr()
