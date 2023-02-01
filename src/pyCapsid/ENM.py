@@ -2,6 +2,45 @@
 import numba as nb
 import numpy as np
 
+def buildENMPreset(coords, preset='ANM', **kwargs):
+    """Builds a hessian matrix representing an ENM based on one of several presets.
+
+    :param ndarray coords: Cartesian coordinates of alpha carbon atoms(or choice of alternate representation).
+    :param str preset: The specific model preset to use. Only accepts the following values:
+        - 'ANM': Anisotropic Network Model with a cutoff of 15Å and no distance weighting.
+        - 'GNM': Gaussian Network Model with a cutoff of 7.5Å and no distance weighting.
+        - 'U-ENM': Unified Elastic Network Model with a cutoff of 7.5Å and and f_anm parameter of 0.1. [ref]
+        - 'bbENM': Backbone-enhanced Elastic Network Model with a cutoff of 7.5Å and no distance weighting.
+        - 'betaENM': Not yet implemented
+    :return: A tuple of sparse matrices. The kirchoff matrix and the hessian matrix
+    :rtype: (scipy.sparse.csr_matrix, scipy.sparse.csr_matrix)
+    """
+    model_presets = ['ANM', 'GNM', 'U-ENM', 'bbENM']
+    match preset:
+        case 'ANM':
+            cutoff = 15
+            return buildENM(coords, cutoff=cutoff)
+        case 'GNM':
+            cutoff = 7.5
+            gnm=True
+            return buildENM(coords, cutoff=cutoff, gnm=gnm)
+        case 'U-ENM':
+            cutoff = 7.5
+            fanm = 0.1
+            return buildENM(coords, cutoff=cutoff, fanm=fanm)
+        case 'bbENM':
+            cutoff = 7.5
+            l_backbone=1
+            k_backbone = 100
+            if 'chain_starts' not in kwargs:
+                raise ValueError("No chain information provided. Indices of chain starts must be provided as chain_starts")
+            chain_starts = kwargs['chain_starts']
+            return buildENM(coords, cutoff=cutoff, chain_starts=chain_starts, l_backbone=l_backbone, k_backbone=k_backbone)
+        case _:
+            raise ValueError("Invalid model preset. Expected one of: %s" % model_presets)
+
+
+
 def buildENM(coords, cutoff=10, gnm=False, fanm=1, wfunc='power', base_dist=1, d_power=0, backbone=False, k_backbone=1,
              l_backbone=1, chain_starts=None):
     """Builds a hessian matrix representing an ENM based on the provided parameters.
