@@ -6,17 +6,17 @@ def buildENM(coords, cutoff=10, gnm=False, fanm=1, wfunc='power', base_dist=1, d
              l_backbone=1, chain_starts=None):
     """Builds a hessian matrix representing an ENM based on the provided parameters.
 
-        :arg coords: Cartesian of alpha carbon (or choice of representation) atoms
-        :arg cutoff: Cutoff distance for long range interactions in the ENM
-        :arg gnm: Whether to use only the kirchhoff matrix (Isotropic GNM), otherwise use full hessian
-        :arg fanm: Parameter representing degree of anisotropy for U-ENM
-        :arg wfunc: Weight function to assign spring constant based on distance. Use 'power' or 'exp'
-        :arg base_dist: In wfunc, divide distance by the base_distance
-        :arg d_power: In wfunc, use this power of the distance
-        :arg backbone: Whether to use stronger interactions for residues connected along the backbone
-        :arg k_backbone: Relative strength of backbone interaction
-        :arg l_backbone: How many steps along the backbone to give stronger interactions
-        :arg chain_starts: Used for defining backbone interactions
+        :param coords: Cartesian of alpha carbon (or choice of representation) atoms
+        :param cutoff: Cutoff distance for long range interactions in the ENM
+        :param gnm: Whether to use only the kirchhoff matrix (Isotropic GNM), otherwise use full hessian
+        :param fanm: Parameter representing degree of anisotropy for U-ENM
+        :param wfunc: Weight function to assign spring constant based on distance. Use 'power' or 'exp'
+        :param base_dist: In wfunc, divide distance by the base_distance
+        :param d_power: In wfunc, use this power of the distance
+        :param backbone: Whether to use stronger interactions for residues connected along the backbone
+        :param k_backbone: Relative strength of backbone interaction
+        :param l_backbone: How many steps along the backbone to give stronger interactions
+        :param chain_starts: Used for defining backbone interactions
         :return: A tuple of sparse matrices. The kirchoff matrix and the hessian matrix
         :rtype: (scipy.sparse.csr_matrix, scipy.sparse.csr_matrix)
         """
