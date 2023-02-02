@@ -261,17 +261,3 @@ def fluctPlot(d, title, pdb):
     plt.show()
 
 
-def fluctToSims(d):
-    """
-
-    :param d:
-    :return:
-    """
-    from scipy import sparse
-    d_bar = np.mean(np.sqrt(d.data))
-    print('RMS distance fluctuations: ', d_bar)
-    sigma = 1 / (2 * d_bar ** 2)
-    data = d.data
-    data = np.exp(-sigma * data ** 2)
-    sims = sparse.coo_matrix((data, (d.row, d.col)), shape=d.shape)
-    return sims

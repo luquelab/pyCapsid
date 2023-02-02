@@ -17,7 +17,7 @@ def buildENMPreset(coords, preset='ANM', **kwargs):
     """
     model_presets = ['ANM', 'GNM', 'U-ENM', 'bbENM']
     print('Building hessian for model preset: ', preset)
-    match preset:
+    match preset: # change to if/elif/else
         case 'ANM':
             cutoff = 15
             return buildENM(coords, cutoff=cutoff)

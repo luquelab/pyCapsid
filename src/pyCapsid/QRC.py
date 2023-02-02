@@ -2,6 +2,54 @@
 ENM or provided."""
 import numpy as np
 
+def findQuasiRigidClusters(pdb, dist_flucts, n_range, cluster_method='discretize', return_type='final', score_method='median', save=False, dir='.'):
+    """
+
+    :param str pdb:
+    :param dist_flucts:
+    :param list n_range:
+    :param str cluster_method:
+    :param str score_method:
+    :param bool save:
+    :param str dir:
+    :return:
+    """
+    sims = fluctToSims(dist_flucts)
+    n_vecs = n_range.max()
+
+    embedding = calcEmbedding(sims, n_vecs)
+
+    labels, scores, variances, numtypes = cluster_embedding(n_range, embedding, method=cluster_method, score_method=score_method)
+
+    from .clustering_util import plotScores
+    plotScores(pdb, n_range, scores, variances, numtypes)
+
+    ind = np.argmax(scores)
+    final_clusters = labels[ind]
+    final_score = scores[ind]
+    if return_type=='final':
+        return final_clusters, final_score
+    elif return_type=='full':
+        return labels, scores, variances, numtypes
+    else:
+        return final_clusters
+
+def fluctToSims(d):
+    """Transforms a distance fluctuation matrix into a similarity matrix
+
+    :param d: Sparse distance fluctuation matrix
+    :return: Sparse similarity matrix
+    """
+    from scipy import sparse
+    d_bar = np.mean(np.sqrt(d.data))
+    print('RMS distance fluctuations: ', d_bar)
+    sigma = 1 / (2 * d_bar ** 2)
+    data = d.data
+    data = np.exp(-sigma * data ** 2)
+    sims = sparse.coo_matrix((data, (d.row, d.col)), shape=d.shape)
+    sims.eliminate_zeros()
+    return sims
+
 
 def calcEmbedding(sims, n_vecs):
     """
@@ -22,7 +70,7 @@ def calcEmbedding(sims, n_vecs):
     return X_transformed
 
 
-def cluster_embedding(n_range, maps, method='kmeans', score_method='median'):
+def cluster_embedding(n_range, maps, method='discretize', score_method='median'):
     """
 
     :param n_range:
