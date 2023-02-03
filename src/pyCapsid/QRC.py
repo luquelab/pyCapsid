@@ -263,7 +263,7 @@ def discretize(
                 rotation = np.dot(Vh.T, U.T)
 
     if not has_converged:
-        raise LinAlgError("SVD did not conve    rge")
+        raise LinAlgError("SVD did not converge")
     return labels
 
 
