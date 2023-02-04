@@ -2,6 +2,46 @@
 import numba as nb
 import numpy as np
 
+def buildENMPreset(coords, preset='ANM', **kwargs):
+    """Builds a hessian matrix representing an ENM based on one of several presets.
+
+    :param ndarray coords: Cartesian coordinates of alpha carbon atoms(or choice of alternate representation).
+    :param str preset: The specific model preset to use. Only accepts the following values:
+        - 'ANM': Anisotropic Network Model with a cutoff of 15Å and no distance weighting.
+        - 'GNM': Gaussian Network Model with a cutoff of 7.5Å and no distance weighting.
+        - 'U-ENM': Unified Elastic Network Model with a cutoff of 7.5Å and and f_anm parameter of 0.1. [ref]
+        - 'bbENM': Backbone-enhanced Elastic Network Model with a cutoff of 7.5Å and no distance weighting.
+        - 'betaENM': Not yet implemented
+    :return: A tuple of sparse matrices. The kirchoff matrix and the hessian matrix
+    :rtype: (scipy.sparse.csr_matrix, scipy.sparse.csr_matrix)
+    """
+    model_presets = ['ANM', 'GNM', 'U-ENM', 'bbENM']
+    print('Building hessian for model preset: ', preset)
+    match preset: # change to if/elif/else
+        case 'ANM':
+            cutoff = 15
+            return buildENM(coords, cutoff=cutoff)
+        case 'GNM':
+            cutoff = 7.5
+            gnm=True
+            return buildENM(coords, cutoff=cutoff, gnm=gnm)
+        case 'U-ENM':
+            cutoff = 7.5
+            fanm = 0.1
+            return buildENM(coords, cutoff=cutoff, fanm=fanm)
+        case 'bbENM':
+            cutoff = 7.5
+            l_backbone=1
+            k_backbone = 100
+            if 'chain_starts' not in kwargs:
+                raise ValueError("No chain information provided. Indices of chain starts must be provided as chain_starts")
+            chain_starts = kwargs['chain_starts']
+            return buildENM(coords, cutoff=cutoff, chain_starts=chain_starts, l_backbone=l_backbone, k_backbone=k_backbone)
+        case _:
+            raise ValueError("Invalid model preset. Expected one of: %s" % model_presets)
+
+
+
 def buildENM(coords, cutoff=10, gnm=False, fanm=1, wfunc='power', base_dist=1, d_power=0, backbone=False, k_backbone=1,
              l_backbone=1, chain_starts=None):
     """Builds a hessian matrix representing an ENM based on the provided parameters.
@@ -20,38 +60,43 @@ def buildENM(coords, cutoff=10, gnm=False, fanm=1, wfunc='power', base_dist=1, d
         :return: A tuple of sparse matrices. The kirchoff matrix and the hessian matrix
         :rtype: (scipy.sparse.csr_matrix, scipy.sparse.csr_matrix)
         """
+    params = locals()
+    params.pop('coords')
+    print('Model parameters: ', params)
+
     import numpy as np
     from scipy import sparse
     from sklearn.neighbors import BallTree, radius_neighbors_graph, kneighbors_graph
 
+
     n_atoms = coords.shape[0]
     dof = n_atoms * 3
 
+    print(f'Finding neighbors within {cutoff}Å')
     tree = BallTree(coords)
     distGraph = radius_neighbors_graph(tree, cutoff, mode='distance', n_jobs=-1)
     dists = distGraph.tocoo().copy()
     dists.sum_duplicates()
 
+    print('Building kirchhoff matrix')
     kirch = kirchGamma(dists, gfunc=wfunc, bd=base_dist, d2=d_power).tolil()
 
     if backbone:
+        print('Adding backbone terms')
         try:
             c = chain_starts[0]
         except:
             print('Must provide an array of chain starts')
         buildBackbone(l_backbone, k_backbone, kirch, chain_starts)
 
-    kirch = kirch.tocsr()
     dg = np.array(kirch.sum(axis=0))
-    print(dg)
-    print(dg.max())
     kirch.setdiag(-dg[0])
-    kirch.sum_duplicates()
     kirch = kirch.tocsr()
 
     if not gnm:
+        print('Building hessian matrix')
         kc = kirch.tocoo().copy()
-        hData = hessCalc(kc.row, kc.col, kirch.data, coords)
+        hData = hessCalc(kc.row, kc.col, kc.data, coords)
         indpt = kirch.indptr
         inds = kirch.indices
         hessian = sparse.bsr_matrix((hData, inds, indpt), shape=(dof, dof)).tocsr()
@@ -59,7 +104,7 @@ def buildENM(coords, cutoff=10, gnm=False, fanm=1, wfunc='power', base_dist=1, d
     else:
         hessian = kirch.copy()
 
-    print('done constructing matrix')
+    print('Done building model')
 
     from sklearn.utils.validation import check_symmetric
     check_symmetric(hessian, raise_warning=True, tol=1e-5)
@@ -108,7 +153,6 @@ def buildBackbone(bblen, bbgamma, kirch, chain_starts):
 @nb.njit()
 def hessCalc(row, col, kGamma, coords):
     """
-
     :param row:
     :param col:
     :param kGamma:

@@ -5,23 +5,19 @@ import numba as nb
 import numpy as np
 
 
-def modeCalc(hess, kirch, n_modes, eigmethod='eigsh', gnm=False):
+def modeCalc(hess, n_modes, eigmethod='eigsh'):
     """Calculate the 'n_modes' lowest frequency modes of the system by calculating the smallest eigenvalues and eigenvectors
     of the hessian matrix.
 
     :param hess: Sparse hessian matrix
-    :param kirch: Sparse kirchhoff matrix
     :param n_modes: Integer number of low-frequency modes to calculate.
     :param eigmethod: Choice of method for solving the eigenvalue problem.
-    :param gnm:
     :returns:
     """
     import time
     print('Calculating Normal Modes')
     start = time.time()
 
-    if gnm:
-        hess = kirch
     n_dim = hess.shape[0]
 
     # if useMass:
@@ -265,17 +261,3 @@ def fluctPlot(d, title, pdb):
     plt.show()
 
 
-def fluctToSims(d):
-    """
-
-    :param d:
-    :return:
-    """
-    from scipy import sparse
-    d_bar = np.mean(np.sqrt(d.data))
-    print('RMS distance fluctuations: ', d_bar)
-    sigma = 1 / (2 * d_bar ** 2)
-    data = d.data
-    data = np.exp(-sigma * data ** 2)
-    sims = sparse.coo_matrix((data, (d.row, d.col)), shape=d.shape)
-    return sims
