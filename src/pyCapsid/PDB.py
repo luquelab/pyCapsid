@@ -34,9 +34,9 @@ def downloadPDB(pdb, dir='.', pdbx=False):
     """
     from biotite.database.rcsb import fetch
     if pdbx:
-        filename = fetch(pdb, target_path=dir, format='pdbx', overwrite=False, verbose=True)
+        filename = fetch(pdb, target_path=dir, format='pdbx', overwrite=True, verbose=True)
     else:
-        filename = fetch(pdb, target_path=dir, format='pdb', overwrite=False, verbose=True)
+        filename = fetch(pdb, target_path=dir, format='pdb', overwrite=True, verbose=True)
 
     return filename
 
@@ -84,13 +84,14 @@ def loadPDB(filename, pdb, save):
     from prody import parsePDB, writePDB
     import os
 
-    capsid, header = parsePDB(filename, header=True, biomol=True, extend_biomol=True)
+    capsid, header = parsePDB(filename, header=True, biomol=True, secondary=True, extend_biomol=True)
     asym_unit = parsePDB(filename)  # Maybe need a check to see if assembly
 
     if type(capsid) is list:
+        print('list')
         capsid = capsid[0]
 
-    ENM_capsid = capsid.select('protein').copy()
+    ENM_capsid = capsid.select('protein')
     calphas = ENM_capsid.select('calpha')
 
     ENM_capsid_asym = asym_unit.select('protein').copy()
@@ -102,6 +103,7 @@ def loadPDB(filename, pdb, save):
 
     if save:
         print('Writing complete capsid PDB')
+        #print('Number Of Saved Residues: ', ENM_capsid.numResidues())
         writePDB(pdb + '_capsid.pdb', ENM_capsid, hybrid36=True)
 
     if 'title' in header:

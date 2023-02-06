@@ -6,7 +6,7 @@ def chimeraxLaunchTest(labels, chimerax_path='C:\\Program Files\\ChimeraX\\bin',
                        script_path='../src/pyCapsid/scripts/chimerax_script.py', labels_path='.'):
     import os
     from numpy import save
-    from tempfile import NamedTemporaryFile
+    # from tempfile import NamedTemporaryFile
     save(labels_path, labels)
     print(labels_path)
 
