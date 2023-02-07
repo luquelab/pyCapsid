@@ -22,7 +22,8 @@ def chimeraxLaunchTest(labels, chimerax_path='C:\\Program Files\\ChimeraX\\bin',
     #                          stdout=subprocess.PIPE)
     # print(results.stdout)
 
-    # Adapted from py3dmol tutorial
+
+# Adapted from py3dmol tutorial
 # https://william-dawson.github.io/using-py3dmol.html
 class Atom(dict):
     def __init__(self, line):
@@ -49,8 +50,9 @@ class Atom(dict):
         line[46:54] = str(self["z"]).rjust(8)
         line[76:78] = self["sym"].rjust(2)
         return "".join(line) + "\n"
-   
-  class Molecule(list):
+
+
+class Molecule(list):
     def __init__(self, file):
         for line in file:
             if "ATOM" in line or "HETATM" in line:
@@ -117,7 +119,8 @@ def generate_colormap(number_of_distinct_colors: int = 80):
 
     return ListedColormap(initial_cm)
   
-  
+
+import numpy as np
 def open_pdb(pdb):
   with open(pdb + "_capsid.pdb") as ifile:
     mol = Molecule(ifile)
@@ -140,7 +143,7 @@ def clusters_colormap_hexcolor(clusters):
   for c in rgba:
       hexcolor.append(mpl.colors.rgb2hex(c))
       
-def cluster_scheme(mol, hexcolor):
+def cluster_scheme(mol, hexcolor, clusters):
   r0 = mol[0]['resid']
   c0 = hexcolor[0]
   #l0 = clusters[0]
