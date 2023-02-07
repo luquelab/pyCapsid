@@ -4,10 +4,23 @@
 
 def chimeraxLaunchTest(labels, chimerax_path='C:\\Program Files\\ChimeraX\\bin', pdb_path='.', save_path='.',
                        script_path='../src/pyCapsid/scripts/chimerax_script.py', labels_path='.'):
+    """
+
+    :param labels:
+    :param chimerax_path:
+    :param pdb_path:
+    :param save_path:
+    :param script_path:
+    :param labels_path:
+    :return:
+    """
     import os
     from numpy import save
-    # from tempfile import NamedTemporaryFile
-    save(labels_path, labels)
+    from tempfile import NamedTemporaryFile
+    with NamedTemporaryFile(suffix='.npy', delete=False) as temp_file:
+        save(temp_file, labels)
+        labels_path = temp_file.name.replace('\\','/') #os.path.abspath(temp_file.name)
+
     print(labels_path)
 
     chimerax_exe = chimerax_path + '\\ChimeraX.exe'
@@ -16,6 +29,8 @@ def chimeraxLaunchTest(labels, chimerax_path='C:\\Program Files\\ChimeraX\\bin',
     print(cmd_string)
     os.system(cmd_string)
     print('???')
+    temp_file.close()
+    os.unlink(temp_file.name)
 
     # results = subprocess.run(['"' + chimerax_exe + '"', '--script',
     #                           f'"src/pyCapsid/scripts/chimerax_script.py {labels_path} {save_path} {pdb_path}"'],
