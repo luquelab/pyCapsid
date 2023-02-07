@@ -5,7 +5,7 @@ import numba as nb
 import numpy as np
 
 
-def modeCalc(hess, n_modes, eigmethod='eigsh'):
+def modeCalc(hess, n_modes=200, eigmethod='eigsh'):
     """Calculate the 'n_modes' lowest frequency modes of the system by calculating the smallest eigenvalues and eigenvectors
     of the hessian matrix.
 
