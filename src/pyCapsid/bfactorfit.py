@@ -162,7 +162,6 @@ def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotM
     coeff, k, intercept, bfactors_predicted, ci, pv, ico_dev, nmodes = fitBfactors(evals, evecs, bfactors, is3d,
                                                                                    fitModes,
                                                                                    plotModes, forceIco, icotol)
-    print(ci)
     ci = np.abs(ci[0][0] - ci[0][1])
     gamma = (8 * np.pi ** 2) / k
 
@@ -171,18 +170,18 @@ def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotM
 
     import matplotlib.pyplot as plt
     import matplotlib
-    fig, ax = plt.subplots(1, 1, figsize=(10, 5))
+    fig, ax = plt.subplots(1, 1, figsize=(6, 3))
     font = {'family': 'sans-serif',
             'weight': 'normal',
-            'size': 11}
+            'size': 9}
     matplotlib.rc('font', **font)
 
     n_asym = int(bfactors.shape[0] / 60)
 
     ax.plot(np.arange(bfactors.shape[0])[:n_asym], bfactors[:n_asym], label='b-factors (Experimental)')
     ax.plot(np.arange(bfactors_predicted.shape[0])[:n_asym], bfactors_predicted[:n_asym], label='b-factors (Predicted)')
-    ax.set_ylabel(r'$Å^{2}$', fontsize=12)
-    ax.set_xlabel('Residue Number', fontsize=12)
+    ax.set_ylabel(r'$Å^{2}$', fontsize=9)
+    ax.set_xlabel('Residue Number', fontsize=9)
     ax.tick_params(axis='y', labelsize=8)
     ax.tick_params(axis='x', labelsize=8)
 
@@ -190,7 +189,7 @@ def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotM
     fig.suptitle(
         (fr"Experimental vs Predicted b-factors: ({pdb})" + '\n' + fr"$\gamma = $ {gamma:.2e} $\pm$ {ci:.2e} "
                                                                    fr"$\frac{{k_b T}}{{Å^{2}}}$ CC = {coeff:.2f} Icosahedral deviation = {ico_dev:.2f}"),
-        fontsize=12)
+        fontsize=9)
     plt.show()
 
     return coeff, gamma, nmodes

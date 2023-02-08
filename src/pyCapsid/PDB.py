@@ -91,7 +91,7 @@ def loadPDB(filename, pdb, save):
         print('list')
         capsid = capsid[0]
 
-    ENM_capsid = capsid.select('protein')
+    ENM_capsid = capsid.select('protein').copy()
     calphas = ENM_capsid.select('calpha')
 
     ENM_capsid_asym = asym_unit.select('protein').copy()

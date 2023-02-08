@@ -61,7 +61,6 @@ def calcEmbedding(sims, n_vecs):
     from sklearn.manifold import spectral_embedding
     print('Performing Spectral Embedding')
 
-    from scipy.sparse.csgraph import connected_components
 
     X_transformed = spectral_embedding(sims, n_components=n_vecs, drop_first=False, eigen_solver='arpack',
                                        norm_laplacian=True)
@@ -103,7 +102,7 @@ def cluster_embedding(n_range, maps, method='discretize', score_method='median')
 
         normalize(emb, copy=False)
 
-        print('Clusters: ' + str(n_clusters))
+        # print('Clusters: ' + str(n_clusters))
 
         if method == 'discretize':
             label = discretize(emb)
@@ -111,22 +110,13 @@ def cluster_embedding(n_range, maps, method='discretize', score_method='median')
         elif method == 'kmeans':
             centroids, label, inert, n_iter = k_means(emb, n_clusters=n_clusters,
                                                       return_n_iter=True)
-        elif method == 'qr':
-            label = cluster_qr(emb)
-            centroids = calcCosCentroids(emb, label, n_clusters)
-        elif method == 'qr_init':
-            label = cluster_qr(emb)
-            centroids = calcCentroids(emb, label, n_clusters)
-            normalize(centroids, copy=False)
-            centroids, label, inert, n_iter = k_means(emb, n_clusters=n_clusters, init=centroids,
-                                                      return_n_iter=True)
         else:
-            raise Exception('Method should be kmeans, discretize, qr, or qr_init.')
+            raise Exception('Method should be kmeans or discretize.')
 
         labels.append(label)
 
         testScore = median_score(emb, centroids, score_method)
-        print('Score: ', testScore)
+        # print('Score: ', testScore)
         scores.append(testScore)
 
         var, ntypes = cluster_types(label)

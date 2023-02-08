@@ -194,6 +194,6 @@ def view_pdb_ngl(pdb, capsid, labels):
 
     view.add_representation("spacefill",  color=color_scheme)
     view._remote_call("setSize", target='Widget', args=['1000px','1000px'])
-    view
+    return view
 
     

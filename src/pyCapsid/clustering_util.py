@@ -23,9 +23,9 @@ def calcCentroids(X, labels, n_clusters):
             cent = np.mean(clust, axis=0)
             centroids[i, :] = cent
 
-    if n != n_clusters:
-        print('Some clusters unassigned')
-        print('Assigned Clusters: ', n)
+    # if n != n_clusters:
+    #     print('Some clusters unassigned')
+    #     print('Assigned Clusters: ', n)
 
     return np.array(centroids)
 
@@ -52,9 +52,9 @@ def calcCosCentroids(X, labels, n_clusters):
             cent = c / np.linalg.norm(c)
             centroids[i, :] = cent
 
-    if n != n_clusters:
-        print('Some clusters unassigned')
-        print('Assigned Clusters: ', n)
+    # if n != n_clusters:
+    #     print('Some clusters unassigned')
+    #     print('Assigned Clusters: ', n)
 
     return centroids
 
@@ -137,7 +137,7 @@ def plotScores(pdb, n_range, scores, ntypes):
     matplotlib.rc('font', **font)
 
     print('Plotting')
-    fig, ax = plt.subplots(2, 1, figsize=(10, 5), sharex=True)
+    fig, ax = plt.subplots(2, 1, figsize=(6, 3), sharex=True)
     fig.suptitle('k profile: ' + ' (' + pdb + ')')
     ax[0].scatter(n_range, scores, marker='D', s=15)
     ax[0].plot(n_range, scores)
