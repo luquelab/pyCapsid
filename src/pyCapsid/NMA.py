@@ -5,7 +5,7 @@ import numba as nb
 import numpy as np
 
 
-def modeCalc(hess, n_modes=200, eigmethod='eigsh'):
+def modeCalc(hess, n_modes=200, eigmethod='eigsh', is3d=True):
     """Calculate the 'n_modes' lowest frequency modes of the system by calculating the smallest eigenvalues and eigenvectors
     of the hessian matrix.
 
@@ -43,7 +43,7 @@ def modeCalc(hess, n_modes=200, eigmethod='eigsh'):
         from scipy.sparse.linalg import lobpcg
 
         epredict = np.random.rand(n_dim, n_modes + 6)
-        evals, evecs = lobpcg(mat, epredict, largest=False, tol=0, maxiter=n_dim)
+        evals, evecs = lobpcg(hess, epredict, largest=False, tol=0, maxiter=n_dim)
         evals = evals[6:]
         evecs = evecs[:, 6:]
     elif eigmethod == 'lobcuda':
@@ -51,15 +51,15 @@ def modeCalc(hess, n_modes=200, eigmethod='eigsh'):
         from cupyx.scipy.sparse.linalg import lobpcg as clobpcg
         from cupyx.scipy.sparse.linalg import LinearOperator, spilu
 
-        sparse_gpu = cp.sparse.csr_matrix(mat.astype(cp.float32))
+        sparse_gpu = cp.sparse.csr_matrix(hess.astype(cp.float32))
         epredict = cp.random.rand(n_dim, n_modes + 6, dtype=cp.float32)
 
         lu = spilu(sparse_gpu, fill_factor=50)  # LU decomposition
-        M = LinearOperator(mat.shape, lu.solve)
+        M = LinearOperator(hess.shape, lu.solve)
         print('gpu eigen')
 
         evals, evecs = clobpcg(sparse_gpu, epredict, M=M, largest=False, tol=0, verbosityLevel=0)
-        if model == 'anm':
+        if is3d == 'anm':
             evals = cp.asnumpy(evals[6:])
             evecs = cp.asnumpy(evecs[:, 6:])
         else:
@@ -261,3 +261,20 @@ def fluctPlot(d, title, pdb):
     plt.show()
 
 
+# This is a stupid way to switch this to be in NMA
+def fitCompareBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotModes=False, forceIco=True, icotol=0.002):
+    """
+
+    :param evals:
+    :param evecs:
+    :param bfactors:
+    :param pdb:
+    :param is3d:
+    :param fitModes:
+    :param plotModes:
+    :param forceIco:
+    :param icotol:
+    :return:
+    """
+    from .bfactorfit import fitPlotBfactors
+    return fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=is3d, fitModes=fitModes, plotModes=plotModes, forceIco=forceIco, icotol=icotol)

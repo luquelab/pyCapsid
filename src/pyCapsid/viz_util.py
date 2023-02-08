@@ -2,8 +2,8 @@
 
 """
 
-def chimeraxLaunchTest(labels, chimerax_path='C:\\Program Files\\ChimeraX\\bin', pdb_path='.', save_path='.',
-                       script_path='../src/pyCapsid/scripts/chimerax_script.py', labels_path='.'):
+def chimeraxLaunchTest(labels, pdb, remote=True, chimerax_path='C:\\Program Files\\ChimeraX\\bin', pdb_path='.', save_path='.',
+                       script_path='../src/pyCapsid/scripts/chimerax_script.py'):
     """
 
     :param labels:
@@ -25,7 +25,7 @@ def chimeraxLaunchTest(labels, chimerax_path='C:\\Program Files\\ChimeraX\\bin',
 
     chimerax_exe = chimerax_path + '\\ChimeraX.exe'
     print(chimerax_exe)
-    cmd_string = f'""{chimerax_exe}" --script "{script_path} {labels_path} {save_path} {pdb_path}""'
+    cmd_string = f'""{chimerax_exe}" --script "{script_path} {labels_path} {save_path} {pdb_path} {str(remote)} {pdb}""'
     print(cmd_string)
     os.system(cmd_string)
     print('???')
@@ -161,8 +161,6 @@ def clusters_colormap_hexcolor(clusters):
 def cluster_scheme(mol, hexcolor, clusters):
   r0 = mol[0]['resid']
   c0 = hexcolor[0]
-  #l0 = clusters[0]
-  #fullcolors = []
   clust_scheme = []
   select = '@'
   print(r0, c0)
