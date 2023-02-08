@@ -2,7 +2,7 @@
 
 """
 
-def chimeraxLaunchTest(labels, pdb, remote=True, chimerax_path='C:\\Program Files\\ChimeraX\\bin', pdb_path='.', save_path='.',
+def chimeraxViz(labels, pdb, remote=True, chimerax_path='C:\\Program Files\\ChimeraX\\bin', pdb_path='.', save_path='.',
                        script_path='../src/pyCapsid/scripts/chimerax_script.py'):
     """
 
@@ -14,6 +14,7 @@ def chimeraxLaunchTest(labels, pdb, remote=True, chimerax_path='C:\\Program File
     :param labels_path:
     :return:
     """
+
     import os
     from numpy import save
     from tempfile import NamedTemporaryFile
@@ -21,14 +22,11 @@ def chimeraxLaunchTest(labels, pdb, remote=True, chimerax_path='C:\\Program File
         save(temp_file, labels)
         labels_path = temp_file.name.replace('\\','/') #os.path.abspath(temp_file.name)
 
-    print(labels_path)
 
     chimerax_exe = chimerax_path + '\\ChimeraX.exe'
-    print(chimerax_exe)
     cmd_string = f'""{chimerax_exe}" --script "{script_path} {labels_path} {save_path} {pdb_path} {str(remote)} {pdb}""'
     print(cmd_string)
     os.system(cmd_string)
-    print('???')
     temp_file.close()
     os.unlink(temp_file.name)
 
@@ -137,26 +135,26 @@ def generate_colormap(number_of_distinct_colors: int = 80):
 
 import numpy as np
 def open_pdb(pdb):
-  with open(pdb + "_capsid.pdb") as ifile:
-    mol = Molecule(ifile)
+    with open(pdb + "_capsid.pdb") as ifile:
+        mol = Molecule(ifile)
+    return mol
+
     
-    
-def clusters_min_shape(clusters):
-  import numpy as np
-  print(np.min(clusters))
-  print('labels: ', clusters.shape)
+
   
   
 def clusters_colormap_hexcolor(clusters):
-  import matplotlib as mpl
-  norm = mpl.colors.Normalize(vmin=np.min(clusters), vmax=np.max(clusters))
-  cmap = generate_colormap(int(np.max(clusters)))
-  print(cmap)
-  rgba = cmap(norm(clusters))
-  print(rgba*255)
-  hexcolor = []
-  for c in rgba:
+    import matplotlib as mpl
+    norm = mpl.colors.Normalize(vmin=np.min(clusters), vmax=np.max(clusters))
+    cmap = generate_colormap(int(np.max(clusters)))
+    print(cmap)
+    rgba = cmap(norm(clusters))
+    print(rgba*255)
+    hexcolor = []
+    for c in rgba:
       hexcolor.append(mpl.colors.rgb2hex(c))
+
+    return hexcolor
       
 def cluster_scheme(mol, hexcolor, clusters):
   r0 = mol[0]['resid']
@@ -180,17 +178,22 @@ def cluster_scheme(mol, hexcolor, clusters):
           c0 = hexcolor[j]
           l0 = clusters[j]
   clust_scheme.append([c0, select[:-1]])
+
+  return clust_scheme
   
-def view_pdb(pdb, clust_scheme, capsid):
-  import nglview as ngl
-  file = pdb + '_capsid.pdb'
-  color_scheme = ngl.color._ColorScheme(clust_scheme, label="scheme_regions")
-  view = ngl.show_prody(capsid, gui=False)
-  view.clear_representations()
+def view_pdb_ngl(pdb, capsid, labels):
+    mol = open_pdb(pdb)
+    hexcolor = clusters_colormap_hexcolor(labels)
+    clust_scheme = cluster_scheme(mol, hexcolor, labels)
+
+    import nglview as ngl
+    color_scheme = ngl.color._ColorScheme(clust_scheme, label="scheme_regions")
+    view = ngl.show_prody(capsid, gui=False)
+    view.clear_representations()
 
 
-  view.add_representation("spacefill",  color=color_scheme)
-  view._remote_call("setSize", target='Widget', args=['1000px','1000px'])
-  view
+    view.add_representation("spacefill",  color=color_scheme)
+    view._remote_call("setSize", target='Widget', args=['1000px','1000px'])
+    view
 
     

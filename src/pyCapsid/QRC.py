@@ -22,7 +22,7 @@ def findQuasiRigidClusters(pdb, dist_flucts, n_range, cluster_method='discretize
     labels, scores, variances, numtypes = cluster_embedding(n_range, embedding, method=cluster_method, score_method=score_method)
 
     from .clustering_util import plotScores
-    plotScores(pdb, n_range, scores, variances, numtypes)
+    plotScores(pdb, n_range, scores, numtypes)
 
     ind = np.argmax(scores)
     final_clusters = labels[ind]
@@ -62,7 +62,6 @@ def calcEmbedding(sims, n_vecs):
     print('Performing Spectral Embedding')
 
     from scipy.sparse.csgraph import connected_components
-    print(connected_components(sims))
 
     X_transformed = spectral_embedding(sims, n_components=n_vecs, drop_first=False, eigen_solver='arpack',
                                        norm_laplacian=True)
@@ -80,6 +79,8 @@ def cluster_embedding(n_range, maps, method='discretize', score_method='median')
     :return:
     """
     print('Clustering Embedded Points')
+    print(f'Method: {method}')
+
     from sklearn.preprocessing import normalize
     if method == 'kmeans':
         from sklearn.cluster import k_means
@@ -103,7 +104,6 @@ def cluster_embedding(n_range, maps, method='discretize', score_method='median')
         normalize(emb, copy=False)
 
         print('Clusters: ' + str(n_clusters))
-        print(method)
 
         if method == 'discretize':
             label = discretize(emb)
@@ -124,10 +124,7 @@ def cluster_embedding(n_range, maps, method='discretize', score_method='median')
             raise Exception('Method should be kmeans, discretize, qr, or qr_init.')
 
         labels.append(label)
-        cl = np.unique(label)
-        print(cl.shape)
 
-        print('Scoring')
         testScore = median_score(emb, centroids, score_method)
         print('Score: ', testScore)
         scores.append(testScore)

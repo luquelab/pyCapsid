@@ -145,7 +145,7 @@ def plotByMode(mode_indices, data, datalabel):
     plt.show()
 
 
-def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=False, plotModes=False, forceIco=False, icotol=0.002):
+def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotModes=False, forceIco=True, icotol=0.002):
     """
 
     :param evals:
