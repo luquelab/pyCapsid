@@ -193,4 +193,4 @@ def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=False, plot
         fontsize=12)
     plt.show()
 
-    return coeff, k, intercept, bfactors_predicted, ci, pv, ico_dev, nmodes
+    return coeff, gamma, nmodes

@@ -42,7 +42,7 @@ def fluctToSims(d):
     """
     from scipy import sparse
     d_bar = np.mean(np.sqrt(d.data))
-    print('RMS distance fluctuations: ', d_bar)
+    # print('RMS distance fluctuations: ', d_bar)
     sigma = 1 / (2 * d_bar ** 2)
     data = d.data
     data = np.exp(-sigma * data ** 2)

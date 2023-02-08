@@ -85,9 +85,7 @@ def calcCovMat(evals, evecs, n_modes, coords, fluct_cutoff, is3d=True):
     from scipy import sparse
     from sklearn.neighbors import BallTree, radius_neighbors_graph
 
-    n_modes = int(n_modes)
-    print(n_modes)
-    print('Direct Calculation Method')
+    print('Calculating sparse covariance matrix')
 
     tree = BallTree(coords)
     adj = radius_neighbors_graph(tree, fluct_cutoff, mode='connectivity', n_jobs=-1).tocoo()
@@ -104,7 +102,7 @@ def calcCovMat(evals, evecs, n_modes, coords, fluct_cutoff, is3d=True):
     return covariance
 
 
-def calcDistFlucts(evals, evecs, n_modes, coords, fluct_cutoff, is3d=True):
+def calcDistFlucts(evals, evecs, coords, fluct_cutoff=7.5, is3d=True):
     """Calculates a sparse covariance matrix from the low frequency modes.
 
     :param evals:
@@ -117,14 +115,13 @@ def calcDistFlucts(evals, evecs, n_modes, coords, fluct_cutoff, is3d=True):
     """
     from scipy import sparse
 
+    n_modes = evals.shape[0]
     covariance = calcCovMat(evals, evecs, n_modes, coords, fluct_cutoff, is3d)
     c_diag = covariance.diagonal()
     row, col, c_data = (covariance.row, covariance.col, covariance.data)
-    print('diag: ', c_diag)
-    print('data: ', c_data)
 
+    print('Calculating sparse distance fluctuation matrix from covariance matrix')
     fluct_data = distFluctFromCov(c_diag, c_data, row, col)
-    print(fluct_data)
 
     dist_flucts = sparse.coo_matrix((fluct_data, (row, col)), shape=covariance.shape)
 
@@ -277,4 +274,7 @@ def fitCompareBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, pl
     :return:
     """
     from .bfactorfit import fitPlotBfactors
-    return fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=is3d, fitModes=fitModes, plotModes=plotModes, forceIco=forceIco, icotol=icotol)
+    cc, gamma,n_modes = fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=is3d, fitModes=fitModes, plotModes=plotModes, forceIco=forceIco, icotol=icotol)
+    r_evals = evals[:n_modes]*gamma
+    r_evecs = evecs[:, :n_modes]
+    return r_evals, r_evecs
