@@ -3,7 +3,7 @@ ENM or provided."""
 import numpy as np
 
 def findQuasiRigidClusters(pdb, dist_flucts, n_range, cluster_method='discretize', return_type='final', score_method='median', save=False, dir='.'):
-    """
+    """Uses spectral clustering to split the residues into clusters with minimal internal distance fluctuations.
 
     :param str pdb:
     :param dist_flucts:
@@ -108,8 +108,7 @@ def cluster_embedding(n_range, maps, method='discretize', score_method='median')
             label = discretize(emb)
             centroids = calcCosCentroids(emb, label, n_clusters)
         elif method == 'kmeans':
-            centroids, label, inert, n_iter = k_means(emb, n_clusters=n_clusters,
-                                                      return_n_iter=True)
+            centroids, label, inert, n_iter = k_means(emb, n_clusters=n_clusters, return_n_iter=True)
         else:
             raise Exception('Method should be kmeans or discretize.')
 
@@ -254,7 +253,7 @@ def discretize(
     return labels
 
 
-# Also adapted from sklearn, similar method???
+# Also adapted from sklearn, similar method?
 # def cluster_qr(vectors):
 #     from scipy.linalg import svd, qr
 #     """Find the discrete partition closest to the eigenvector embedding.

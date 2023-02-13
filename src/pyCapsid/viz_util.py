@@ -4,7 +4,7 @@
 
 def chimeraxViz(labels, pdb, remote=True, chimerax_path='C:\\Program Files\\ChimeraX\\bin', pdb_path='.', save_path='.',
                        script_path='../src/pyCapsid/scripts/chimerax_script.py'):
-    """
+    """Launches ChimeraX and runs a script that visualizes the results.
 
     :param labels:
     :param chimerax_path:
