@@ -1,10 +1,3 @@
----
-layout: default
-title: Example 
-parent: Tutorial
-nav_order: 1
----
-
 # Example Tutorial
 This tutorial covers an example of the process to use PyCapid.
 
