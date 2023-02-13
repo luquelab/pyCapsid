@@ -1,7 +1,8 @@
 ---
 layout: default
-title: Tutorial
-nav_order: 4
+title: Example 
+parent: Tutorial
+nav_order: 1
 ---
 
 # Example Tutorial
