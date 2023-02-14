@@ -16,7 +16,7 @@ Via conda:
 First, create a new virtual environment using conda and then activate it.
 
 ~~~~
-conda create -n pycapsid python=3.10
+conda create -n pycapsid python=3.10 -y
 conda activate pycapsid
 ~~~~
 ~~~~

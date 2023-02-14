@@ -11,7 +11,7 @@
 package:
   noarch: python
   name: pycapsid
-  version: 0.1.2
+  version: 0.1.3
 
 source:
   path: ..
@@ -47,14 +47,14 @@ requirements:
     - pip
   run:
     - python <3.11
-    - prody<=2.2
-    - biotite
-    - scikit-learn
-    - numpy<1.24
-    - scipy
-    - matplotlib-base
-    - numba
-    - statsmodels
+    - prody=2.2
+    - biotite=0.35
+    - scikit-learn=1.2.0
+    - numpy=1.23
+    - scipy=1.10
+    - matplotlib-base=3.6
+    - numba=0.56
+    - statsmodels=0.13
 
 test:
   # Some packages might need a `test/commands` key to check CLI.
