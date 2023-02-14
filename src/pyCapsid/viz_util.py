@@ -30,11 +30,6 @@ def chimeraxViz(labels, pdb, remote=True, chimerax_path='C:\\Program Files\\Chim
     temp_file.close()
     os.unlink(temp_file.name)
 
-    # results = subprocess.run(['"' + chimerax_exe + '"', '--script',
-    #                           f'"src/pyCapsid/scripts/chimerax_script.py {labels_path} {save_path} {pdb_path}"'],
-    #                          stdout=subprocess.PIPE)
-    # print(results.stdout)
-
 
 # Adapted from py3dmol tutorial
 # https://william-dawson.github.io/using-py3dmol.html
