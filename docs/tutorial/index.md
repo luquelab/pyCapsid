@@ -4,7 +4,7 @@ title: Tutorial
 nav_order: 3
 ---
 
-# Tutorial: Quasi-rigid subunits of Satellite Tobacco Mosaic Virus
+# Tutorial
 
 This tutorial covers installing and using pyCapsid to identify the quasi-rigid subunits of an example capsid. An example 
 notebook is provided with all of the example code in the [notebooks folder](https://github.com/luquelab/pyCapsid/tree/main/notebooks). 
@@ -44,7 +44,7 @@ Once these are all installed, download the notebook and run the following comman
 jupyter lab
 ~~~~
 
-## Code
+## Quasi-rigid subunits of Satellite Tobacco Mosaic Virus
 
 ### Fetch and load PDB
 This code acquires the pdb file from the RCSB databank, loads the necessary information, and saves copies for possible use in visualization in other software.
