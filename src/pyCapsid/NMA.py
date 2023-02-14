@@ -33,12 +33,13 @@ def modeCalc(hess, n_modes=200, eigmethod='eigsh', is3d=True):
     #     Mass = diags(mass)
     # else:
 
-    from scipy.sparse import identity
-    Mass = identity(n_dim)
+
+    # from scipy.sparse import identity
+    # Mass = identity(n_dim)
 
     if eigmethod == 'eigsh':
         from scipy.sparse.linalg import eigsh
-        evals, evecs = eigsh(hess, k=n_modes, M=Mass, sigma=1e-10, which='LA')
+        evals, evecs = eigsh(hess, k=n_modes, sigma=1e-10, which='LA')
     elif eigmethod == 'lobpcg':
         from scipy.sparse.linalg import lobpcg
 

@@ -82,14 +82,10 @@ def loadPDB(filename, pdb, save):
     :param save: Whether to save a copy of the complete assembly as pdb/pdbx
     """
     from prody import parsePDB, writePDB
-    import os
 
     capsid, header = parsePDB(filename, header=True, biomol=True, secondary=True, extend_biomol=True)
     asym_unit = parsePDB(filename)  # Maybe need a check to see if assembly
 
-    if type(capsid) is list:
-        print('list')
-        capsid = capsid[0]
 
     ENM_capsid = capsid.select('protein').copy()
     calphas = ENM_capsid.select('calpha')
