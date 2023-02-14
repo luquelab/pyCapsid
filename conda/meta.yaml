@@ -11,7 +11,7 @@
 package:
   noarch: python
   name: pycapsid
-  version: 0.1.1
+  version: 0.1.2
 
 source:
   path: ..
@@ -47,10 +47,10 @@ requirements:
     - pip
   run:
     - python <3.11
-    - prody
+    - prody<=2.2
     - biotite
     - scikit-learn
-    - numpy
+    - numpy<1.24
     - scipy
     - matplotlib-base
     - numba
