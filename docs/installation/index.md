@@ -12,7 +12,13 @@ pip install pyCapsid
 ~~~~
 
 Via conda:
-We recommend creating a virtual environment using conda 
+
+First, create a new virtual environment using conda and then activate it.
+
+~~~~
+conda create -n pycapsid python=3.10
+conda activate pycapsid
+~~~~
 ~~~~
 conda install -c colintravisbrown -c conda-forge pycapsid
 ~~~~

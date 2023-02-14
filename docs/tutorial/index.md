@@ -94,7 +94,7 @@ n_range = np.arange(4, n_cluster_max, 2)
 labels, score  = findQuasiRigidClusters(pdb, dist_flucts, n_range)
 ```
 
-### Visualize in ChimeraX
+## Visualize in ChimeraX
 If ChimeraX (https://www.cgl.ucsf.edu/chimerax/download.html) is installed you may provide a path to the chimerax 
 executable file and the path to the script (https://github.com/luquelab/pyCapsid/blob/main/src/pyCapsid/scripts/chimerax_script.py) 
 to automatically visualize the results in chimerax.
@@ -104,7 +104,7 @@ from pyCapsid.viz_util import chimeraxViz
 chimeraxViz(labels, pdb, chimerax_path='C:\\Program Files\\ChimeraX\\bin')
 ```
 
-### Visualize in jupyter notebook with nglview
+## Visualize in jupyter notebook with nglview
 You can visualize the results in a jupyter notebook with nglview. The following function returns an nglview view with the 
 results colored based on cluster. See the nglview documentation for further info 
 (http://nglviewer.org/nglview/release/v2.7.7/index.html)
