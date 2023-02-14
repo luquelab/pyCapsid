@@ -4,47 +4,17 @@ title: Tutorial
 nav_order: 3
 ---
 
-# Tutorial
+# Tutorial: Quasi-rigid subunits of Satellite Tobacco Mosaic Virus
 
-This tutorial covers installing and using pyCapsid to identify the quasi-rigid subunits of an example capsid. An example 
+This tutorial covers the use pyCapsid to identify the quasi-rigid subunits of an example capsid. An example 
 notebook is provided with all of the example code in the [notebooks folder](https://github.com/luquelab/pyCapsid/tree/main/notebooks). 
 
-
-## Installation
-
-First, create a new virtual environment using conda and then activate it.
-
-~~~~
-conda create -n pycapsid python=3.10
-conda activate pycapsid
-~~~~
-
-In the virtual environment, install pycapsid using either pip or conda.
-~~~~
-pip install pycapsid
-~~~~
-
-~~~~
-conda install -c colintravisbrown -c conda-forge pycapsid
-~~~~
-
-To use the notebook and visualize the results, you will need jupyter lab with widgets and the nglview package. Install
-these using pip or conda.
-~~~~
-pip install jupyterlab ipywidgets==7.7.2 nglview
-~~~~
-
-~~~~
-conda install -c conda-forge jupyterlab ipywidgets==7.7.2 nglview
-~~~~
-
-Once these are all installed, download the notebook and run the following command in its directory to launch jupyter lab.
+Once the package and other dependecies are [installed](https://luquelab.github.io/pyCapsid/installation/), download the 
+notebook and run the following command in its directory to launch jupyter lab.
 
 ~~~~
 jupyter lab
 ~~~~
-
-## Quasi-rigid subunits of Satellite Tobacco Mosaic Virus
 
 ### Fetch and load PDB
 This code acquires the pdb file from the RCSB databank, loads the necessary information, and saves copies for possible use in visualization in other software.

@@ -34,3 +34,7 @@ Via conda:
 ~~~~
 conda install -c conda-forge jupyterlab ipywidgets==7.7.2 nglview
 ~~~~
+
+## Visualization in ChimeraX
+For higher quality visualization of the results you need to download and install [ChimeraX](https://www.cgl.ucsf.edu/chimerax/download.html).
+We reccomend ChimeraX 1.5
