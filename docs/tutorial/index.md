@@ -4,10 +4,13 @@ title: Tutorial
 nav_order: 3
 ---
 
-# Tutorial Notebook
+# Tutorial: Quasi-rigid subunits of Satellite Tobacco Mosaic Virus
 
-An example notebook is provided in the [notebooks folder](https://github.com/luquelab/pyCapsid/tree/main/notebooks). 
-This tutorial covers what is necessary to run the notebook.
+This tutorial covers installing and using pyCapsid to identify the quasi-rigid subunits of an example capsid. An example 
+notebook is provided with all of the example code in the [notebooks folder](https://github.com/luquelab/pyCapsid/tree/main/notebooks). 
+
+
+## Installation
 
 First, create a new virtual environment using conda and then activate it.
 
@@ -16,7 +19,7 @@ conda create -n pycapsid python=3.10
 conda activate pycapsid
 ~~~~
 
-In the virtual environment, install pycapsid using pip or conda.
+In the virtual environment, install pycapsid using either pip or conda.
 ~~~~
 pip install pycapsid
 ~~~~
@@ -41,13 +44,9 @@ Once these are all installed, download the notebook and run the following comman
 jupyter lab
 ~~~~
 
-The following steps are included in the notebook.
+## Code
 
-# Example Tutorial
-This tutorial covers an example of the process to use PyCapid.
-
-
-## Fetch and load PDB
+### Fetch and load PDB
 This code acquires the pdb file from the RCSB databank, loads the necessary information, and saves copies for possible use in visualization in other software.
 
 ```python
@@ -57,7 +56,7 @@ capsid, calphas, coords, bfactors, chain_starts, title = getCapsid(pdb, save=Tru
 
 ```
 
-## Build ENM Hessian
+### Build ENM Hessian
 This code builds a hessian matrix using an elastic network model defined by the given parameters. The types of model and the meaning of the parameters are provided in the documentation.
 
 ```python
@@ -65,64 +64,53 @@ from pyCapsid.ENM import buildENMPreset
 kirch, hessian = buildENMPreset(coords, preset='U-ENM')
 ```
 
-## Perform NMA
-### Calculate low frequency modes
+### Perform NMA
 This code calculates the n lowest frequency modes of the system by calculating the eigenvalues and eigenvectors of the hessian matrix.
 
 ```python
 from pyCapsid.NMA import modeCalc
-n_modes = 200
-eigmethod = 'eigsh'
-
-evals, evecs = modeCalc(hessian, n_modes, eigmethod=eigmethod)
+evals, evecs = modeCalc(hessian)
 ```
 
-## Predict, fit, and compare b-factors
+### Predict, fit, and compare b-factors
 This code uses the resulting normal modes and frequencies to predict the b-factors of each alpha carbon, fits these results to experimental values from the pdb entry, and plots the results for comparison.
 
 ```python
-from pyCapsid.bfactorfit import plotBfactors
-plotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotModes=True, forceIc
+from pyCapsid.NMA import fitCompareBfactors
+evals_scaled, evecs_scaled = fitCompareBfactors(evals, evecs, bfactors, pdb, fitModes=False)
 ```
 
-## Perform quasi-rigid cluster identification (QRC)
-### Build weighted graph based on distance fluctuations
-This code calculates the distance fluctuations between residues within a cutoff distance from each other and transforms those distance fluctuations into a similarity matrix representing a sparse weighted graph.
+### Perform quasi-rigid cluster identification (QRC)
 
 ```python
 from pyCapsid.NMA import calcDistFlucts
-
-n_modes = 200
-fluct_cutoff = 10
-
-dist_flucts = calcDistFlucts(evals, evecs, n_modes, coords, fluct_cutoff, is3d=True)
-print(dist_flucts.data)
-```
-
-## Calculate the spectral embedding of the graph
-This code calculates the spectral embedding (eigenvectors) of the sparse weighted graph.
-
-```python
-from pyCapsid.QRC import calcEmbedding, cluster_embedding
-from pyCapsid import clustering_util
+from pyCapsid.QRC import findQuasiRigidClusters
 import numpy as np
 
-n_cluster_max = 130
-embedding = calcEmbedding(sims, n_cluster_max)
-```
+dist_flucts = calcDistFlucts(evals_scaled, evecs, coords)
 
-## Cluster the embedded points
-This code performs clustering for a set of # of clusters
-
-```python
+n_cluster_max = 62
 n_range = np.arange(4, n_cluster_max, 2)
-
-labels, scores, variances, numtypes = cluster_embedding(n_range, embedding, method='discretize')
+labels, score  = findQuasiRigidClusters(pdb, dist_flucts, n_range)
 ```
 
+### Visualize in ChimeraX
+If ChimeraX (https://www.cgl.ucsf.edu/chimerax/download.html) is installed you may provide a path to the chimerax 
+executable file and the path to the script (https://github.com/luquelab/pyCapsid/blob/main/src/pyCapsid/scripts/chimerax_script.py) 
+to automatically visualize the results in chimerax.
 
 ```python
-from pyCapsid.clustering_util import plotScores
-plotScores(pdb, n_range, scores, variances, numtypes)
-clusters = labels[np.argmax(scores)]
+from pyCapsid.viz_util import chimeraxViz
+chimeraxViz(labels, pdb, chimerax_path='C:\\Program Files\\ChimeraX\\bin')
+```
+
+### Visualize in jupyter notebook with nglview
+You can visualize the results in a jupyter notebook with nglview. The following function returns an nglview view with the 
+results colored based on cluster. See the nglview documentation for further info 
+(http://nglviewer.org/nglview/release/v2.7.7/index.html)
+
+```python
+from pyCapsid.viz_util import view_pdb_ngl
+view = view_pdb_ngl(pdb, capsid, labels)
+view
 ```

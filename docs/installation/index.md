@@ -11,7 +11,8 @@ Via pip:
 pip install pyCapsid
 ~~~~
 
-Via conda: 
+Via conda:
+We recommend creating a virtual environment using conda 
 ~~~~
 conda install -c colintravisbrown -c conda-forge pycapsid
 ~~~~

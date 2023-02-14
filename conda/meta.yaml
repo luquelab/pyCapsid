@@ -47,7 +47,7 @@ requirements:
     - pip
   run:
     - python <3.11
-    - prody=2.2
+    - prody
     - biotite
     - scikit-learn
     - numpy
