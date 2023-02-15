@@ -9,9 +9,8 @@
 #{% set data = load_setup_py_data() %}
 
 package:
-  noarch: python
   name: pycapsid
-  version: 0.1.3
+  version: 0.1.4
 
 source:
   path: ..
@@ -28,7 +27,8 @@ source:
   #  `conda install openssl -c conda-forge``
 
 build:
-  script: python -m pip install .
+  noarch: python
+  script: python -m pip install . -vv
   number: 0
   # Uncomment the following line if the package is pure Python and the recipe is exactly the same for all platforms.
   # It is okay if the dependencies are not built for all platforms/versions, although selectors are still not allowed.
@@ -43,18 +43,20 @@ build:
 
 requirements:
   host:
-    - python >=3.6, <3.11
-    - pip
-  run:
     - python <3.11
-    - prody=2.2
-    - biotite=0.35
-    - scikit-learn=1.2.0
-    - numpy=1.23
-    - scipy=1.10
-    - matplotlib-base=3.6
-    - numba=0.56
-    - statsmodels=0.13
+    - pip
+    - setuptools
+    - setuptools-scm
+  run:
+    - python<3.11
+    - prody
+    - biotite
+    - scikit-learn
+    - numpy<1.24
+    - scipy
+    - matplotlib-base
+    - numba
+    - statsmodels
 
 test:
   # Some packages might need a `test/commands` key to check CLI.
