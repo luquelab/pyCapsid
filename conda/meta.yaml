@@ -27,7 +27,6 @@ source:
   #  `conda install openssl -c conda-forge``
 
 build:
-  noarch: python
   script: python -m pip install . -vv
   number: 0
   # Uncomment the following line if the package is pure Python and the recipe is exactly the same for all platforms.
