@@ -2,7 +2,8 @@
 
 """
 
-def chimeraxViz(labels, pdb, remote=True, chimerax_path='C:\\Program Files\\ChimeraX\\bin', pdb_path='.', save_path='.',):
+def chimeraxViz(labels, pdb, remote=True, chimerax_path='C:\\Program Files\\ChimeraX\\bin', pdb_path='.', save_path='.',
+                rwb_scale=False):
     """Launches ChimeraX and runs a script that visualizes the results.
 
     :param labels:
@@ -29,7 +30,7 @@ def chimeraxViz(labels, pdb, remote=True, chimerax_path='C:\\Program Files\\Chim
     script_path = scpath.replace('__init__', 'chimerax_script')
 
     chimerax_exe = chimerax_path + '\\ChimeraX.exe'
-    cmd_string = f'""{chimerax_exe}" --script "{script_path} {labels_path} {save_path} {pdb_path} {str(remote)} {pdb}""'
+    cmd_string = f'""{chimerax_exe}" --script "{script_path} {labels_path} {save_path} {pdb_path} {str(remote)} {pdb} {str(rwb_scale)}""'
     print(cmd_string)
     os.system(cmd_string)
     temp_file.close()
@@ -143,11 +144,16 @@ def open_pdb(pdb):
 
   
   
-def clusters_colormap_hexcolor(clusters):
+def clusters_colormap_hexcolor(clusters, rwb_scale):
     import matplotlib as mpl
     norm = mpl.colors.Normalize(vmin=np.min(clusters), vmax=np.max(clusters))
-    cmap = generate_colormap(int(np.max(clusters)))
-    rgba = cmap(norm(clusters))
+
+    if rwb_scale:
+        cmap = mpl.pyplot.get_cmap('coolwarm_r')
+        rgba = cmap(norm(clusters))
+    else:
+        cmap = generate_colormap(int(np.max(clusters)))
+        rgba = cmap(norm(clusters))
     hexcolor = []
     for c in rgba:
       hexcolor.append(mpl.colors.rgb2hex(c))
@@ -178,12 +184,12 @@ def cluster_scheme(mol, hexcolor, clusters):
 
   return clust_scheme
   
-def view_pdb_ngl(pdb, capsid, labels):
+def view_pdb_ngl(pdb, capsid, labels, rwb_scale=False):
     import biotite.structure.io as strucio
     strucio.save_structure(pdb + '_capsid.pdb', capsid, hybrid36=True)
 
     mol = open_pdb(pdb)
-    hexcolor = clusters_colormap_hexcolor(labels)
+    hexcolor = clusters_colormap_hexcolor(labels, rwb_scale)
     clust_scheme = cluster_scheme(mol, hexcolor, labels)
 
     import nglview as ngl

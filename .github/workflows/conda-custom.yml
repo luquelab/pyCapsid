@@ -1,0 +1,14 @@
+name: Conda Package Custom Publish
+
+on:
+  release:
+    types: [published, edited]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: publish-to-conda-custom
+      run: ./.github/scripts/conda_build_script.sh

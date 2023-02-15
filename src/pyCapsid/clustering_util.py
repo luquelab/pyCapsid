@@ -98,7 +98,7 @@ def median_score(coords, centroids, score_method):
     else:
         score = np.mean(s)
 
-    return score
+    return score, s
 
 
 def cluster_types(labels):

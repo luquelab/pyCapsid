@@ -68,7 +68,7 @@ from chimerax.std_commands import split
 from numpy.linalg import norm
 import sys
 print(sys.argv)
-label_dir, save_dir, pdb_dir, remote, pdb = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
+label_dir, save_dir, pdb_dir, remote, pdb, rwb_scale = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6])
 
 if remote=='True':
     run(session, f'open {pdb}')
@@ -102,8 +102,14 @@ print("radius_est: ", radius)
 labels = np.load(label_dir)
 import matplotlib as mpl
 norm = mpl.colors.Normalize(vmin=np.min(labels), vmax=np.max(labels))
-cmap = generate_colormap(int(np.max(labels)))
-rgba = cmap(norm(labels))*255
+
+if rwb_scale=='True':
+    import matplotlib.pyplot as plt
+    cmap = plt.get_cmap('coolwarm_r')
+    rgba = cmap(norm(labels))*255
+else:
+    cmap = generate_colormap(int(np.max(labels)))
+    rgba = cmap(norm(labels))*255
 
 residues = atoms.unique_residues
 cx_nr = len(residues)

@@ -20,7 +20,7 @@ def findQuasiRigidClusters(pdb, dist_flucts, n_range, cluster_method='discretize
 
     embedding = calcEmbedding(sims, n_vecs)
 
-    labels, scores, variances, numtypes = cluster_embedding(n_range, embedding, method=cluster_method, score_method=score_method)
+    labels, scores, numtypes, fullscores = cluster_embedding(n_range, embedding, method=cluster_method, score_method=score_method)
 
     from .clustering_util import plotScores
     plotScores(pdb, n_range, scores, numtypes)
@@ -28,10 +28,11 @@ def findQuasiRigidClusters(pdb, dist_flucts, n_range, cluster_method='discretize
     ind = np.argmax(scores)
     final_clusters = labels[ind]
     final_score = scores[ind]
+    final_full_score = fullscores[ind]
     if return_type=='final':
-        return final_clusters, final_score
+        return final_clusters, final_score, final_full_score
     elif return_type=='full':
-        return labels, scores, variances, numtypes
+        return labels, scores, numtypes, fullscores
     else:
         return final_clusters
 
@@ -93,8 +94,8 @@ def cluster_embedding(n_range, maps, method='discretize', score_method='median')
     from .clustering_util import median_score, cluster_types, calcCentroids, calcCosCentroids
 
     labels = []
+    fullScores = []
     scores = []
-    variances = []
     numtypes = []
 
     for n in range(len(n_range)):
@@ -115,15 +116,15 @@ def cluster_embedding(n_range, maps, method='discretize', score_method='median')
 
         labels.append(label)
 
-        testScore = median_score(emb, centroids, score_method)
+        med_score, full_score = median_score(emb, centroids, score_method)
         # print('Score: ', testScore)
-        scores.append(testScore)
+        fullScores.append(full_score)
+        scores.append(med_score)
 
         var, ntypes = cluster_types(label)
-        variances.append(var)
         numtypes.append(ntypes)
 
-    return labels, scores, variances, numtypes
+    return labels, scores, numtypes, fullScores
 
 
 # Adapted from sklearn. May need to change later.

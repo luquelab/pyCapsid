@@ -64,9 +64,10 @@ labels, score  = findQuasiRigidClusters(pdb, dist_flucts, n_range)
 ```
 
 ## Visualize in ChimeraX
+## Visualize in ChimeraX
 If ChimeraX (https://www.cgl.ucsf.edu/chimerax/download.html) is installed you may provide a path to the chimerax 
-executable file and the path to the script (https://github.com/luquelab/pyCapsid/blob/main/src/pyCapsid/scripts/chimerax_script.py) 
-to automatically visualize the results in chimerax.
+executable file to automatically visualize the results in chimerax. This is done using the runscript command in chimerax 
+and this python script: (https://github.com/luquelab/pyCapsid/blob/main/src/pyCapsid/scripts/chimerax_script.py).
 
 ```python
 from pyCapsid.viz_util import chimeraxViz
