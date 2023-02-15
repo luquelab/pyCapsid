@@ -1,6 +1,6 @@
 ---
 layout: default
-title: About
+title: Home
 nav_order: 1
 ---
 
