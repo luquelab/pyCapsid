@@ -10,7 +10,7 @@
 
 package:
   name: pycapsid
-  version: 0.1.4
+  version: 0.1.5
 
 source:
   path: ..
@@ -48,7 +48,6 @@ requirements:
     - setuptools-scm
   run:
     - python<3.11
-    - prody
     - biotite
     - scikit-learn
     - numpy<1.24

@@ -142,9 +142,7 @@ def clusters_colormap_hexcolor(clusters):
     import matplotlib as mpl
     norm = mpl.colors.Normalize(vmin=np.min(clusters), vmax=np.max(clusters))
     cmap = generate_colormap(int(np.max(clusters)))
-    print(cmap)
     rgba = cmap(norm(clusters))
-    print(rgba*255)
     hexcolor = []
     for c in rgba:
       hexcolor.append(mpl.colors.rgb2hex(c))
@@ -156,7 +154,6 @@ def cluster_scheme(mol, hexcolor, clusters):
   c0 = hexcolor[0]
   clust_scheme = []
   select = '@'
-  print(r0, c0)
   i = 1
   j = 0
   for at in mol:
@@ -177,17 +174,22 @@ def cluster_scheme(mol, hexcolor, clusters):
   return clust_scheme
   
 def view_pdb_ngl(pdb, capsid, labels):
+    import biotite.structure.io as strucio
+    strucio.save_structure(pdb + '_capsid.pdb', capsid, hybrid36=True)
+
     mol = open_pdb(pdb)
     hexcolor = clusters_colormap_hexcolor(labels)
     clust_scheme = cluster_scheme(mol, hexcolor, labels)
 
     import nglview as ngl
     color_scheme = ngl.color._ColorScheme(clust_scheme, label="scheme_regions")
-    view = ngl.show_prody(capsid, gui=False)
+
+
+    view = ngl.show_structure_file(pdb + '_capsid.pdb', gui=True)
     view.clear_representations()
 
 
-    view.add_representation("spacefill",  color=color_scheme)
+    view.add_representation("spacefill", color=color_scheme)
     view._remote_call("setSize", target='Widget', args=['1000px','1000px'])
     return view
 

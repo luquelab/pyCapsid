@@ -61,6 +61,12 @@ def springFit(bfactors, sqFlucts):
     else:
         b = 0
 
+    # from sklearn.linear_model import HuberRegressor
+    #
+    # huber = HuberRegressor(fit_intercept=False, tol=0, alpha=0.0).fit(sqFlucts, bfactors)
+    # a = huber.coef_
+    # b = huber.intercept_
+
     return a, b, stderr, ci, pv
 
 
