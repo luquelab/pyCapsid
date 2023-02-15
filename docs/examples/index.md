@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Examples
+title: Gallery
 nav_order: 3
 ---
 
