@@ -11,9 +11,9 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - uses: conda-incubator/setup-miniconda@v2
-          with:
-            miniconda-version: "latest"
-            activate-environment: build
+        with:
+          miniconda-version: "latest"
+          activate-environment: build
       - name: conda-setup
         shell: bash
         run: conda install conda-build anaconda-client
