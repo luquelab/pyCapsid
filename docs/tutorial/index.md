@@ -23,7 +23,6 @@ This code acquires the pdb file from the RCSB databank, loads the necessary info
 from pyCapsid.PDB import getCapsid
 pdb = '4oq8'
 capsid, calphas, coords, bfactors, chain_starts, title = getCapsid(pdb, save=True)
-
 ```
 
 ### Build ENM Hessian
@@ -74,6 +73,8 @@ from pyCapsid.viz_util import chimeraxViz
 chimeraxViz(labels, pdb, chimerax_path='C:\\Program Files\\ChimeraX\\bin')
 ```
 
+![capsid_chx](4oq8_chimerax.png){: width="500"}
+
 ## Visualize in jupyter notebook with nglview
 You can visualize the results in a jupyter notebook with nglview. The following function returns an nglview view with the 
 results colored based on cluster. See the nglview documentation for further info 
@@ -84,3 +85,5 @@ from pyCapsid.viz_util import view_pdb_ngl
 view = view_pdb_ngl(pdb, capsid, labels)
 view
 ```
+
+![capsid_ngl](4oq8_nglview.png){: width="500"}

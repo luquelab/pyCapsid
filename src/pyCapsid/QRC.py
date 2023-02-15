@@ -1,5 +1,6 @@
 """Module with functions for identifying quasi-rigid clusters given a distance fluctuation matrix, either calculated using
 ENM or provided."""
+
 import numpy as np
 
 def findQuasiRigidClusters(pdb, dist_flucts, n_range, cluster_method='discretize', return_type='final', score_method='median', save=False, dir='.'):
