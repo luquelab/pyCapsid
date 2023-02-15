@@ -18,10 +18,10 @@ jobs:
         shell: bash
         run: |
           conda install conda-build 
-          conda install anaconda-client
       - name: publish-to-conda-custom
         shell: bash
         run: |
           cd conda
           conda build -c conda-forge --output-folder . .
+          conda install anaconda-client
           anaconda -t ${{ secrets.ANACONDA_TOKEN }} upload --label main noarch/*.tar.bz2
