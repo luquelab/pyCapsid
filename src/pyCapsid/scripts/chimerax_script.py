@@ -1,12 +1,3 @@
-from chimerax.core.commands import *
-from chimerax.std_commands import *
-from chimerax.core.commands import all_objects
-from chimerax.core.commands import run
-from chimerax.atomic.molsurf import MolecularSurface
-from chimerax.atomic import *
-import numpy as np
-import matplotlib as mpl
-# Colormap taken from stackexchange
 
 def generate_colormap(number_of_distinct_colors: int = 80):
     import math
@@ -59,6 +50,16 @@ def generate_colormap(number_of_distinct_colors: int = 80):
             initial_cm[lower_half + j * number_of_shades: lower_half + (j + 1) * number_of_shades, i] += modifier
 
     return ListedColormap(initial_cm)
+
+from chimerax.core.commands import *
+from chimerax.std_commands import *
+from chimerax.core.commands import all_objects
+from chimerax.core.commands import run
+from chimerax.atomic.molsurf import MolecularSurface
+from chimerax.atomic import *
+import numpy as np
+import matplotlib as mpl
+# Colormap taken from stackexchange
 
 # from chimerax.core.commands import measure
 

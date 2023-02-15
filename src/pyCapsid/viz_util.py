@@ -2,8 +2,7 @@
 
 """
 
-def chimeraxViz(labels, pdb, remote=True, chimerax_path='C:\\Program Files\\ChimeraX\\bin', pdb_path='.', save_path='.',
-                       script_path='../src/pyCapsid/scripts/chimerax_script.py'):
+def chimeraxViz(labels, pdb, remote=True, chimerax_path='C:\\Program Files\\ChimeraX\\bin', pdb_path='.', save_path='.',):
     """Launches ChimeraX and runs a script that visualizes the results.
 
     :param labels:
@@ -22,6 +21,12 @@ def chimeraxViz(labels, pdb, remote=True, chimerax_path='C:\\Program Files\\Chim
         save(temp_file, labels)
         labels_path = temp_file.name.replace('\\','/') #os.path.abspath(temp_file.name)
 
+    # get path to chimerax script
+    import pyCapsid.scripts as scpath
+    import os
+
+    scpath = os.path.abspath(scpath.__file__).replace('\\','/')
+    script_path = scpath.replace('__init__', 'chimerax_script')
 
     chimerax_exe = chimerax_path + '\\ChimeraX.exe'
     cmd_string = f'""{chimerax_exe}" --script "{script_path} {labels_path} {save_path} {pdb_path} {str(remote)} {pdb}""'
