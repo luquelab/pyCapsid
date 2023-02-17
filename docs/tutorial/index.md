@@ -64,7 +64,6 @@ labels, score  = findQuasiRigidClusters(pdb, dist_flucts, n_range)
 ```
 
 ## Visualize in ChimeraX
-## Visualize in ChimeraX
 If ChimeraX (https://www.cgl.ucsf.edu/chimerax/download.html) is installed you may provide a path to the chimerax 
 executable file to automatically visualize the results in chimerax. This is done using the runscript command in chimerax 
 and this python script: (https://github.com/luquelab/pyCapsid/blob/main/src/pyCapsid/scripts/chimerax_script.py).
@@ -75,6 +74,17 @@ chimeraxViz(labels, pdb, chimerax_path='C:\\Program Files\\ChimeraX\\bin')
 ```
 
 ![capsid_chx](4oq8_chimerax.png){: width="500"}
+
+Running the same code but replacing labels with residue_scores and adding rwb_scale=True visualizes the quality score of 
+each residue. This is a measure of how rigid each residue is with respect to its cluster. Blue residues make up the 
+cores of rigid clusters, and red residues represent borders between clusters. 
+
+```python
+from pyCapsid.viz_util import chimeraxViz
+chimeraxViz(residue_scores, pdb, chimerax_path='C:\\Program Files\\ChimeraX\\bin', rwb_scale=True)
+```
+
+![capsid_score_chx](4oq8_score_cx.png){: width="500"}
 
 ## Visualize in jupyter notebook with nglview
 You can visualize the results in a jupyter notebook with nglview. The following function returns an nglview view with the 
@@ -88,6 +98,15 @@ view
 ```
 
 ![capsid_ngl](4oq8_nglview.png){: width="500"}
+
+```python
+from pyCapsid.viz_util import view_pdb_ngl
+view = view_pdb_ngl(pdb, capsid, residue_scores, rwb_scale=True)
+view.download_image()
+view
+```
+
+![capsid_ngl](4oq8_score.png){: width="500"}
 
 # Tutorial: ProDy Integration
 One can make use of pyCapsids faster ENM and NMA module while still being able to use ProDy's other features by performing
