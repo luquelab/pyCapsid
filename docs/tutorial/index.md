@@ -88,3 +88,25 @@ view
 ```
 
 ![capsid_ngl](4oq8_nglview.png){: width="500"}
+
+# Tutorial: ProDy Integration
+One can make use of pyCapsids faster ENM and NMA module while still being able to use ProDy's other features by performing
+the calculations using pyCapsid and passing the results to ProDy.
+
+```python
+from prody import ANM, parsePDB
+capsid = parsePDB('7kq5', biomol=True)
+calphas = capsid.select('protein and name CA')
+anm = ANM('T. maritima ANM analysis')
+
+from pyCapsid.ENM import buildENM
+coords = calphas.getCoords()
+kirch, hessian = buildENM(coords, cutoff=10)
+
+from pyCapsid.NMA import modeCalc
+evals, evecs = modeCalc(hessian)
+
+anm._hessian = hessian
+anm._array = evecs
+anm._eigvals = evals
+```
