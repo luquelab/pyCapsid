@@ -15,11 +15,11 @@ jobs:
           miniconda-version: "latest"
           activate-environment: build
       - name: conda-setup
-        shell: bash
+        shell: bash -el {0}
         run: |
           conda install conda-build 
       - name: publish-to-conda-custom
-        shell: bash
+        shell: bash -el {0}
         run: |
           cd conda
           conda build -c conda-forge --output-folder . .
