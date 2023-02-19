@@ -115,7 +115,7 @@ def cluster_types(labels):
     return var, ntypes
 
 
-def plotScores(pdb, n_range, scores, ntypes):
+def plotScores(pdb, n_range, scores, ntypes, save=True, save_path='score.png'):
     """
 
     :param pdb:
@@ -138,7 +138,7 @@ def plotScores(pdb, n_range, scores, ntypes):
 
     print('Plotting')
     fig, ax = plt.subplots(2, 1, figsize=(6, 3), sharex=True)
-    fig.suptitle('k profile: ' + ' (' + pdb + ')')
+    fig.suptitle('Cluster quality score profile: ' + ' (' + pdb + ')')
     ax[0].scatter(n_range, scores, marker='D', s=15)
     ax[0].plot(n_range, scores)
     ax[1].plot(n_range, ntypes)
@@ -160,5 +160,9 @@ def plotScores(pdb, n_range, scores, ntypes):
     ax[0].grid()
     ax[1].grid()
     ax[0].legend()
-    # fig.tight_layout()
+    fig.tight_layout()
+    if save:
+        fig.savefig(f'{save_path}')
+
     plt.show()
+

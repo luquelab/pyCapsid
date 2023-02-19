@@ -151,7 +151,7 @@ def plotByMode(mode_indices, data, datalabel):
     plt.show()
 
 
-def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotModes=False, forceIco=True, icotol=0.002):
+def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotModes=False, forceIco=True, icotol=0.002, save=True, save_path='bfactors.png'):
     """
 
     :param evals:
@@ -196,6 +196,9 @@ def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotM
         (fr"Experimental vs Predicted b-factors: ({pdb})" + '\n' + fr"$\gamma = $ {gamma:.2e} $\pm$ {ci:.2e} "
                                                                    fr"$\frac{{k_b T}}{{Å^{2}}}$ CC = {coeff:.2f} Icosahedral deviation = {ico_dev:.2f}"),
         fontsize=9)
+    fig.tight_layout()
+    if save:
+        fig.savefig(f'{save_path}')
     plt.show()
 
     return coeff, gamma, nmodes

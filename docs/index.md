@@ -17,7 +17,7 @@ protein complexes. These methods are commonly available in existing packages suc
 but pyCapsid is significantly more optimized for analyzing large protein complexes. pyCapsid can perform NMA in as low as
 1/5th the time for even small protein shells.
 
-![myimg](7s21_120_nocage.png){: width="500"; style="display:block; margin-left:auto; margin-right:auto"}
+![myimg](figure_process_overview_07_13_CB.png){: width="800"; style="display:block; margin-left:auto; margin-right:auto"}
 
 
 

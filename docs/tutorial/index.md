@@ -49,6 +49,8 @@ from pyCapsid.NMA import fitCompareBfactors
 evals_scaled, evecs_scaled = fitCompareBfactors(evals, evecs, bfactors, pdb, fitModes=False)
 ```
 
+![capsid_chx](4oq8_bfactorplot.png){: width="500"}
+
 ### Perform quasi-rigid cluster identification (QRC)
 
 ```python
@@ -62,6 +64,8 @@ n_cluster_max = 62
 n_range = np.arange(4, n_cluster_max, 2)
 labels, score  = findQuasiRigidClusters(pdb, dist_flucts, n_range)
 ```
+
+![capsid_chx](4oq8_score_profile.png){: width="500"}
 
 ## Visualize in ChimeraX
 If ChimeraX (https://www.cgl.ucsf.edu/chimerax/download.html) is installed you may provide a path to the chimerax 
