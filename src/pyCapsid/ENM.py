@@ -110,6 +110,8 @@ def buildENM(coords, cutoff=10, gnm=False, fanm=1, wfunc='power', base_dist=1, d
     from sklearn.utils.validation import check_symmetric
     check_symmetric(hessian, raise_warning=True, tol=1e-5)
     check_symmetric(kirch, raise_warning=True, tol=1e-5)
+    hessian.eliminate_zeros()
+    kirch.eliminate_zeros()
     return kirch, hessian
 
 
