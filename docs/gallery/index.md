@@ -6,6 +6,8 @@ nav_order: 3
 
 ## Example Results
 
+The following results are from the application of pyCapsid to a set of HK97-fold protein shells. 
+
 ![myimg](figure_complete_capsid_gallery.png){: width="1800"}
 
 

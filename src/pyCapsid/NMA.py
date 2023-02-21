@@ -5,7 +5,7 @@ import numba as nb
 import numpy as np
 
 
-def modeCalc(hess, n_modes=200, eigmethod='eigsh', is3d=True):
+def modeCalc(hess, n_modes=200, eigmethod='eigsh', is3d=True, shift_invert=True):
     """Calculate the 'n_modes' lowest frequency modes of the system by calculating the smallest eigenvalues and eigenvectors
     of the hessian matrix.
 
@@ -39,7 +39,13 @@ def modeCalc(hess, n_modes=200, eigmethod='eigsh', is3d=True):
 
     if eigmethod == 'eigsh':
         from scipy.sparse.linalg import eigsh
-        evals, evecs = eigsh(hess, k=n_modes, sigma=1e-10, which='LA')
+        if shift_invert:
+            print('Using shift-invert for increased performance with increased memory usage.')
+            evals, evecs = eigsh(hess, k=n_modes, sigma=1e-10, which='LA')
+        else:
+            evals, evecs = eigsh(hess, k=n_modes, which='SA')
+            evals = evals[6:]
+            evecs = evecs[:, 6:]
     elif eigmethod == 'lobpcg':
         from scipy.sparse.linalg import lobpcg
 
