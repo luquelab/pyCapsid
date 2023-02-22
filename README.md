@@ -22,6 +22,9 @@ Documentation is provided on our github pages site: [https://luquelab.github.io/
 An example notebook is provided in the [notebooks folder](https://github.com/luquelab/pyCapsid/tree/main/notebooks).
 An accompanying tutorial is provided in the documentation.
 
+## Github Repository
+The Github Repository of this project: [https://github.com/luquelab/pyCapsid](https://github.com/luquelab/pyCapsid)
+
 ## Project History
 This is an evolving repository
 Started: 2022-10-24
