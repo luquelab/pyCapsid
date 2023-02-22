@@ -29,7 +29,7 @@ capsid, calphas, coords, bfactors, chain_starts, title = getCapsid(pdb, save=Tru
 This code builds a hessian matrix using an elastic network model defined by the given parameters. The types of model and the meaning of the parameters are provided in the documentation.
 
 ```python
-from pyCapsid.ENM import buildENMPreset
+from pyCapsid.CG import buildENMPreset
 kirch, hessian = buildENMPreset(coords, preset='U-ENM')
 ```
 
@@ -73,7 +73,7 @@ executable file to automatically visualize the results in chimerax. This is done
 and this python script: (https://github.com/luquelab/pyCapsid/blob/main/src/pyCapsid/scripts/chimerax_script.py).
 
 ```python
-from pyCapsid.viz_util import chimeraxViz
+from pyCapsid.VIS import chimeraxViz
 chimeraxViz(labels, pdb, chimerax_path='C:\\Program Files\\ChimeraX\\bin')
 ```
 
@@ -84,7 +84,7 @@ each residue. This is a measure of how rigid each residue is with respect to its
 cores of rigid clusters, and red residues represent borders between clusters. 
 
 ```python
-from pyCapsid.viz_util import chimeraxViz
+from pyCapsid.VIS import chimeraxViz
 chimeraxViz(residue_scores, pdb, chimerax_path='C:\\Program Files\\ChimeraX\\bin', rwb_scale=True)
 ```
 
@@ -96,7 +96,7 @@ results colored based on cluster. See the nglview documentation for further info
 (http://nglviewer.org/nglview/release/v2.7.7/index.html)
 
 ```python
-from pyCapsid.viz_util import view_pdb_ngl
+from pyCapsid.VIS import view_pdb_ngl
 view = view_pdb_ngl(pdb, capsid, labels)
 view
 ```
@@ -104,7 +104,7 @@ view
 ![capsid_ngl](4oq8_nglview.png){: width="500"}
 
 ```python
-from pyCapsid.viz_util import view_pdb_ngl
+from pyCapsid.VIS import view_pdb_ngl
 view = view_pdb_ngl(pdb, capsid, residue_scores, rwb_scale=True)
 view.download_image()
 view
@@ -122,7 +122,7 @@ capsid = parsePDB('7kq5', biomol=True)
 calphas = capsid.select('protein and name CA')
 anm = ANM('T. maritima ANM analysis')
 
-from pyCapsid.ENM import buildENM
+from pyCapsid.CG import buildENM
 coords = calphas.getCoords()
 kirch, hessian = buildENM(coords, cutoff=10)
 
