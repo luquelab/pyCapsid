@@ -39,6 +39,8 @@ plugins:
 color_scheme: light
 source: .
 
+date_format: "%B %d, %Y" # Add dates to site.
+
 # Exclude from processing.
 # The following items will not be processed, by default.
 # Any item listed under the `exclude:` key here will be automatically added to
