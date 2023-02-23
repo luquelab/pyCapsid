@@ -8,7 +8,7 @@ nav_order: 6
 
 ## Citation
 pyCapsid operates under MIT license. If you publish or disseminate a project using pyCapsid, please cite the following references to support the package:
-+ Brown, Colin, Anuradhu Agarwal, and Antoni Luque, "pyCapsid: Identification of dominant dynamics and quasi-rigid mechanical units in protein shells", bioRxiv, TBD.
++ Brown, Colin, Anuradha Agarwal, and Antoni Luque, "pyCapsid: Identification of dominant dynamics and quasi-rigid mechanical units in protein shells", bioRxiv, TBD.
 
 ## Funding
 The research and development of pyCapsid have been supported by the following funds:
