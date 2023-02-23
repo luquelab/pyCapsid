@@ -6,8 +6,8 @@ nav_order: 1
 
 # pyCapsid Documentation
 
+[pyCapsid](https://github.com/luquelab/pyCapsid) is a high-performance Python package to analyze protein shells and other protein complexes. Given a molecular model in PDB format, it identifies the dominant dynamics and quasi-rigid mechanical units in the structure as illustrated in the Figure below and on the [Gallery page](https://luquelab.github.io/pyCapsid/gallery/). The results from pyCapsid have been generated having in mind the visualization software [NGLView](http://nglviewer.org/nglview/latest/) and [ChimeraX](https://www.cgl.ucsf.edu/chimerax/), but they can be also be visualized with other platforms. The package is available on [GitHub](https://github.com/luquelab/pyCapsid), [PIP](https://pypi.org/project/pyCapsid/), and [Conda](https://anaconda.org/luque_lab/pycapsid), and the steps to install the package are described in the [Installation page](https://luquelab.github.io/pyCapsid/installation/).
 
-pyCapsid is an accessible high performance python package used to identify the motions and quasi-rigid regions of large protein complexes and 
 generate comprehensive outputs to interpret the results. The development of pyCapsid is a result of our lab's need for
 high performance computational tools when investigating macromolecular protein shells. Such protein shells include viral capsids, cellular 
 protein compartments like encapsulins, and capsids of gene transfer agents (GTAs), gene vectors or antivirals.
