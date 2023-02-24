@@ -20,7 +20,7 @@ conda create -n pycapsid python=3.10 -y
 conda activate pycapsid
 ~~~~
 ~~~~
-conda install -c colintravisbrown -c conda-forge pycapsid
+conda install -c luque_lab -c conda-forge pycapsid
 ~~~~
 
 ## Visualization in jupyter lab
