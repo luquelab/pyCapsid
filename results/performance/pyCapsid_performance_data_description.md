@@ -1,5 +1,7 @@
-# File descriptors
-The list below describes the columns in `results_table_toni_wip.csv`:
+# General information
+This file provides complementary information for the data file `pyCapsid_performance_data.csv`:
+
+## Description of columns
 + `PDB`: Protein Data Bank (PDB) identification, for example, 7kq5, unless indicated otherwise (for example, an entry from the electron microscopy database, like EMD-21123).
 + `Capsid`: Name associated with the capsid or protein shell.
 + `Abbreviation`: Abbreviated version of the capsid name.
@@ -21,5 +23,16 @@ The list below describes the columns in `results_table_toni_wip.csv`:
 + `Icos_class`: Icosahedral classification of the distribution of quasi-rigid clusters obtained in the capsid.
 + `Memory`: Memory usage obtained in the computational performance benchmarking. Units: Mebibytes (MiB), that is, 2^20 bytes. It is equal to 2^20/10^6 MegaBytes (MB) (Conversion factor: 1.048576).
 + `Runtime`: Runtime obtained in the computational performance benchmarking. Units: seconds (sec).
-+ `pyCap_bench`: Runtime?? obtained for pyCapsid in the benchmarking with ProDy. Units: seconds (sec)?? <font color = 'red'> Confirm! </font>
-+ `ProDy_bench`: Runtime?? obtained for ProDy in for benchmarking. Units: seconds (sec)?? <font color = 'red'> Confirm! </font>
++ `pyCap_runtime`: Runtime obtained for pyCapsid in the benchmarking with ProDy. Units: seconds (sec).
++ `ProDy_runtime`: Runtime obtained for ProDy for benchmarking. Units: seconds (sec).
++ `pyCap_memory`: Memory peak obtained for pyCapsid in the benchmarking with ProDy. Units: Mebibytes (MiB).
++ `ProDy_memory`: Runtime obtained for ProDy for benchmarking. Units: seconds (sec). Units: Mebibytes (MiB).
+
+## Notes
++ For the general performanc of pyCapsid, the unified elastic network model (UENM) was used. This is the default model in pyCapsid due to its otpimal performance.
++ For benchmarking with ProDy the model used was the anysotropic network model (ANM) because ProDy does not offer UENM as option. Both pyCapsid and ProDy offer ANM as on option.
++ The differences between the runtime and memory of pyCapsid in the general performance versus the benchmarking performance in the comparison with ProDy are associated with using different elastic models and focusing on the NMA results (no quasi-rigid domain decomposition, which is not available in ProDy).
++ The computational performance was estimated in a HPC core (CSRC cinci cluster) with Intel Xeon CPU E5-2650 v4 at 2.20GHz CPUs and 128GB RAM.
+
+
+
