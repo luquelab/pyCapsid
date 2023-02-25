@@ -12,7 +12,7 @@ pip install pyCapsid
 
 Via conda: 
 ~~~~
-conda install -c colintravisbrown -c conda-forge pycapsid
+conda install -c luque_lab -c conda-forge pycapsid
 ~~~~
 
 ## Documentation
