@@ -70,7 +70,7 @@ def springFit(bfactors, sqFlucts):
     return a, b, stderr, ci, pv
 
 
-def fluctModes(evals, evecs, bfactors, is3d):
+def fluctModes(evals, evecs, bfactors, is3d, isIco):
     """
 
     :param evals:
@@ -85,13 +85,16 @@ def fluctModes(evals, evecs, bfactors, is3d):
     for n_modes in range(1, len(evals)):
         flucts = fastFlucts(evals, evecs, n_modes, is3d)
         cc = np.corrcoef(bfactors, flucts)[1, 0]
-        icodev = checkIcoFlucts(flucts)
+        if isIco:
+            icodev = checkIcoFlucts(flucts)
+        else:
+            icodev = 0
         coeffs.append(cc)
         ico_devs.append(icodev)
     return coeffs, ico_devs
 
 
-def fitBfactors(evals, evecs, bfactors, is3d, fitModes=False, plotModes=False, forceIco=False, icotol=0.002):
+def fitBfactors(evals, evecs, bfactors, is3d, isIco=True, fitModes=False, plotModes=False, forceIco=False, icotol=0.002):
     """
 
     :param evals:
@@ -106,7 +109,7 @@ def fitBfactors(evals, evecs, bfactors, is3d, fitModes=False, plotModes=False, f
     """
     n_modes = evals.shape[0]
     if fitModes:
-        coeffs, ico_devs = fluctModes(evals, evecs, bfactors, is3d)
+        coeffs, ico_devs = fluctModes(evals, evecs, bfactors, is3d, isIco)
         if plotModes:
             plotByMode(np.arange(1, n_modes), coeffs, 'CC')
             plotByMode(np.arange(1, n_modes), ico_devs, 'Icosahedral Deviation')
@@ -125,7 +128,10 @@ def fitBfactors(evals, evecs, bfactors, is3d, fitModes=False, plotModes=False, f
         n_m = n_modes
         flucts = fastFlucts(evals, evecs, n_m, is3d)
         coeff = np.corrcoef(bfactors, flucts)[1, 0]
-        ico_dev = checkIcoFlucts(flucts)
+        if isIco:
+            ico_dev = checkIcoFlucts(flucts)
+        else:
+            ico_dev = 0
 
     k, intercept, stderr, ci, pv = springFit(bfactors, flucts[:, np.newaxis])
 
@@ -151,9 +157,11 @@ def plotByMode(mode_indices, data, datalabel):
     plt.show()
 
 
-def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotModes=False, forceIco=True, icotol=0.002, save=True, save_path='bfactors.png'):
+def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotModes=False, forceIco=True, icotol=0.002,
+                    save=True, save_path='bfactors.png', isIco=True):
     """
 
+    :param isIco:
     :param evals:
     :param evecs:
     :param bfactors:
@@ -165,9 +173,9 @@ def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotM
     :param icotol:
     :return:
     """
-    coeff, k, intercept, bfactors_predicted, ci, pv, ico_dev, nmodes = fitBfactors(evals, evecs, bfactors, is3d,
-                                                                                   fitModes,
-                                                                                   plotModes, forceIco, icotol)
+    coeff, k, intercept, bfactors_predicted, ci, pv, ico_dev, nmodes = fitBfactors(evals, evecs, bfactors, is3d, isIco,
+                                                                                   fitModes, plotModes, forceIco,
+                                                                                   icotol)
     ci = np.abs(ci[0][0] - ci[0][1])
     gamma = (8 * np.pi ** 2) / k
 
@@ -182,10 +190,20 @@ def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotM
             'size': 9}
     matplotlib.rc('font', **font)
 
-    n_asym = int(bfactors.shape[0] / 60)
+    if isIco:
+        n_asym = int(bfactors.shape[0] / 60)
+        plotx_experimental = np.arange(bfactors.shape[0])[:n_asym]
+        ploty_experimental = bfactors[:n_asym]
+        plotx_predicted = np.arange(bfactors_predicted.shape[0])[:n_asym]
+        ploty_predicted = bfactors_predicted[:n_asym]
+    else:
+        plotx_experimental = np.arange(bfactors.shape[0])
+        ploty_experimental = bfactors
+        plotx_predicted = np.arange(bfactors_predicted.shape[0])
+        ploty_predicted = bfactors_predicted
 
-    ax.plot(np.arange(bfactors.shape[0])[:n_asym], bfactors[:n_asym], label='b-factors (Experimental)')
-    ax.plot(np.arange(bfactors_predicted.shape[0])[:n_asym], bfactors_predicted[:n_asym], label='b-factors (Predicted)')
+    ax.plot(plotx_experimental, ploty_experimental, label='b-factors (Experimental)')
+    ax.plot(plotx_predicted, ploty_predicted, label='b-factors (Predicted)')
     ax.set_ylabel(r'$Å^{2}$', fontsize=9)
     ax.set_xlabel('Residue Number', fontsize=9)
     ax.tick_params(axis='y', labelsize=8)
