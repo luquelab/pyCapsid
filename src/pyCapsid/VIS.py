@@ -92,6 +92,9 @@ def generate_colormap(number_of_distinct_colors: int = 80):
         number_of_distinct_colors = 80
 
     number_of_shades = 7
+    if number_of_distinct_colors < (number_of_shades-1):
+        number_of_shades = number_of_distinct_colors - 2
+
     number_of_distinct_colors_with_multiply_of_shades = int(math.ceil(number_of_distinct_colors / number_of_shades) * number_of_shades)
 
     # Create an array with uniformly drawn floats taken from <0, 1) partition
