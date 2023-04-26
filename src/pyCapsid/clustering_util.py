@@ -87,7 +87,7 @@ def median_score(coords, centroids, score_method):
     dists = pairwise_distances(coords, centroids, metric='cosine')
     cdist = pairwise_distances(centroids, centroids, metric='cosine')
     normal = cdist.mean()
-    d2min = np.partition(dists, kth=2)[:, :2]
+    d2min = np.partition(dists, kth=1)[:, :2]
 
     a = d2min[:, 1]
     b = d2min[:, 0]
