@@ -18,28 +18,27 @@ def buildENMPreset(coords, preset='ANM', **kwargs):
     """
     model_presets = ['ANM', 'GNM', 'U-ENM', 'bbENM']
     print('Building hessian for model preset: ', preset)
-    match preset: # change to if/elif/else
-        case 'ANM':
-            cutoff = 15
-            return buildENM(coords, cutoff=cutoff)
-        case 'GNM':
-            cutoff = 7.5
-            gnm=True
-            return buildENM(coords, cutoff=cutoff, gnm=gnm)
-        case 'U-ENM':
-            cutoff = 7.5
-            fanm = 0.1
-            return buildENM(coords, cutoff=cutoff, fanm=fanm)
-        case 'bbENM':
-            cutoff = 7.5
-            l_backbone=1
-            k_backbone = 100
-            if 'chain_starts' not in kwargs:
-                raise ValueError("No chain information provided. Indices of chain starts must be provided as chain_starts")
-            chain_starts = kwargs['chain_starts']
-            return buildENM(coords, cutoff=cutoff, chain_starts=chain_starts, l_backbone=l_backbone, k_backbone=k_backbone)
-        case _:
-            raise ValueError("Invalid model preset. Expected one of: %s" % model_presets)
+    if preset == 'ANM':
+        cutoff = 15
+        return buildENM(coords, cutoff=cutoff)
+    elif preset == 'GNM':
+        cutoff = 7.5
+        gnm=True
+        return buildENM(coords, cutoff=cutoff, gnm=gnm)
+    elif preset == 'U-ENM':
+        cutoff = 7.5
+        fanm = 0.1
+        return buildENM(coords, cutoff=cutoff, fanm=fanm)
+    elif preset == 'bbENM':
+        cutoff = 7.5
+        l_backbone=1
+        k_backbone = 100
+        if 'chain_starts' not in kwargs:
+            raise ValueError("No chain information provided. Indices of chain starts must be provided as chain_starts")
+        chain_starts = kwargs['chain_starts']
+        return buildENM(coords, cutoff=cutoff, chain_starts=chain_starts, l_backbone=l_backbone, k_backbone=k_backbone)
+    else:
+        raise ValueError("Invalid model preset. Expected one of: %s" % model_presets)
 
 
 
