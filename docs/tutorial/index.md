@@ -60,9 +60,9 @@ import numpy as np
 
 dist_flucts = calcDistFlucts(evals_scaled, evecs, coords)
 
-n_cluster_max = 62
+n_cluster_max = 130
 n_range = np.arange(4, n_cluster_max, 2)
-labels, score  = findQuasiRigidClusters(pdb, dist_flucts, n_range)
+labels, score, residue_scores  = findQuasiRigidClusters(pdb, dist_flucts, n_range)
 ```
 
 ![capsid_chx](4oq8_score_profile.png){: width="500"}
@@ -98,6 +98,7 @@ results colored based on cluster. See the nglview documentation for further info
 ```python
 from pyCapsid.VIS import view_pdb_ngl
 view = view_pdb_ngl(pdb, capsid, labels)
+view.download_image()
 view
 ```
 
