@@ -5,7 +5,7 @@ from setuptools import setup
 long_description = open("README.md").read()
 setup(
     name='pyCapsid',
-    version='0.1.9',
+    version='0.2.0',
     description='A set of computational tools written in python for the analysis of viral capsids',
     long_description =long_description,
     long_description_content_type='text/markdown',
@@ -15,7 +15,7 @@ setup(
     url='https://github.com/luquelab/pycapsid',
     packages=find_packages("src"),
     package_dir={"": "src"},
-    python_requires = '<3.11',
+    python_requires = '<3.11, >',
     install_requires=[
         'biotite',
         'scikit-learn',
