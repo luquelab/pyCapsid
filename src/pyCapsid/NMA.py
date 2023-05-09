@@ -266,9 +266,11 @@ def fluctPlot(d, title, pdb):
 
 
 # This is a stupid way to switch this to be in NMA
-def fitCompareBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotModes=False, forceIco=True, icotol=0.002):
+def fitCompareBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotModes=False, forceIco=True,
+                       icotol=0.002, isIco=True):
     """
 
+    :param isIco:
     :param evals:
     :param evecs:
     :param bfactors:
@@ -281,7 +283,8 @@ def fitCompareBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, pl
     :return:
     """
     from .bfactorfit import fitPlotBfactors
-    cc, gamma,n_modes = fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=is3d, fitModes=fitModes, plotModes=plotModes, forceIco=forceIco, icotol=icotol)
+    cc, gamma,n_modes = fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=is3d, fitModes=fitModes, plotModes=plotModes,
+                                        forceIco=forceIco, icotol=icotol, isIco=isIco)
     r_evals = evals[:n_modes]*gamma
     r_evecs = evecs[:, :n_modes]
     return r_evals, r_evecs
