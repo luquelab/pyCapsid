@@ -2,7 +2,7 @@
 
 """
 
-def chimeraxViz(labels, pdb, remote=True, chimerax_path='C:\\Program Files\\ChimeraX\\bin', pdb_path='.', save_path='.',
+def chimeraxViz(labels, pdb, remote=True, chimerax_path=None, pdb_path='.', save_path='.',
                 rwb_scale=False):
     """Launches ChimeraX and runs a script that visualizes the results.
 
@@ -16,20 +16,28 @@ def chimeraxViz(labels, pdb, remote=True, chimerax_path='C:\\Program Files\\Chim
     """
 
     import os
+    import platform
+    if chimerax_path is None:
+        if platform.system()=='Linux':
+            chimerax_path = 'usr/bin/chimerax'
+        elif platform.system()=='Windows':
+            chimerax_path = 'C:\\Program Files\\ChimeraX\\bin\\ChimeraX.exe'
+
     from numpy import save
     from tempfile import NamedTemporaryFile
     with NamedTemporaryFile(suffix='.npy', delete=False) as temp_file:
         save(temp_file, labels)
-        labels_path = temp_file.name.replace('\\','/') #os.path.abspath(temp_file.name)
+        labels_path = os.path.normpath(temp_file.name)
+        #labels_path = temp_file.name.replace('\\','/') #os.path.abspath(temp_file.name)
 
     # get path to chimerax script
     import pyCapsid.scripts as scpath
     import os
 
-    scpath = os.path.abspath(scpath.__file__).replace('\\','/')
-    script_path = scpath.replace('__init__', 'chimerax_script')
+    script_path = os.path.abspath(scpath.__file__)
+    script_path = script_path.replace('__init__', 'chimerax_script')
 
-    chimerax_exe = chimerax_path + '\\ChimeraX.exe'
+    chimerax_exe = chimerax_path #+ '\\ChimeraX.exe'
     cmd_string = f'""{chimerax_exe}" --script "{script_path} {labels_path} {save_path} {pdb_path} {str(remote)} {pdb} {str(rwb_scale)}""'
     print(cmd_string)
     os.system(cmd_string)
