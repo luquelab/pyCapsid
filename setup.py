@@ -15,7 +15,7 @@ setup(
     url='https://github.com/luquelab/pycapsid',
     packages=find_packages("src"),
     package_dir={"": "src"},
-    python_requires = '<3.11, >',
+    python_requires = '<3.11',
     install_requires=[
         'biotite',
         'scikit-learn',
