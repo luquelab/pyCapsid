@@ -28,7 +28,8 @@ def chimeraxViz(labels, pdb, remote=True, chimerax_path=None, pdb_path='.', save
     with NamedTemporaryFile(suffix='.npy', delete=False) as temp_file:
         save(temp_file, labels)
         labels_path = os.path.normpath(temp_file.name)
-        #labels_path = temp_file.name.replace('\\','/') #os.path.abspath(temp_file.name)
+        labels_path = labels_path.replace('\\','/') #os.path.abspath(temp_file.name)
+        print(labels_path)
 
     # get path to chimerax script
     import pyCapsid.scripts as scpath
