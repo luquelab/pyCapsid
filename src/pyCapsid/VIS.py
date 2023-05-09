@@ -39,7 +39,10 @@ def chimeraxViz(labels, pdb, remote=True, chimerax_path=None, pdb_path='.', save
     script_path = script_path.replace('__init__', 'chimerax_script')
 
     chimerax_exe = chimerax_path #+ '\\ChimeraX.exe'
-    cmd_string = f'""{chimerax_exe}" --script "{script_path} {labels_path} {save_path} {pdb_path} {str(remote)} {pdb} {str(rwb_scale)}""'
+    if platform.system()=='Windows':
+        cmd_string = f'""{chimerax_exe}" --script "{script_path} {labels_path} {save_path} {pdb_path} {str(remote)} {pdb} {str(rwb_scale)}""'
+    elif platform.system()=='Linux':
+        cmd_string = f'"{chimerax_exe} --script "{script_path} {labels_path} {save_path} {pdb_path} {str(remote)} {pdb} {str(rwb_scale)}""'
     print(cmd_string)
     os.system(cmd_string)
     temp_file.close()
