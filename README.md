@@ -4,7 +4,7 @@
 A python package for identification of dominant motions and rigid domains of protein shells using Elastic Network Models.
 
 ## Installation
-The package requires python < 3.11, we reccomend python 3.10.
+The package requires python >3.6 and < 3.11, we reccommend python 3.10.
 Via pip:
 ~~~~
 pip install pyCapsid
