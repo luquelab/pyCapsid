@@ -3,7 +3,7 @@ ENM or provided."""
 
 import numpy as np
 
-def findQuasiRigidClusters(pdb, dist_flucts, n_range, cluster_method='discretize', return_type='final', score_method='median', save=False, dir='.'):
+def findQuasiRigidClusters(pdb, dist_flucts, n_range, cluster_method='discretize', return_type='final', score_method='median', save=True, save_dir='./'):
     """Uses spectral clustering to split the residues into clusters with minimal internal distance fluctuations.
 
     :param str pdb:
@@ -20,19 +20,25 @@ def findQuasiRigidClusters(pdb, dist_flucts, n_range, cluster_method='discretize
 
     embedding = calcEmbedding(sims, n_vecs)
 
-    labels, scores, numtypes, fullscores = cluster_embedding(n_range, embedding, method=cluster_method, score_method=score_method)
+    labels, scores, numtypes, full_scores = cluster_embedding(n_range, embedding, method=cluster_method, score_method=score_method)
 
     from .clustering_util import plotScores
     plotScores(pdb, n_range, scores, numtypes)
 
     ind = np.argmax(scores)
+    final_cluster_num = n_range[ind]
     final_clusters = labels[ind]
     final_score = scores[ind]
-    final_full_score = fullscores[ind]
+    final_numtypes = numtypes[ind]
+    final_full_score = full_scores[ind]
     if return_type=='final':
+        np.savez_compressed(save_dir + pdb + '/' + pdb + '_' + return_type + '_results', labels=final_clusters, score=final_score,
+                nc=final_cluster_num, cluster_method=cluster_method, final_full_score=final_full_score)
         return final_clusters, final_score, final_full_score
     elif return_type=='full':
-        return labels, scores, numtypes, fullscores
+        np.savez_compressed(save_dir + pdb + '/' + pdb + '_' + return_type + '_results', labels=labels, score=scores,
+                 nc_range=n_range, cluster_method=cluster_method, numtypes=numtypes, full_scores=full_scores)
+        return labels, scores, numtypes, full_scores
     else:
         return final_clusters
 

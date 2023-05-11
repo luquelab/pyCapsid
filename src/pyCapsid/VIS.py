@@ -7,6 +7,8 @@ def chimeraxViz(labels, pdb, remote=True, chimerax_path=None, pdb_path='.', save
     """Launches ChimeraX and runs a script that visualizes the results.
 
     :param labels:
+    :param pdb:
+    :param remote:
     :param chimerax_path:
     :param pdb_path:
     :param save_path:
