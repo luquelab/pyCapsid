@@ -1,0 +1,41 @@
+[PDB]
+pdb = '2e0z'
+pdbx = false
+local = false
+dir = '.'
+
+
+[CG]
+preset = 'U-ENM'
+
+[NMA]
+n_modes = 200
+eigen_method = 'eigsh'
+shift_invert = true
+
+[b_factors]
+fit_modes = false
+plot_modes = false
+force_ico = true
+ico_tol = 0.002
+
+
+[QRC]
+cluster_start = 10
+cluster_stop = 100
+cluster_step = 2
+cluster_method = 'discretize'
+score_method = 'median'
+
+[VIS]
+chimerax_path = 'C:\\Program Files\\ChimeraX\\bin\\ChimeraX.exe'
+
+[save]
+save_full_pdb = false
+save_full_pdb_path = '.'
+save_hessian = false
+save_hessian_path = '.'
+save_kirchhoff = false
+save_kirchhoff_path = '.'
+save_modes = false
+save_mode_path = '.'

@@ -23,7 +23,8 @@ setup(
         'scipy',
         'matplotlib',
         'numba',
-        'statsmodels'
+        'statsmodels',
+        'toml'
     ],
     classifiers=[
         'Development Status :: 1 - Planning',

@@ -1,7 +1,7 @@
 """Module with functions for downloading and dealing with PDB/PDBx files."""
 
 
-def getCapsid(pdb, dir='.', pdbx=False, local=False, save=False, pdb_biotite=False, chains='', chains_clust=''):
+def getCapsid(pdb, dir='.', pdbx=False, local=False, save=False, pdb_biotite=False, chains='', chains_clust='', is_ico=False):
     """Downloads and opens molecular data from a PDB entry or loads data from a local file.
 
     :param pdb: PDB id of entry to download. Can also be the name of a local file
@@ -12,6 +12,15 @@ def getCapsid(pdb, dir='.', pdbx=False, local=False, save=False, pdb_biotite=Fal
     :param chains: List of chains from the entry to include in the ENM model
     :param chains_clust: List of chains that will be assigned to quasi-rigid clusters. Must be a subset of 'chains'
     """
+
+
+    if isinstance(pdbx, str):
+        pdbx = pdbx == 'true' or pdbx == 'True'
+    if isinstance(local, str):
+        local = local == 'true' or local == 'True'
+    if isinstance(save, str):
+        save = save == 'true' or save == 'True'
+
     if local:
         filename = dir + pdb
     else:
