@@ -13,28 +13,27 @@ def run_capsid(params_path):
     params_dict = read_config(params_path)
 
 
-    from PDB import getCapsid
+    from .PDB import getCapsid
     pdb = params_dict['PDB']['pdb']
-    capsid, calphas, coords, bfactors, chain_starts, title = getCapsid(pdb, **params_dict['PDB'])
+    capsid, calphas, coords, bfactors, chain_starts, title = getCapsid(**params_dict['PDB'])
 
-    from CG import buildENMPreset
-    kirch, hessian = buildENMPreset(coords, preset='U-ENM')
+    from .CG import buildENMPreset
 
-    from pyCapsid.NMA import modeCalc
-    evals, evecs = modeCalc(hessian)
+    kirch, hessian = buildENMPreset(coords, **params_dict['CG'])
 
-    from pyCapsid.NMA import fitCompareBfactors
-    evals_scaled, evecs_scaled = fitCompareBfactors(evals, evecs, bfactors, pdb, fitModes=False)
+    from .NMA import modeCalc
+    evals, evecs = modeCalc(hessian, **params_dict['NMA'])
 
-    from pyCapsid.NMA import calcDistFlucts
-    from pyCapsid.QRC import findQuasiRigidClusters
-    import numpy as np
+    from .NMA import fitCompareBfactors
+    evals_scaled, evecs_scaled = fitCompareBfactors(evals, evecs, bfactors, pdb, **params_dict['b_factors'])
+
+    from .NMA import calcDistFlucts
+    from .QRC import findQuasiRigidClusters
 
     dist_flucts = calcDistFlucts(evals_scaled, evecs, coords)
 
-    n_cluster_max = 100
-    n_range = np.arange(4, n_cluster_max, 2)
-    labels, score, residue_scores = findQuasiRigidClusters(pdb, dist_flucts, n_range)
+
+    labels, score, residue_scores = findQuasiRigidClusters(pdb, dist_flucts, **params_dict['QRC'])
 
     from pyCapsid.VIS import chimeraxViz
-    chimeraxViz(labels, pdb, chimerax_path='C:\\Program Files\\ChimeraX\\bin')
+    chimeraxViz(labels, pdb, **params_dict['VIS'])

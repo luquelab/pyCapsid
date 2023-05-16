@@ -1,9 +1,8 @@
 [PDB]
-pdb = '2e0z'
+pdb = '1a34'
 pdbx = false
 local = false
 dir = '.'
-
 
 [CG]
 preset = 'U-ENM'
