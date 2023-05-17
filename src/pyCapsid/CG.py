@@ -43,7 +43,7 @@ def buildENMPreset(coords, preset='ANM', **kwargs):
 
 
 def buildENM(coords, cutoff=10, gnm=False, fanm=1, wfunc='power', base_dist=1, d_power=0, backbone=False, k_backbone=1,
-             l_backbone=1, chain_starts=None):
+             l_backbone=1, chain_starts=None, save_hessian=False, save_kirchoff=False, save_cg_path=''):
     """Builds a hessian matrix representing an ENM based on the provided parameters.
 
         :param coords: Cartesian of alpha carbon (or choice of representation) atoms
@@ -66,7 +66,7 @@ def buildENM(coords, cutoff=10, gnm=False, fanm=1, wfunc='power', base_dist=1, d
 
     import numpy as np
     from scipy import sparse
-    from sklearn.neighbors import BallTree, radius_neighbors_graph, kneighbors_graph
+    from sklearn.neighbors import BallTree, radius_neighbors_graph
 
 
     n_atoms = coords.shape[0]
@@ -111,6 +111,15 @@ def buildENM(coords, cutoff=10, gnm=False, fanm=1, wfunc='power', base_dist=1, d
     check_symmetric(kirch, raise_warning=True, tol=1e-5)
     hessian.eliminate_zeros()
     kirch.eliminate_zeros()
+
+    if save_kirchoff:
+        file = save_cg_path + "kirchoff"
+        sparse.save_npz(file, kirch, compressed=True)
+
+    if save_hessian:
+        file = save_cg_path + "hessian"
+        sparse.save_npz(file, hessian, compressed=True)
+
     return kirch, hessian
 
 

@@ -1,16 +1,16 @@
 """Module with functions for downloading and dealing with PDB/PDBx files."""
 
 
-def getCapsid(pdb, dir='.', pdbx=False, local=False, save=False, pdb_biotite=False, chains='', chains_clust='', is_ico=False):
+def getCapsid(pdb, save_pdb_path='', pdbx=False, local=False, save_full_pdb=False, chains='', chains_clust='', is_ico=False):
     """Downloads and opens molecular data from a PDB entry or loads data from a local file.
 
     :param pdb: PDB id of entry to download. Can also be the name of a local file
-    :param dir: Target directory where download will be placed
+    :param save_pdb_path: Target directory where download will be placed
     :param pdbx: Whether the target structure should be acquired in pdbx/mmcif format
     :param local: Whether to instead load a local file
-    :param save: Whether to save a copy of the complete assembly as pdb/pdbx. Necessary if visualizing in external software.
-    :param chains: List of chains from the entry to include in the ENM model
-    :param chains_clust: List of chains that will be assigned to quasi-rigid clusters. Must be a subset of 'chains'
+    :param save_full_pdb: Whether to save a copy of the complete assembly as pdb/pdbx. Useful for some visualizations.
+    :param chains: List of chains from the entry to include in the ENM model. Not implemented
+    :param chains_clust: List of chains that will be assigned to quasi-rigid clusters. Must be a subset of 'chains'. Not implemented
     """
 
 
@@ -18,18 +18,18 @@ def getCapsid(pdb, dir='.', pdbx=False, local=False, save=False, pdb_biotite=Fal
         pdbx = pdbx == 'true' or pdbx == 'True'
     if isinstance(local, str):
         local = local == 'true' or local == 'True'
-    if isinstance(save, str):
-        save = save == 'true' or save == 'True'
+    if isinstance(save_full_pdb, str):
+        save_full_pdb = save_full_pdb == 'true' or save_full_pdb == 'True'
 
     if local:
-        filename = dir + pdb
+        filename = save_pdb_path + pdb
     else:
-        filename = downloadPDB(pdb, dir, pdbx)
+        filename = downloadPDB(pdb, save_pdb_path, pdbx)
 
     if pdbx:
-        capsid, calphas, coords, bfactors, chain_starts, title = loadPDBx(filename, pdb, save)
+        capsid, calphas, coords, bfactors, chain_starts, title = loadPDBx(filename, pdb, save_full_pdb)
     else:
-        capsid, calphas, coords, bfactors, chain_starts, title = loadPDB(filename, pdb, save)
+        capsid, calphas, coords, bfactors, chain_starts, title = loadPDB(filename, pdb, save_full_pdb)
 
     return capsid, calphas, coords, bfactors, chain_starts, title
 

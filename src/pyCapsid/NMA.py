@@ -5,7 +5,7 @@ import numba as nb
 import numpy as np
 
 
-def modeCalc(hess, n_modes=200, eigen_method='eigsh', is3d=True, shift_invert=True):
+def modeCalc(hess, n_modes=200, eigen_method='eigsh', is3d=True, shift_invert=True, save_modes=True, save_mode_path=''):
     """Calculate the 'n_modes' lowest frequency modes of the system by calculating the smallest eigenvalues and eigenvectors
     of the hessian matrix.
 
@@ -75,6 +75,12 @@ def modeCalc(hess, n_modes=200, eigen_method='eigsh', is3d=True, shift_invert=Tr
 
     end = time.time()
     print('NMA time: ', end - start)
+
+    if save_modes:
+        file = save_mode_path + 'modes.npz'
+        print('Saving NMA results in' + file)
+        np.savez_compressed(file, eigen_vals=evals, eigen_vecs = evecs)
+
     return evals, evecs
 
 
