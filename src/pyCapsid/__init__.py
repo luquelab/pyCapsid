@@ -27,16 +27,21 @@ def create_directories(params):
 
 
 def run_capsid(params_path):
+    from timeit import default_timer as timer
+    pycap_start = timer()
 
     params_dict = read_config(params_path)
     create_directories(params_dict)
+
+    if params_dict['plotting']['suppress_plots']:
+        import matplotlib
+        matplotlib.use('Agg')
 
     from .PDB import getCapsid
     pdb = params_dict['PDB']['pdb']
     capsid, calphas, coords, bfactors, chain_starts, title = getCapsid(**params_dict['PDB'])
 
     from .CG import buildENMPreset
-
     kirch, hessian = buildENMPreset(coords, **params_dict['CG'])
 
     from .NMA import modeCalc
@@ -52,6 +57,9 @@ def run_capsid(params_path):
 
 
     labels, score, residue_scores = findQuasiRigidClusters(pdb, dist_flucts, **params_dict['QRC'])
+
+    pycap_time = timer() - pycap_start
+    print(f'pyCapsid total execution time for {pdb}: {pycap_time}')
 
     from pyCapsid.VIS import chimeraxViz
     chimeraxViz(labels, pdb, **params_dict['VIS'])

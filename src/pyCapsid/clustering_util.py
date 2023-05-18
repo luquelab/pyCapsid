@@ -162,7 +162,7 @@ def plotScores(pdb, n_range, scores, ntypes, save=True, save_path='score.png'):
     ax[0].legend()
     fig.tight_layout()
     if save:
-        fig.savefig(f'{save_path}_results_plot.svg')
+        fig.savefig(f'{save_path}results_plot.svg')
 
     plt.show()
 
