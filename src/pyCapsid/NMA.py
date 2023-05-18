@@ -14,9 +14,9 @@ def modeCalc(hess, n_modes=200, eigen_method='eigsh', is3d=True, shift_invert=Tr
     :param eigen_method: Choice of method for solving the eigenvalue problem.
     :returns:
     """
-    import time
+    from timeit import default_timer as timer
+    NMA_start = timer()
     print('Calculating Normal Modes')
-    start = time.time()
 
     n_dim = hess.shape[0]
 
@@ -73,8 +73,8 @@ def modeCalc(hess, n_modes=200, eigen_method='eigsh', is3d=True, shift_invert=Tr
             evals = cp.asnumpy(evals[1:])
             evecs = cp.asnumpy(evecs[:, 1:])
 
-    end = time.time()
-    print('NMA time: ', end - start)
+    NMA_time = NMA_start - timer()
+    print('NMA time: ', NMA_time)
 
     if save_modes:
         file = save_mode_path + 'modes.npz'
@@ -289,8 +289,13 @@ def fitCompareBfactors(evals, evecs, bfactors, pdb, is3d=True, fit_modes=True, p
     :return:
     """
     from .bfactorfit import fitPlotBfactors
+    from timeit import default_timer as timer
+    bfactor_start = timer()
     cc, gamma,n_modes = fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=is3d, fitModes=fit_modes, plotModes=plot_modes,
                                         forceIco=force_ico, icotol=ico_tol, isIco=is_ico, save_path=save_bfactors_path)
+
+    bfactor_time = bfactor_start - timer()
+    print('bfactor fitting time: ', bfactor_time)
     r_evals = evals[:n_modes]*gamma
     r_evecs = evecs[:, :n_modes]
     return r_evals, r_evecs

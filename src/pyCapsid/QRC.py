@@ -16,6 +16,9 @@ def findQuasiRigidClusters(pdb, dist_flucts, n_range=None, cluster_start=4, clus
     :param str dir:
     :return:
     """
+    from timeit import default_timer as timer
+    QRC_start = timer()
+
     if n_range is None:
         n_range = np.arange(cluster_start, cluster_stop, cluster_step)
 
@@ -25,6 +28,9 @@ def findQuasiRigidClusters(pdb, dist_flucts, n_range=None, cluster_start=4, clus
     embedding = calcEmbedding(sims, n_vecs)
 
     labels, scores, numtypes, full_scores = cluster_embedding(n_range, embedding, method=cluster_method, score_method=score_method)
+
+    QRC_time = QRC_start - timer()
+    print('QRC time: ', QRC_time)
 
     from .clustering_util import plotScores
     plotScores(pdb, n_range, scores, numtypes, save_path=save_results_path)
@@ -91,6 +97,9 @@ def cluster_embedding(n_range, maps, method='discretize', score_method='median')
     :param score_method:
     :return:
     """
+
+
+
     print('Clustering Embedded Points')
     print(f'Method: {method}')
 
