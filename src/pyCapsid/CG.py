@@ -20,15 +20,15 @@ def buildENMPreset(coords, preset='ANM', **kwargs):
     print('Building hessian for model preset: ', preset)
     if preset == 'ANM':
         cutoff = 15
-        return buildENM(coords, cutoff=cutoff)
+        return buildENM(coords, cutoff=cutoff, **kwargs)
     elif preset == 'GNM':
         cutoff = 7.5
         gnm=True
-        return buildENM(coords, cutoff=cutoff, gnm=gnm)
+        return buildENM(coords, cutoff=cutoff, gnm=gnm, **kwargs)
     elif preset == 'U-ENM':
         cutoff = 7.5
         fanm = 0.1
-        return buildENM(coords, cutoff=cutoff, fanm=fanm)
+        return buildENM(coords, cutoff=cutoff, fanm=fanm, **kwargs)
     elif preset == 'bbENM':
         cutoff = 7.5
         l_backbone=1
@@ -36,20 +36,20 @@ def buildENMPreset(coords, preset='ANM', **kwargs):
         if 'chain_starts' not in kwargs:
             raise ValueError("No chain information provided. Indices of chain starts must be provided as chain_starts")
         chain_starts = kwargs['chain_starts']
-        return buildENM(coords, cutoff=cutoff, chain_starts=chain_starts, l_backbone=l_backbone, k_backbone=k_backbone)
+        return buildENM(coords, cutoff=cutoff, chain_starts=chain_starts, l_backbone=l_backbone, k_backbone=k_backbone, **kwargs)
     else:
         raise ValueError("Invalid model preset. Expected one of: %s" % model_presets)
 
 
 
 def buildENM(coords, cutoff=10, gnm=False, fanm=1, wfunc='power', base_dist=1, d_power=0, backbone=False, k_backbone=1,
-             l_backbone=1, chain_starts=None, save_hessian=False, save_kirchoff=False, save_cg_path=''):
+             l_backbone=1, chain_starts=None, save_hessian=False, save_kirchhoff=False, save_cg_path=''):
     """Builds a hessian matrix representing an ENM based on the provided parameters.
 
         :param coords: Cartesian of alpha carbon (or choice of representation) atoms
-        :param cutoff: Cutoff distance for long range interactions in the ENM
+        :param float cutoff: Cutoff distance for long range interactions in the ENM
         :param gnm: Whether to use only the kirchhoff matrix (Isotropic GNM), otherwise use full hessian
-        :param fanm: Parameter representing degree of anisotropy for U-ENM
+        :param float fanm: Parameter representing degree of anisotropy for U-ENM
         :param wfunc: Weight function to assign spring constant based on distance. Use 'power' or 'exp'
         :param base_dist: In wfunc, divide distance by the base_distance
         :param d_power: In wfunc, use this power of the distance
@@ -57,7 +57,7 @@ def buildENM(coords, cutoff=10, gnm=False, fanm=1, wfunc='power', base_dist=1, d
         :param k_backbone: Relative strength of backbone interaction
         :param l_backbone: How many steps along the backbone to give stronger interactions
         :param chain_starts: Used for defining backbone interactions
-        :return: A tuple of sparse matrices. The kirchoff matrix and the hessian matrix
+        :return: A tuple of sparse matrices. The kirchhoff matrix and the hessian matrix
         :rtype: (scipy.sparse.csr_matrix, scipy.sparse.csr_matrix)
         """
     params = locals()
@@ -112,8 +112,8 @@ def buildENM(coords, cutoff=10, gnm=False, fanm=1, wfunc='power', base_dist=1, d
     hessian.eliminate_zeros()
     kirch.eliminate_zeros()
 
-    if save_kirchoff:
-        file = save_cg_path + "kirchoff"
+    if save_kirchhoff:
+        file = save_cg_path + "kirchhoff"
         sparse.save_npz(file, kirch, compressed=True)
 
     if save_hessian:

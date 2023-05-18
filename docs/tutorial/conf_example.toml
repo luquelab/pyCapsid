@@ -2,30 +2,29 @@
 pdb = '1a34'
 pdbx = false
 local = false
-dir = '.'
-save_full_pdb = false
-save_pdb_path = '.'
+save_full_pdb = true
+save_pdb_path = './1a34/pdb/'
 
 [CG]
 preset = 'U-ENM'
-save_hessian = false
-save_kirchhoff = false
-save_cg_path = '.'
+save_hessian = true
+save_kirchhoff = true
+save_cg_path = './1a34/matrices/'
 
 [NMA]
 n_modes = 200
 eigen_method = 'eigsh'
 shift_invert = true
-save_modes = false
-save_mode_path = '.'
+save_modes = true
+save_mode_path = './1a34/modes/'
 
 [b_factors]
-fit_modes = false
+fit_modes = true
 plot_modes = false
 force_ico = true
 ico_tol = 0.002
-save_bfactors = false
-save_bfactors_path = '.'
+save_bfactors = true
+save_bfactors_path = './1a34/bfactors/'
 
 
 [QRC]
@@ -34,10 +33,11 @@ cluster_stop = 100
 cluster_step = 2
 cluster_method = 'discretize'
 score_method = 'median'
+return_type = 'final'
 save_results =  true
-save_results_path =  ''
+save_results_path =  './1a34/results/'
 
 [VIS]
-chimerax_path = 'C:\\Program Files\\ChimeraX\\bin\\ChimeraX.exe'
+chimerax_path = 'C:\Program Files\ChimeraX\bin\ChimeraX.exe'
 
 

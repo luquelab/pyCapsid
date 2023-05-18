@@ -6,12 +6,30 @@ def read_config(file_path):
 
     return params_dict
 
+def create_directories(params):
+    from pathlib import Path
+    # pdb = params['PDB']['pdb']
+    # results_dir = f'./{pdb}/'
+    # Path(results_dir).mkdir(parents=True, exist_ok=True)
+
+    save_suffix = '_path'
+    save_params = {}
+    for k, v in params.items():
+        s = {key: val for key, val in v.items() if key.endswith(save_suffix)}
+        save_params.update(s)
+
+    save_params.pop('chimerax_path')
+    print(save_params)
+    for key, val in save_params.items():
+
+        Path(val).mkdir(parents=True, exist_ok=True)
+
 
 
 def run_capsid(params_path):
 
     params_dict = read_config(params_path)
-
+    create_directories(params_dict)
 
     from .PDB import getCapsid
     pdb = params_dict['PDB']['pdb']
