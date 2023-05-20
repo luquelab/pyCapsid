@@ -29,7 +29,7 @@ def findQuasiRigidClusters(pdb, dist_flucts, n_range=None, cluster_start=4, clus
 
     labels, scores, numtypes, full_scores = cluster_embedding(n_range, embedding, method=cluster_method, score_method=score_method)
 
-    QRC_time = QRC_start - timer()
+    QRC_time = timer() - QRC_start
     print('QRC time: ', QRC_time)
 
     from .clustering_util import plotScores

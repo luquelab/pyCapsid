@@ -6,23 +6,26 @@ def read_config(file_path):
 
     return params_dict
 
-def create_directories(params):
+def create_directories(params_dict):
     from pathlib import Path
     # pdb = params['PDB']['pdb']
     # results_dir = f'./{pdb}/'
     # Path(results_dir).mkdir(parents=True, exist_ok=True)
 
     save_suffix = '_path'
-    save_params = {}
+    params = params_dict.copy()
+
+    top_path = params['PDB']['save_all_path']
+
     for k, v in params.items():
-        s = {key: val for key, val in v.items() if key.endswith(save_suffix)}
-        save_params.update(s)
+        for key, val in v.items():
+            if key.endswith(save_suffix) and not key == 'save_all_path' and not key == 'chimerax_path':
+                params_dict[k][key] = top_path + val
+                Path(params_dict[k][key]).mkdir(parents=True, exist_ok=True)
 
-    save_params.pop('chimerax_path')
-    print(save_params)
-    for key, val in save_params.items():
+    print(params_dict)
 
-        Path(val).mkdir(parents=True, exist_ok=True)
+
 
 
 
@@ -32,10 +35,12 @@ def run_capsid(params_path):
 
     params_dict = read_config(params_path)
     create_directories(params_dict)
+    params_dict['PDB'].pop('save_all_path')
 
     if params_dict['plotting']['suppress_plots']:
         import matplotlib
         matplotlib.use('Agg')
+
 
     from .PDB import getCapsid
     pdb = params_dict['PDB']['pdb']
