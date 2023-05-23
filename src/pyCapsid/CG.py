@@ -43,7 +43,7 @@ def buildENMPreset(coords, preset='ANM', **kwargs):
 
 
 def buildENM(coords, cutoff=10, gnm=False, fanm=1, wfunc='power', base_dist=1, d_power=0, backbone=False, k_backbone=1,
-             l_backbone=1, chain_starts=None, save_hessian=False, save_kirchhoff=False, save_cg_path=''):
+             l_backbone=1, chain_starts=None, save_hessian=False, save_kirchhoff=False, save_cg_path='./'):
     """Builds a hessian matrix representing an ENM based on the provided parameters.
 
         :param coords: Cartesian of alpha carbon (or choice of representation) atoms

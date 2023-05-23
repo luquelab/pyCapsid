@@ -5,7 +5,7 @@ import numba as nb
 import numpy as np
 
 
-def modeCalc(hess, n_modes=200, eigen_method='eigsh', is3d=True, shift_invert=True, save_modes=True, save_mode_path=''):
+def modeCalc(hess, n_modes=200, eigen_method='eigsh', is3d=True, shift_invert=True, save_modes=True, save_mode_path='./'):
     """Calculate the 'n_modes' lowest frequency modes of the system by calculating the smallest eigenvalues and eigenvectors
     of the hessian matrix.
 
@@ -273,7 +273,7 @@ def fluctPlot(d, title, pdb):
 
 # This is a stupid way to switch this to be in NMA
 def fitCompareBfactors(evals, evecs, bfactors, pdb, is3d=True, fit_modes=True, plot_modes=False, force_ico=True,
-                       ico_tol=0.002, is_ico=True, save_bfactors=False, save_bfactors_path=''):
+                       ico_tol=0.002, is_ico=True, save_bfactors=False, save_bfactors_path='./'):
     """
 
     :param is_ico:
