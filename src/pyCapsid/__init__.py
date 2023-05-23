@@ -8,14 +8,14 @@ def read_config(file_path):
 
 def create_directories(params_dict):
     from pathlib import Path
-    # pdb = params['PDB']['pdb']
-    # results_dir = f'./{pdb}/'
-    # Path(results_dir).mkdir(parents=True, exist_ok=True)
+
 
     save_suffix = '_path'
     params = params_dict.copy()
 
     top_path = params['PDB']['save_all_path']
+
+    # This is remarkably hacky but it does its job of creating all the folders for saving results
 
     for k, v in params.items():
         for key, val in v.items():
@@ -23,7 +23,6 @@ def create_directories(params_dict):
                 params_dict[k][key] = top_path + val
                 Path(params_dict[k][key]).mkdir(parents=True, exist_ok=True)
 
-    print(params_dict)
 
 
 
