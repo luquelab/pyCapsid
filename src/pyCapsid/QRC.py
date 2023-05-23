@@ -3,7 +3,8 @@ ENM or provided."""
 
 import numpy as np
 
-def findQuasiRigidClusters(pdb, dist_flucts, n_range, cluster_method='discretize', return_type='final', score_method='median', save=False, dir='.'):
+def findQuasiRigidClusters(pdb, dist_flucts, n_range=None, cluster_start=4, cluster_stop = 100, cluster_step = 1, cluster_method='discretize', return_type='final',
+                           score_method='median', save_results=True, save_results_path=''):
     """Uses spectral clustering to split the residues into clusters with minimal internal distance fluctuations.
 
     :param str pdb:
@@ -11,28 +12,45 @@ def findQuasiRigidClusters(pdb, dist_flucts, n_range, cluster_method='discretize
     :param list n_range:
     :param str cluster_method:
     :param str score_method:
-    :param bool save:
+    :param bool save_results:
     :param str dir:
     :return:
     """
+    from timeit import default_timer as timer
+    QRC_start = timer()
+
+    if n_range is None:
+        n_range = np.arange(cluster_start, cluster_stop, cluster_step)
+
     sims = fluctToSims(dist_flucts)
     n_vecs = n_range.max()
 
     embedding = calcEmbedding(sims, n_vecs)
 
-    labels, scores, numtypes, fullscores = cluster_embedding(n_range, embedding, method=cluster_method, score_method=score_method)
+    labels, scores, numtypes, full_scores = cluster_embedding(n_range, embedding, method=cluster_method, score_method=score_method)
+
+    QRC_time = timer() - QRC_start
+    print('QRC time: ', QRC_time)
 
     from .clustering_util import plotScores
-    plotScores(pdb, n_range, scores, numtypes)
+    plotScores(pdb, n_range, scores, numtypes, save_path=save_results_path)
 
     ind = np.argmax(scores)
+    final_cluster_num = n_range[ind]
     final_clusters = labels[ind]
     final_score = scores[ind]
-    final_full_score = fullscores[ind]
+    final_numtypes = numtypes[ind]
+    final_full_score = full_scores[ind]
     if return_type=='final':
+        if save_results:
+            np.savez_compressed(save_results_path + pdb + '_' + return_type + '_results', labels=final_clusters, score=final_score,
+                                nc=final_cluster_num, cluster_method=cluster_method, final_full_score=final_full_score)
         return final_clusters, final_score, final_full_score
     elif return_type=='full':
-        return labels, scores, numtypes, fullscores
+        if save_results:
+            np.savez_compressed(save_results_path + pdb + '_' + return_type + '_results', labels=labels, score=scores,
+                                nc_range=n_range, cluster_method=cluster_method, numtypes=numtypes, full_scores=full_scores)
+        return labels, scores, numtypes, full_scores
     else:
         return final_clusters
 
@@ -79,6 +97,9 @@ def cluster_embedding(n_range, maps, method='discretize', score_method='median')
     :param score_method:
     :return:
     """
+
+
+
     print('Clustering Embedded Points')
     print(f'Method: {method}')
 

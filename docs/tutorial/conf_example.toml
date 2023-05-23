@@ -1,0 +1,47 @@
+[PDB]
+pdb = '1a34'
+pdbx = false
+local = false
+save_full_pdb = true
+save_all_path = './1a34/' # will be prepended to all other save_paths
+save_pdb_path = 'pdb/'
+
+[CG]
+preset = 'U-ENM'
+save_hessian = true
+save_kirchhoff = true
+save_cg_path = 'matrices/'
+
+[NMA]
+n_modes = 200
+eigen_method = 'eigsh'
+shift_invert = true
+save_modes = true
+save_mode_path = 'modes/'
+
+[b_factors]
+fit_modes = true
+plot_modes = false
+force_ico = true
+ico_tol = 0.002
+save_bfactors = true
+save_bfactors_path = 'bfactors/'
+
+
+[QRC]
+cluster_start = 10
+cluster_stop = 100
+cluster_step = 2
+cluster_method = 'discretize'
+score_method = 'median'
+return_type = 'final'
+save_results =  true
+save_results_path =  'results/'
+
+[VIS]
+chimerax_path = 'C:\Program Files\ChimeraX\bin\ChimeraX.exe'
+
+[plotting]
+suppress_plots = true
+
+

@@ -216,7 +216,7 @@ def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotM
         fontsize=9)
     fig.tight_layout()
     if save:
-        fig.savefig(f'{save_path}')
+        fig.savefig(f'{save_path}b_factors.svg')
     plt.show()
 
     return coeff, gamma, nmodes

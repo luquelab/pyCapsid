@@ -5,18 +5,18 @@ import numba as nb
 import numpy as np
 
 
-def modeCalc(hess, n_modes=200, eigmethod='eigsh', is3d=True, shift_invert=True):
+def modeCalc(hess, n_modes=200, eigen_method='eigsh', is3d=True, shift_invert=True, save_modes=True, save_mode_path=''):
     """Calculate the 'n_modes' lowest frequency modes of the system by calculating the smallest eigenvalues and eigenvectors
     of the hessian matrix.
 
     :param hess: Sparse hessian matrix
     :param n_modes: Integer number of low-frequency modes to calculate.
-    :param eigmethod: Choice of method for solving the eigenvalue problem.
+    :param eigen_method: Choice of method for solving the eigenvalue problem.
     :returns:
     """
-    import time
+    from timeit import default_timer as timer
+    NMA_start = timer()
     print('Calculating Normal Modes')
-    start = time.time()
 
     n_dim = hess.shape[0]
 
@@ -37,7 +37,7 @@ def modeCalc(hess, n_modes=200, eigmethod='eigsh', is3d=True, shift_invert=True)
     # from scipy.sparse import identity
     # Mass = identity(n_dim)
 
-    if eigmethod == 'eigsh':
+    if eigen_method == 'eigsh':
         from scipy.sparse.linalg import eigsh
         if shift_invert:
             print('Using shift-invert for increased performance with increased memory usage.')
@@ -46,14 +46,14 @@ def modeCalc(hess, n_modes=200, eigmethod='eigsh', is3d=True, shift_invert=True)
             evals, evecs = eigsh(hess, k=n_modes, which='SA')
             evals = evals[6:]
             evecs = evecs[:, 6:]
-    elif eigmethod == 'lobpcg':
+    elif eigen_method == 'lobpcg':
         from scipy.sparse.linalg import lobpcg
 
         epredict = np.random.rand(n_dim, n_modes + 6)
         evals, evecs = lobpcg(hess, epredict, largest=False, tol=0, maxiter=n_dim)
         evals = evals[6:]
         evecs = evecs[:, 6:]
-    elif eigmethod == 'lobcuda':
+    elif eigen_method == 'lobcuda':
         import cupy as cp
         from cupyx.scipy.sparse.linalg import lobpcg as clobpcg
         from cupyx.scipy.sparse.linalg import LinearOperator, spilu
@@ -73,8 +73,14 @@ def modeCalc(hess, n_modes=200, eigmethod='eigsh', is3d=True, shift_invert=True)
             evals = cp.asnumpy(evals[1:])
             evecs = cp.asnumpy(evecs[:, 1:])
 
-    end = time.time()
-    print('NMA time: ', end - start)
+    NMA_time = timer() - NMA_start
+    print('NMA time: ', NMA_time)
+
+    if save_modes:
+        file = save_mode_path + 'modes.npz'
+        print('Saving NMA results in' + file)
+        np.savez_compressed(file, eigen_vals=evals, eigen_vecs = evecs)
+
     return evals, evecs
 
 
@@ -266,25 +272,30 @@ def fluctPlot(d, title, pdb):
 
 
 # This is a stupid way to switch this to be in NMA
-def fitCompareBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotModes=False, forceIco=True,
-                       icotol=0.002, isIco=True):
+def fitCompareBfactors(evals, evecs, bfactors, pdb, is3d=True, fit_modes=True, plot_modes=False, force_ico=True,
+                       ico_tol=0.002, is_ico=True, save_bfactors=False, save_bfactors_path=''):
     """
 
-    :param isIco:
+    :param is_ico:
     :param evals:
     :param evecs:
     :param bfactors:
     :param pdb:
     :param is3d:
-    :param fitModes:
-    :param plotModes:
-    :param forceIco:
-    :param icotol:
+    :param fit_modes:
+    :param plot_modes:
+    :param force_ico:
+    :param ico_tol:
     :return:
     """
     from .bfactorfit import fitPlotBfactors
-    cc, gamma,n_modes = fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=is3d, fitModes=fitModes, plotModes=plotModes,
-                                        forceIco=forceIco, icotol=icotol, isIco=isIco)
+    from timeit import default_timer as timer
+    bfactor_start = timer()
+    cc, gamma,n_modes = fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=is3d, fitModes=fit_modes, plotModes=plot_modes,
+                                        forceIco=force_ico, icotol=ico_tol, isIco=is_ico, save_path=save_bfactors_path)
+
+    bfactor_time = timer() - bfactor_start
+    print('bfactor fitting time: ', bfactor_time)
     r_evals = evals[:n_modes]*gamma
     r_evecs = evecs[:, :n_modes]
     return r_evals, r_evecs
