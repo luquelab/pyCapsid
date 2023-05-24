@@ -4,7 +4,7 @@ ENM or provided."""
 import numpy as np
 
 def findQuasiRigidClusters(pdb, dist_flucts, n_range=None, cluster_start=4, cluster_stop = 100, cluster_step = 1, cluster_method='discretize', return_type='final',
-                           score_method='median', save_results=True, save_results_path=''):
+                           score_method='median', save_results=True, save_results_path='./'):
     """Uses spectral clustering to split the residues into clusters with minimal internal distance fluctuations.
 
     :param str pdb:
