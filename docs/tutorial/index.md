@@ -4,10 +4,16 @@ title: Tutorial
 nav_order: 3
 ---
 
-# Tutorial: Quasi-rigid subunits of Satellite Tobacco Mosaic Virus
+* 
+{:toc}
 
-This tutorial covers the use pyCapsid to identify the quasi-rigid subunits of an example capsid. An example 
-notebook is provided with all of the example code in the [notebooks folder](https://github.com/luquelab/pyCapsid/tree/main/notebooks). 
+# Tutorial: Jupyter Notebook
+
+This tutorial covers the use pyCapsid to identify the quasi-rigid subunits of an example capsid. This tutorial also comes
+in the form of a [colab_notebook](https://colab.research.google.com/drive/1p4E1ne8t47yGaiKC6NXpDo4TTnPLOrZ5?usp=sharing)
+which we reccommend as the easiest way to try out pyCapsid.
+The example notebook is also provided for local use in the [notebooks folder](https://github.com/luquelab/pyCapsid/tree/main/notebooks).
+
 
 Once the package and other dependecies are [installed](https://luquelab.github.io/pyCapsid/installation/), download the 
 notebook and run the following command in its directory to launch jupyter lab.
@@ -22,7 +28,7 @@ This code acquires the pdb file from the RCSB databank, loads the necessary info
 ```python
 from pyCapsid.PDB import getCapsid
 pdb = '4oq8'
-capsid, calphas, coords, bfactors, chain_starts, title = getCapsid(pdb, save=True)
+capsid, calphas, coords, bfactors, chain_starts, title = getCapsid(pdb)
 ```
 
 ### Build ENM Hessian
@@ -46,7 +52,7 @@ This code uses the resulting normal modes and frequencies to predict the b-facto
 
 ```python
 from pyCapsid.NMA import fitCompareBfactors
-evals_scaled, evecs_scaled = fitCompareBfactors(evals, evecs, bfactors, pdb, fitModes=False)
+evals_scaled, evecs_scaled = fitCompareBfactors(evals, evecs, bfactors, pdb)
 ```
 
 ![capsid_chx](4oq8_bfactorplot.png){: width="500"}
@@ -56,13 +62,13 @@ evals_scaled, evecs_scaled = fitCompareBfactors(evals, evecs, bfactors, pdb, fit
 ```python
 from pyCapsid.NMA import calcDistFlucts
 from pyCapsid.QRC import findQuasiRigidClusters
-import numpy as np
 
-dist_flucts = calcDistFlucts(evals_scaled, evecs, coords)
+dist_flucts = calcDistFlucts(evals, evecs, coords)
 
-n_cluster_max = 130
-n_range = np.arange(4, n_cluster_max, 2)
-labels, score, residue_scores  = findQuasiRigidClusters(pdb, dist_flucts, n_range)
+cluster_start = 4
+cluster_stop = 130
+cluster_step = 2
+labels, score, residue_scores  = findQuasiRigidClusters(pdb, dist_flucts, cluster_start=cluster_start, cluster_stop=cluster_stop, cluster_step=cluster_step)
 ```
 
 ![capsid_chx](4oq8_score_profile.png){: width="500"}
@@ -112,6 +118,52 @@ view
 ```
 
 ![capsid_ngl](4oq8_score.png){: width="500"}
+
+
+# Tutorial: Running pyCapsid using a config.toml file
+This is a simpler and faster way to run the entire pyCapsid pipeline and save the results by setting the parameters ahead
+of time in a text file. To do this download [this example]() from our github or copy and paste the following into a text
+editor and save the output as 'config.toml'
+
+### A simple config.toml example
+
+```toml
+[PDB]
+pdb = '4oq8' # PDB ID of structure
+save_all_path = './4oq8/' # Where to save the results
+
+[CG]
+preset = 'U-ENM' # Model Preset To Use
+save_hessian = true # Whether to save the hessian matrix
+
+[NMA]
+n_modes = 200 # Number of low frequency modes to calculate
+eigen_method = 'eigsh' # eigen method to use
+save_modes = true # Whether to save the resulting eigenvalues and eigenvectors
+
+[b_factors]
+fit_modes = true # Whether to select the number of modes used to maximize correlation
+
+[QRC]
+cluster_start = 10 # Number of clusters to start at
+cluster_stop = 100 # Largest number of clusters to be tested
+cluster_step = 2
+
+[VIS]
+chimerax_path = 'C:\Program Files\ChimeraX\bin\ChimeraX.exe'
+
+[plotting]
+suppress_plots = true # Whether to suppress the interactive matplotlib plots
+```
+
+Once you've created the 'config.toml' file, the following python code will run the entire pyCapsid pipeline using the
+specified settings. Make sure to either run python in the same directory as the config file or properly include the
+path to the file in the python code.
+
+```python
+from pyCapsid import run_capsid
+run_capsid('config.toml')
+```
 
 # Tutorial: ProDy Integration
 One can make use of pyCapsids faster ENM and NMA module while still being able to use ProDy's other features by performing
