@@ -15,7 +15,7 @@ which we reccommend as the easiest way to try out pyCapsid.
 The example notebook is also provided for local use in the [notebooks folder](https://github.com/luquelab/pyCapsid/tree/main/notebooks).
 
 
-Once the package and other dependecies are [installed](https://luquelab.github.io/pyCapsid/installation/), download the 
+Once the package and other dependencies are [installed](https://luquelab.github.io/pyCapsid/installation/), download the 
 notebook and run the following command in its directory to launch jupyter lab.
 
 ~~~~
