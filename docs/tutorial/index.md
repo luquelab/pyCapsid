@@ -3,17 +3,15 @@ layout: default
 title: Tutorial
 nav_order: 3
 ---
-
 * 
 {:toc}
 
-# Tutorial: Jupyter Notebook
+# Interactive Usage
 
-This tutorial covers the use pyCapsid to identify the quasi-rigid subunits of an example capsid. This tutorial also comes
+This tutorial covers the step by step use pyCapsid to identify the quasi-rigid subunits of an example capsid. This tutorial also comes
 in the form of a [colab_notebook](https://colab.research.google.com/drive/1p4E1ne8t47yGaiKC6NXpDo4TTnPLOrZ5?usp=sharing)
-which we reccommend as the easiest way to try out pyCapsid.
+which we recommend as the easiest way to try out pyCapsid.
 The example notebook is also provided for local use in the [notebooks folder](https://github.com/luquelab/pyCapsid/tree/main/notebooks).
-
 
 Once the package and other dependencies are [installed](https://luquelab.github.io/pyCapsid/installation/), download the 
 notebook and run the following command in its directory to launch jupyter lab.
@@ -22,7 +20,7 @@ notebook and run the following command in its directory to launch jupyter lab.
 jupyter lab
 ~~~~
 
-### Fetch and load PDB
+## Fetch and load PDB
 This code acquires the pdb file from the RCSB databank, loads the necessary information, and saves copies for possible use in visualization in other software.
 
 ```python
@@ -31,7 +29,7 @@ pdb = '4oq8'
 capsid, calphas, coords, bfactors, chain_starts, title = getCapsid(pdb)
 ```
 
-### Build ENM Hessian
+## Build ENM Hessian
 This code builds a hessian matrix using an elastic network model defined by the given parameters. The types of model and the meaning of the parameters are provided in the documentation.
 
 ```python
@@ -39,7 +37,7 @@ from pyCapsid.CG import buildENMPreset
 kirch, hessian = buildENMPreset(coords, preset='U-ENM')
 ```
 
-### Perform NMA
+## Perform NMA
 This code calculates the n lowest frequency modes of the system by calculating the eigenvalues and eigenvectors of the hessian matrix.
 
 ```python
@@ -47,7 +45,7 @@ from pyCapsid.NMA import modeCalc
 evals, evecs = modeCalc(hessian)
 ```
 
-### Predict, fit, and compare b-factors
+## Predict, fit, and compare b-factors
 This code uses the resulting normal modes and frequencies to predict the b-factors of each alpha carbon, fits these results to experimental values from the pdb entry, and plots the results for comparison.
 
 ```python
@@ -57,7 +55,7 @@ evals_scaled, evecs_scaled = fitCompareBfactors(evals, evecs, bfactors, pdb)
 
 ![capsid_chx](4oq8_bfactorplot.png){: width="500"}
 
-### Perform quasi-rigid cluster identification (QRC)
+## Perform quasi-rigid cluster identification (QRC)
 
 ```python
 from pyCapsid.NMA import calcDistFlucts
@@ -120,9 +118,9 @@ view
 ![capsid_ngl](4oq8_score.png){: width="500"}
 
 
-# Tutorial: Running pyCapsid using a config.toml file
+# Running pyCapsid using a config.toml file
 This is a simpler and faster way to run the entire pyCapsid pipeline and save the results by setting the parameters ahead
-of time in a text file. To do this download [this example]() from our github or copy and paste the following into a text
+of time in a text file. To do this download [this example](https://luquelab.github.io/pyCapsid/docs/tutorial/config_simple.toml) from our github or copy and paste the following into a text
 editor and save the output as 'config.toml'
 
 ### A simple config.toml example
@@ -165,7 +163,7 @@ from pyCapsid import run_capsid
 run_capsid('config.toml')
 ```
 
-# Tutorial: ProDy Integration
+# ProDy Integration
 One can make use of pyCapsids faster ENM and NMA module while still being able to use ProDy's other features by performing
 the calculations using pyCapsid and passing the results to ProDy.
 
