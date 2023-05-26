@@ -36,9 +36,10 @@ def run_capsid(params_path):
     create_directories(params_dict)
     params_dict['PDB'].pop('save_all_path')
 
-    if params_dict['plotting']['suppress_plots']:
-        import matplotlib
-        matplotlib.use('Agg')
+    if 'suppress_plots' in params_dict['plotting'].keys():
+        if params_dict['plotting']['suppress_plots']:
+            import matplotlib
+            matplotlib.use('Agg')
 
 
     from .PDB import getCapsid
@@ -59,6 +60,13 @@ def run_capsid(params_path):
 
     dist_flucts = calcDistFlucts(evals_scaled, evecs, coords)
 
+
+    if not 'cluster_stop' in params_dict['QRC'].keys():
+        print('No cluster range specified, defaulting to: 4-[number of chains]')
+        import biotite.structure as struc
+        params_dict['QRC']['cluster_start'] = 4
+        params_dict['QRC']['cluster_stop'] = struc.get_chain_count(capsid)+1
+        params_dict['QRC']['cluster_step'] = 2
 
     labels, score, residue_scores = findQuasiRigidClusters(pdb, dist_flucts, **params_dict['QRC'])
 
