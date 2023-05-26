@@ -120,7 +120,7 @@ view
 
 # Running pyCapsid using a config.toml file
 This is a simpler and faster way to run the entire pyCapsid pipeline and save the results by setting the parameters ahead
-of time in a text file. To do this download [this example](https://luquelab.github.io/pyCapsid/docs/tutorial/config_simple.toml) from our github or copy and paste the following into a text
+of time in a text file. To do this download [this example](https://github.com/luquelab/pyCapsid/blob/main/docs/tutorial/config_simple.toml) from our github or copy and paste the following into a text
 editor and save the output as 'config.toml'
 
 ### A simple config.toml example
@@ -128,7 +128,7 @@ editor and save the output as 'config.toml'
 ```toml
 [PDB]
 pdb = '4oq8' # PDB ID of structure
-save_all_path = './4oq8/' # Where to save the results
+save_all_path = './4oq8/' # where to save the results
 
 [CG]
 preset = 'U-ENM' # Model Preset To Use
@@ -137,21 +137,17 @@ save_hessian = true # Whether to save the hessian matrix
 [NMA]
 n_modes = 200 # Number of low frequency modes to calculate
 eigen_method = 'eigsh' # eigen method to use
-save_modes = true # Whether to save the resulting eigenvalues and eigenvectors
 
 [b_factors]
 fit_modes = true # Whether to select the number of modes used to maximize correlation
 
 [QRC]
-cluster_start = 10 # Number of clusters to start at
-cluster_stop = 100 # Largest number of clusters to be tested
-cluster_step = 2
 
 [VIS]
 chimerax_path = 'C:\Program Files\ChimeraX\bin\ChimeraX.exe'
 
 [plotting]
-suppress_plots = true # Whether to suppress the interactive matplotlib plots
+
 ```
 
 Once you've created the 'config.toml' file, the following python code will run the entire pyCapsid pipeline using the

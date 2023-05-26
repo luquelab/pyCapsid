@@ -213,7 +213,7 @@ def view_pdb_ngl(pdb, capsid, labels, rwb_scale=False):
     color_scheme = ngl.color._ColorScheme(clust_scheme, label="scheme_regions")
 
 
-    view = ngl.show_structure_file(pdb + '_capsid.pdb', gui=True)
+    view = ngl.show_structure_file(pdb + '_capsid.pdb', gui=False)
     view.clear_representations()
 
 

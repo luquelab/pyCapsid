@@ -1,6 +1,6 @@
 [PDB]
-pdb = '1a34' # PDB ID of structure
-save_all_path = './1a34/' # where to save the results
+pdb = '4oq8' # PDB ID of structure
+save_all_path = './4oq8/' # where to save the results
 
 [CG]
 preset = 'U-ENM' # Model Preset To Use
@@ -9,18 +9,13 @@ save_hessian = true # Whether to save the hessian matrix
 [NMA]
 n_modes = 200 # Number of low frequency modes to calculate
 eigen_method = 'eigsh' # eigen method to use
-save_modes = true # Whether to save the resulting eigenvalues and eigenvectors
 
 [b_factors]
 fit_modes = true # Whether to select the number of modes used to maximize correlation
 
 [QRC]
-cluster_start = 10 # Number of clusters to start at
-cluster_stop = 100 # Largest number of clusters to be tested
-cluster_step = 2
 
 [VIS]
 chimerax_path = 'C:\Program Files\ChimeraX\bin\ChimeraX.exe'
 
 [plotting]
-suppress_plots = true # Whether to suppress the interactive matplotlib plots
