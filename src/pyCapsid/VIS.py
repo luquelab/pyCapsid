@@ -166,7 +166,7 @@ def clusters_colormap_hexcolor(clusters, rwb_scale):
     norm = mpl.colors.Normalize(vmin=np.min(clusters), vmax=np.max(clusters))
 
     if rwb_scale:
-        cmap = mpl.pyplot.get_cmap('coolwarm_r')
+        cmap = mpl.pyplot.get_cmap('coolwarm')
         rgba = cmap(norm(clusters))
     else:
         cmap = generate_colormap(int(np.max(clusters)))
@@ -218,7 +218,27 @@ def view_pdb_ngl(pdb, capsid, labels, rwb_scale=False):
 
 
     view.add_representation("spacefill", color=color_scheme)
-    view._remote_call("setSize", target='Widget', args=['1000px','1000px'])
+    view._remote_call("setSize", target='Widget', args=['600px','600px'])
+
+    code = """
+    var $text = $("<div></div>")
+                .css("position", "absolute")
+                .css("top", "3%")
+                .css("left", "50%")
+                .css("padding", "2px 5px 2px 5px")
+                .css("opacity", "1.0")
+                .css("font-size", "30px")
+                .css("color", "black")
+                .appendTo(this.$container);
+
+    $text.text("{0} ({1} clusters)")
+    """
+    n_clusters = str(int(np.max(labels) + 1))
+    print(code.format(pdb, n_clusters))
+    view._execute_js_code(code.format(pdb))
+
+    print('Each atom in this structure has the same color as other atoms in the same cluster.')
+
     return view
 
     
