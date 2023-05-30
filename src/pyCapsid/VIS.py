@@ -2,6 +2,15 @@
 
 """
 
+
+def visualizeResults(pdb, capsid, labels, method='chimerax', **kwargs):
+    if method == 'chimerax':
+        chimeraxViz(labels, pdb, **kwargs)
+    elif method == 'nglview':
+        return view_pdb_ngl(pdb, capsid, labels, **kwargs)
+    else:
+        print('method must be chimerax or nglview')
+
 def chimeraxViz(labels, pdb, remote=True, chimerax_path=None, pdb_path='.', save_path='.',
                 rwb_scale=False):
     """Launches ChimeraX and runs a script that visualizes the results.
@@ -157,9 +166,6 @@ def open_pdb(pdb):
         mol = Molecule(ifile)
     return mol
 
-    
-
-  
   
 def clusters_colormap_hexcolor(clusters, rwb_scale):
     import matplotlib as mpl
@@ -218,7 +224,7 @@ def view_pdb_ngl(pdb, capsid, labels, rwb_scale=False):
         print('Each atom in this structure is colored according to the clustering quality score of its residue.')
         import matplotlib.colorbar as colorbar
         import matplotlib.pyplot as plt
-        fig, ax = plt.subplots(figsize=(8,0.5))
+        fig, ax = plt.subplots(figsize=(10,0.5))
         cb = colorbar.ColorbarBase(ax, orientation='horizontal',
                                    cmap=cmap, norm=plt.Normalize(np.min(labels), np.max(labels)))
         plt.show()
