@@ -73,5 +73,14 @@ def run_capsid(params_path):
     pycap_time = timer() - pycap_start
     print(f'pyCapsid total execution time for {pdb}: {pycap_time}')
 
-    from pyCapsid.VIS import chimeraxViz
-    chimeraxViz(labels, pdb, **params_dict['VIS'])
+    vis_method = params_dict['VIS']['method']
+
+    from pyCapsid.VIS import visualizeResults
+
+    if vis_method == 'chimerax':
+        visualizeResults(pdb, capsid, labels, method='chimerax', chimerax_path='C:\\Program Files\\ChimeraX\\bin\\chimerax.exe')
+    elif vis_method == 'nglview':
+        view = visualizeResults(pdb, capsid, labels, method='nglview')
+        return view
+    else:
+        print('method must be chimerax or nglview')
