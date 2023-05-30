@@ -7,17 +7,16 @@ nav_order: 3
 {:toc}
 
 # Interactive Usage
-
+The simplest way to follow this tutorial is using this [colab notebook](https://colab.research.google.com/drive/1p4E1ne8t47yGaiKC6NXpDo4TTnPLOrZ5?usp=sharing).
 This tutorial covers the step by step use pyCapsid to identify the quasi-rigid subunits of an example capsid. This tutorial also comes
-in the form of a [colab_notebook](https://colab.research.google.com/drive/1p4E1ne8t47yGaiKC6NXpDo4TTnPLOrZ5?usp=sharing)
-which we recommend as the easiest way to try out pyCapsid.
+in the form of a jupyter notebook for those who wish to run it locally.
 The example notebook is also provided for local use in the [notebooks folder](https://github.com/luquelab/pyCapsid/tree/main/notebooks).
 
 Once the package and other dependencies are [installed](https://luquelab.github.io/pyCapsid/installation/), download the 
-notebook and run the following command in its directory to launch jupyter lab.
+notebook and run the following command in its directory to launch jupyter notebook.
 
 ~~~~
-jupyter lab
+jupyter notebook
 ~~~~
 
 ## Fetch and load PDB
