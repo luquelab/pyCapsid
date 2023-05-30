@@ -166,7 +166,7 @@ def clusters_colormap_hexcolor(clusters, rwb_scale):
     norm = mpl.colors.Normalize(vmin=np.min(clusters), vmax=np.max(clusters))
 
     if rwb_scale:
-        cmap = mpl.pyplot.get_cmap('coolwarm')
+        cmap = mpl.pyplot.get_cmap('coolwarm_r')
         rgba = cmap(norm(clusters))
     else:
         cmap = generate_colormap(int(np.max(clusters)))
@@ -175,7 +175,7 @@ def clusters_colormap_hexcolor(clusters, rwb_scale):
     for c in rgba:
       hexcolor.append(mpl.colors.rgb2hex(c))
 
-    return hexcolor
+    return hexcolor, cmap
       
 def cluster_scheme(mol, hexcolor, clusters):
   r0 = mol[0]['resid']
@@ -206,38 +206,61 @@ def view_pdb_ngl(pdb, capsid, labels, rwb_scale=False):
     strucio.save_structure(pdb + '_capsid.pdb', capsid, hybrid36=True)
 
     mol = open_pdb(pdb)
-    hexcolor = clusters_colormap_hexcolor(labels, rwb_scale)
+    hexcolor, cmap = clusters_colormap_hexcolor(labels, rwb_scale)
     clust_scheme = cluster_scheme(mol, hexcolor, labels)
 
     import nglview as ngl
     color_scheme = ngl.color._ColorScheme(clust_scheme, label="scheme_regions")
-
-
     view = ngl.show_structure_file(pdb + '_capsid.pdb', gui=False)
     view.clear_representations()
 
+    if rwb_scale:
+        print('Each atom in this structure is colored according to the clustering quality score of its residue.')
+        import matplotlib.colorbar as colorbar
+        import matplotlib.pyplot as plt
+        fig, ax = plt.subplots(figsize=(8,0.5))
+        cb = colorbar.ColorbarBase(ax, orientation='horizontal',
+                                   cmap=cmap, norm=plt.Normalize(np.min(labels), np.max(labels)))
+        plt.show()
+        code = """
+                    var $text = $("<div></div>")
+                                .css("position", "absolute")
+                                .css("top", "3%")
+                                .css("left", "30%")
+                                .css("padding", "2px 5px 2px 5px")
+                                .css("opacity", "1.0")
+                                .css("font-size", "30px")
+                                .css("color", "black")
+                                .appendTo(this.$container);
+
+                    $text.text("{0} residue cluster scores")
+                    """
+        view._execute_js_code(code.format(pdb))
+    else:
+        print('Each atom in this structure has the same color as other atoms in the same cluster.')
+        code = """
+            var $text = $("<div></div>")
+                        .css("position", "absolute")
+                        .css("top", "3%")
+                        .css("left", "40%")
+                        .css("padding", "2px 5px 2px 5px")
+                        .css("opacity", "1.0")
+                        .css("font-size", "30px")
+                        .css("color", "black")
+                        .appendTo(this.$container);
+
+            $text.text("{0} ({1} clusters)")
+            """
+        n_clusters = str(int(np.max(labels) + 1))
+        view._execute_js_code(code.format(pdb, n_clusters))
+
+
+
+
 
     view.add_representation("spacefill", color=color_scheme)
-    view._remote_call("setSize", target='Widget', args=['600px','600px'])
-
-    code = """
-    var $text = $("<div></div>")
-                .css("position", "absolute")
-                .css("top", "3%")
-                .css("left", "50%")
-                .css("padding", "2px 5px 2px 5px")
-                .css("opacity", "1.0")
-                .css("font-size", "30px")
-                .css("color", "black")
-                .appendTo(this.$container);
-
-    $text.text("{0} ({1} clusters)")
-    """
-    n_clusters = str(int(np.max(labels) + 1))
-    print(code.format(pdb, n_clusters))
-    view._execute_js_code(code.format(pdb))
-
-    print('Each atom in this structure has the same color as other atoms in the same cluster.')
+    view._remote_call("setSize", target='Widget', args=['800px','800px'])
+    view.center()
 
     return view
 
