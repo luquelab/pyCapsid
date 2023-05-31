@@ -270,21 +270,23 @@ def view_pdb_ngl(pdb, capsid, labels, rwb_scale=False):
 
     return view
 
-def createCapsidView():
+def createCapsidView(pdb, capsid):
+
+    import biotite.structure.io as strucio
+    strucio.save_structure(pdb + '_capsid.pdb', capsid, hybrid36=True)
 
     import nglview as ngl
     view = ngl.NGLWidget()
+    from nglview.adaptor import FileStructure
+
+    view.add_component(FileStructure(pdb + '_capsid.pdb'))
+    view.clear_representations()
 
     return view
 
 
 
-def createClusterRepresentation(pdb, capsid, labels, view, rwb_scale=False):
-    import biotite.structure.io as strucio
-    strucio.save_structure(pdb + '_capsid.pdb', capsid, hybrid36=True)
-
-    from nglview.adaptor import FileStructure
-    view.add_component(FileStructure(pdb + '_capsid.pdb'))
+def createClusterRepresentation(pdb, labels, view, rwb_scale=False):
 
     mol = open_pdb(pdb)
     hexcolor, cmap = clusters_colormap_hexcolor(labels, rwb_scale)
@@ -337,4 +339,4 @@ def createClusterRepresentation(pdb, capsid, labels, view, rwb_scale=False):
 
     view.center()
     print('rendering')
-    view.render_image()
+    #view.render_image()
