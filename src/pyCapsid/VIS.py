@@ -207,6 +207,7 @@ def cluster_scheme(mol, hexcolor, clusters):
 
   return clust_scheme
   
+
 def view_pdb_ngl(pdb, capsid, labels, rwb_scale=False):
     import biotite.structure.io as strucio
     strucio.save_structure(pdb + '_capsid.pdb', capsid, hybrid36=True)
@@ -217,8 +218,10 @@ def view_pdb_ngl(pdb, capsid, labels, rwb_scale=False):
 
     import nglview as ngl
     color_scheme = ngl.color._ColorScheme(clust_scheme, label="scheme_regions")
-    view = ngl.show_structure_file(pdb + '_capsid.pdb', gui=False)
-    view.clear_representations()
+    view = ngl.show_structure_file(pdb + '_capsid.pdb', gui=False, default_representation=False)
+    view._remote_call("setSize", target='Widget', args=['800px', '800px'])
+    view.add_representation("spacefill", color=color_scheme)
+
 
     if rwb_scale:
         print('Each atom in this structure is colored according to the clustering quality score of its residue.')
@@ -261,13 +264,72 @@ def view_pdb_ngl(pdb, capsid, labels, rwb_scale=False):
         view._execute_js_code(code.format(pdb, n_clusters))
 
 
-
-
-
-    view.add_representation("spacefill", color=color_scheme)
-    view._remote_call("setSize", target='Widget', args=['800px','800px'])
     view.center()
+    print('rendering')
+    view.render_image()
 
     return view
 
-    
+def createCapsidView(pdb, capsid):
+
+    import biotite.structure.io as strucio
+    strucio.save_structure(pdb + '_capsid.pdb', capsid, hybrid36=True)
+
+    import nglview as ngl
+    view = ngl.show_structure_file(pdb + '_capsid.pdb', gui=False, default_representation=True)
+
+    return view
+
+def createClusterRepresentation(pdb, labels, view, rwb_scale=False):
+    mol = open_pdb(pdb)
+    hexcolor, cmap = clusters_colormap_hexcolor(labels, rwb_scale)
+    clust_scheme = cluster_scheme(mol, hexcolor, labels)
+
+    import nglview as ngl
+    color_scheme = ngl.color._ColorScheme(clust_scheme, label="scheme_regions")
+    view._remote_call("setSize", target='Widget', args=['800px', '800px'])
+    view.add_representation("spacefill", color=color_scheme)
+
+    if rwb_scale:
+        print('Each atom in this structure is colored according to the clustering quality score of its residue.')
+        import matplotlib.colorbar as colorbar
+        import matplotlib.pyplot as plt
+        fig, ax = plt.subplots(figsize=(10, 0.5))
+        cb = colorbar.ColorbarBase(ax, orientation='horizontal',
+                                   cmap=cmap, norm=plt.Normalize(np.min(labels), np.max(labels)))
+        plt.show()
+        code = """
+                        var $text = $("<div></div>")
+                                    .css("position", "absolute")
+                                    .css("top", "3%")
+                                    .css("left", "30%")
+                                    .css("padding", "2px 5px 2px 5px")
+                                    .css("opacity", "1.0")
+                                    .css("font-size", "30px")
+                                    .css("color", "black")
+                                    .appendTo(this.$container);
+
+                        $text.text("{0} residue cluster scores")
+                        """
+        view._execute_js_code(code.format(pdb))
+    else:
+        print('Each atom in this structure has the same color as other atoms in the same cluster.')
+        code = """
+                var $text = $("<div></div>")
+                            .css("position", "absolute")
+                            .css("top", "3%")
+                            .css("left", "40%")
+                            .css("padding", "2px 5px 2px 5px")
+                            .css("opacity", "1.0")
+                            .css("font-size", "30px")
+                            .css("color", "black")
+                            .appendTo(this.$container);
+
+                $text.text("{0} ({1} clusters)")
+                """
+        n_clusters = str(int(np.max(labels) + 1))
+        view._execute_js_code(code.format(pdb, n_clusters))
+
+    view.center()
+    print('rendering')
+    view.render_image()
