@@ -283,7 +283,8 @@ def createClusterRepresentation(pdb, capsid, labels, view, rwb_scale=False):
     import biotite.structure.io as strucio
     strucio.save_structure(pdb + '_capsid.pdb', capsid, hybrid36=True)
 
-    view.add_component(pdb + '_capsid.pdb')
+    from nglview.adaptor import FileStructure
+    view.add_component(FileStructure(pdb + '_capsid.pdb'))
 
     mol = open_pdb(pdb)
     hexcolor, cmap = clusters_colormap_hexcolor(labels, rwb_scale)
