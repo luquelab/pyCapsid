@@ -4,7 +4,11 @@ title: Installation
 nav_order: 2
 ---
 
+# Requirements
+Requires python 3.7-3.10
+
 # Installation
+
 
 Via pip:
 ~~~~
