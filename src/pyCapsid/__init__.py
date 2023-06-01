@@ -80,7 +80,14 @@ def run_capsid(params_path):
     if vis_method == 'chimerax':
         visualizeResults(pdb, capsid, labels, method='chimerax', chimerax_path='C:\\Program Files\\ChimeraX\\bin\\chimerax.exe')
     elif vis_method == 'nglview':
-        view = visualizeResults(pdb, capsid, labels, method='nglview')
-        return view
+        from pyCapsid.VIS import createCapsidView
+        view_clusters = createCapsidView(pdb, capsid)
+        literal = """To visualize results in notebook use the following code in another cell:
+        from pyCapsid.VIS import createClusterRepresentation
+        createClusterRepresentation(pdb, labels, view_clusters)
+        view_clusters
+        """
+        print(literal)
+        return pdb, labels, view_clusters
     else:
         print('method must be chimerax or nglview')

@@ -97,30 +97,37 @@ chimeraxViz(residue_scores, pdb, chimerax_path='C:\\Program Files\\ChimeraX\\bin
 You can visualize the results in a jupyter notebook with nglview. The following function returns an nglview view with the 
 results colored based on cluster. See the nglview documentation for further info 
 (http://nglviewer.org/nglview/release/v2.7.7/index.html)
-
+This cell will create an empty view, which the next cell will modify to create the final result.
 ```python
-from pyCapsid.VIS import view_pdb_ngl
-view = view_pdb_ngl(pdb, capsid, labels)
-view.download_image()
-view
+from pyCapsid.VIS import createCapsidView
+view_clusters = createCapsidView(pdb, capsid)
+view_clusters
 ```
 
 ![capsid_ngl](4oq8_nglview.png){: width="500"}
 
+If the above view doesn't change coloration, run this cell again. In general do not run this cell until the above cell 
+has finished rendering.
+
 ```python
-from pyCapsid.VIS import view_pdb_ngl
-view = view_pdb_ngl(pdb, capsid, residue_scores, rwb_scale=True)
-view.download_image()
-view
+from pyCapsid.VIS import createClusterRepresentation
+createClusterRepresentation(pdb, labels, view_clusters)
+```
+
+Once you've done this use this code to download the results
+
+```python
+view_clusters.download_image()
 ```
 
 ![capsid_ngl](4oq8_score.png){: width="500"}
 
 
-# Running pyCapsid using a config.toml file
+# Running pyCapsid using a simple config.toml file
+This tutorial also has a corresponding [colab notebook](https://colab.research.google.com/drive/1Ct9Lh6w5qpO_9vGRXt7_9YHcUB9aJL8Z?usp=sharing).
 This is a simpler and faster way to run the entire pyCapsid pipeline and save the results by setting the parameters ahead
-of time in a text file. To do this download [this example](https://github.com/luquelab/pyCapsid/blob/main/docs/tutorial/config_simple.toml) from our github or copy and paste the following into a text
-editor and save the output as 'config.toml'
+of time in a text file. To do this download [this example](https://github.com/luquelab/pyCapsid/blob/main/docs/tutorial/config_simple.toml) 
+from our github or copy and paste the following into a text editor and save the output as 'config.toml'
 
 ### A simple config.toml example
 
@@ -156,6 +163,57 @@ path to the file in the python code.
 ```python
 from pyCapsid import run_capsid
 run_capsid('config.toml')
+```
+
+### A more complex config.toml
+
+```toml
+[PDB]
+pdb = '4oq8' # PDB ID of structure
+pdbx = false
+local = false
+save_full_pdb = true
+save_all_path = './4oq8/' # will be prepended to all other save_paths
+save_pdb_path = 'pdb/'
+
+[CG]
+preset = 'U-ENM'
+save_hessian = true
+save_kirchhoff = true
+save_cg_path = 'matrices/'
+
+[NMA]
+n_modes = 200
+eigen_method = 'eigsh'
+shift_invert = true
+save_modes = true
+save_mode_path = 'modes/'
+
+[b_factors]
+fit_modes = true
+plot_modes = false
+force_ico = true
+ico_tol = 0.002
+save_bfactors = true
+save_bfactors_path = 'bfactors/'
+
+
+[QRC]
+cluster_start = 10
+cluster_stop = 100
+cluster_step = 2
+cluster_method = 'discretize'
+score_method = 'median'
+return_type = 'final'
+save_results =  true
+save_results_path =  'results/'
+
+[VIS]
+chimerax_path = 'C:\Program Files\ChimeraX\bin\ChimeraX.exe'
+
+[plotting]
+suppress_plots = true
+
 ```
 
 # ProDy Integration
