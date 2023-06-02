@@ -35,7 +35,7 @@ def buildENMPreset(coords, preset='ANM', **kwargs):
         k_backbone = 100
         if 'chain_starts' not in kwargs:
             raise ValueError("No chain information provided. Indices of chain starts must be provided as chain_starts")
-        chain_starts = kwargs['chain_starts']
+        chain_starts = kwargs.pop('chain_starts')
         return buildENM(coords, cutoff=cutoff, chain_starts=chain_starts, l_backbone=l_backbone, k_backbone=k_backbone, **kwargs)
     else:
         raise ValueError("Invalid model preset. Expected one of: %s" % model_presets)

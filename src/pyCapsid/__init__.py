@@ -14,6 +14,7 @@ def create_directories(params_dict):
     params = params_dict.copy()
 
     top_path = params['PDB']['save_all_path']
+    Path(top_path).mkdir(parents=True, exist_ok=True)
 
     # This is remarkably hacky but it does its job of creating all the folders for saving results
 
@@ -47,7 +48,9 @@ def run_capsid(params_path):
     capsid, calphas, coords, bfactors, chain_starts, title = getCapsid(**params_dict['PDB'])
 
     from .CG import buildENMPreset
-    kirch, hessian = buildENMPreset(coords, **params_dict['CG'])
+    if params_dict['CG']['preset']=='bbENM':
+        params_dict['CG']['chain_starts'] = chain_starts
+    kirch, hessian = buildENMPreset(coords,  **params_dict['CG'])
 
     from .NMA import modeCalc
     evals, evecs = modeCalc(hessian, **params_dict['NMA'])
