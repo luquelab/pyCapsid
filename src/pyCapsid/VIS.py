@@ -280,22 +280,23 @@ def createCapsidView(pdb, capsid):
     from nglview.adaptor import FileStructure
 
     view.add_component(FileStructure(pdb + '_capsid.pdb'))
-    view.clear_representations()
+    #view.clear_representations()
 
     return view
 
 
 
-def createClusterRepresentation(pdb, labels, view, rwb_scale=False):
+def createClusterRepresentation(pdb, labels, view, rwb_scale=False, rep_type='cartoon'):
 
     mol = open_pdb(pdb)
     hexcolor, cmap = clusters_colormap_hexcolor(labels, rwb_scale)
     clust_scheme = cluster_scheme(mol, hexcolor, labels)
 
+    view.clear_representations()
     import nglview as ngl
     color_scheme = ngl.color._ColorScheme(clust_scheme, label="scheme_regions")
     view._remote_call("setSize", target='Widget', args=['800px', '800px'])
-    view.add_representation("spacefill", color=color_scheme)
+    view.add_representation(rep_type, color=color_scheme)
 
     if rwb_scale:
         print('Each atom in this structure is colored according to the clustering quality score of its residue.')
