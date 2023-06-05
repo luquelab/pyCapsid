@@ -95,24 +95,32 @@ chimeraxViz(residue_scores, pdb, chimerax_path='C:\\Program Files\\ChimeraX\\bin
 
 ## Visualize in jupyter notebook with nglview
 You can visualize the results in a jupyter notebook with nglview. The following function returns an nglview view with the 
-results colored based on cluster. See the nglview documentation for further info 
+results colored based on cluster. See the nglview documentation for further info on how to create high quality images.
 (http://nglviewer.org/nglview/release/v2.7.7/index.html)
-This cell will create an empty view, which the next cell will modify to create the final result.
+
+This cell will create a standard view of the capsid, which the next cell will modify to create the final result.
+
 ```python
 from pyCapsid.VIS import createCapsidView
 view_clusters = createCapsidView(pdb, capsid)
 view_clusters
 ```
 
-![capsid_ngl](4oq8_nglview.png){: width="500"}
+![capsid_ngl](4oq8_standard_ng.png){: width="500"}
 
-If the above view doesn't change coloration, run this cell again. In general do not run this cell until the above cell 
-has finished rendering.
+Once the previous view has been displayed, run the following cell to modify it.
+
 
 ```python
 from pyCapsid.VIS import createClusterRepresentation
 createClusterRepresentation(pdb, labels, view_clusters)
 ```
+
+This should result in the following image:
+![capsid_ngl](4oq8_ngl_clusts.png){: width="500"}
+
+If the above view doesn't change coloration, run the cell again. In general do not run the cell until the first cell 
+has finished rendering.
 
 Once you've done this use this code to download the results
 
@@ -120,7 +128,19 @@ Once you've done this use this code to download the results
 view_clusters.download_image()
 ```
 
-![capsid_ngl](4oq8_score.png){: width="500"}
+Repeat the same process with a new view to visualize the cluster quality scores.
+```python
+from pyCapsid.VIS import createCapsidView
+view_scores = createCapsidView(pdb, capsid)
+view_scores
+```
+
+```python
+from pyCapsid.VIS import createClusterRepresentation
+createClusterRepresentation(pdb, residue_scores, view_scores, rwb_scale=True)
+```
+
+![capsid_ngl](4oq8_scores_ngl.png){: width="500"}
 
 
 # Running pyCapsid using a simple config.toml file
@@ -150,6 +170,7 @@ fit_modes = true # Whether to select the number of modes used to maximize correl
 [QRC]
 
 [VIS]
+method = 'chimerax'
 chimerax_path = 'C:\Program Files\ChimeraX\bin\ChimeraX.exe'
 
 [plotting]

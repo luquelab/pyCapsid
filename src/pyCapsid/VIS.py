@@ -284,7 +284,15 @@ def createCapsidView(pdb, capsid):
 
     return view
 
-
+def showColorBar(labels):
+    print('Each atom in this structure is colored according to the clustering quality score of its residue.')
+    import matplotlib.colorbar as colorbar
+    import matplotlib.pyplot as plt
+    hexcolor, cmap = clusters_colormap_hexcolor(labels, rwb_scale=True)
+    fig, ax = plt.subplots(figsize=(10, 0.5))
+    cb = colorbar.ColorbarBase(ax, orientation='horizontal',
+                               cmap=cmap, norm=plt.Normalize(np.min(labels), np.max(labels)))
+    plt.show()
 
 def createClusterRepresentation(pdb, labels, view, rwb_scale=False, rep_type='cartoon'):
 
