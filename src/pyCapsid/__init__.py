@@ -81,7 +81,7 @@ def run_capsid(params_path):
     from pyCapsid.VIS import visualizeResults
 
     if vis_method == 'chimerax':
-        visualizeResults(pdb, capsid, labels, method='chimerax', chimerax_path='C:\\Program Files\\ChimeraX\\bin\\chimerax.exe')
+        visualizeResults(pdb, capsid, labels, method=vis_method, chimerax_path=params_dict['VIS']['chimerax_path'])
     elif vis_method == 'nglview':
         from pyCapsid.VIS import createCapsidView
         view_clusters = createCapsidView(pdb, capsid)
