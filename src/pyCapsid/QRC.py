@@ -41,6 +41,8 @@ def findQuasiRigidClusters(pdb, dist_flucts, n_range=None, cluster_start=4, clus
     final_score = scores[ind]
     final_numtypes = numtypes[ind]
     final_full_score = full_scores[ind]
+    np.savez_compressed(save_results_path + pdb + '_' + return_type + '_results_full', labels=labels, score=scores,
+                        nc_range=n_range, cluster_method=cluster_method, numtypes=numtypes, full_scores=full_scores)
     if return_type=='final':
         if save_results:
             np.savez_compressed(save_results_path + pdb + '_' + return_type + '_results', labels=final_clusters, score=final_score,

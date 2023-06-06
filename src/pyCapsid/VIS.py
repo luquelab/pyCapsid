@@ -29,10 +29,16 @@ def chimeraxViz(labels, pdb, remote=True, chimerax_path=None, pdb_path='.', save
     import os
     import platform
     if chimerax_path is None:
+        print('No chimerax path specified, checking in default locations for your OS')
         if platform.system()=='Linux':
             chimerax_path = 'usr/bin/chimerax'
         elif platform.system()=='Windows':
             chimerax_path = 'C:\\Program Files\\ChimeraX\\bin\\ChimeraX.exe'
+        elif platform.system()=='Darwin':
+            chimerax_path = '/Applications/ChimeraX'
+        else:
+            print('No chimerax path is given and cannot check default locations')
+            chimerax_path = ''
 
     from numpy import save
     from tempfile import NamedTemporaryFile
@@ -54,10 +60,40 @@ def chimeraxViz(labels, pdb, remote=True, chimerax_path=None, pdb_path='.', save
         cmd_string = f'""{chimerax_exe}" --script "{script_path} {labels_path} {save_path} {pdb_path} {str(remote)} {pdb} {str(rwb_scale)}""'
     elif platform.system()=='Linux':
         cmd_string = f'{chimerax_exe} --script "{script_path} {labels_path} {save_path} {pdb_path} {str(remote)} {pdb} {str(rwb_scale)}"'
+    else:
+        cmd_string = f'{chimerax_exe} --script "{script_path} {labels_path} {save_path} {pdb_path} {str(remote)} {pdb} {str(rwb_scale)}"'
     print(cmd_string)
     os.system(cmd_string)
     temp_file.close()
     os.unlink(temp_file.name)
+
+def visualizeSavedResults(pdb, results_file, n_cluster=None, method='chimerax', **kwargs):
+    import numpy as np
+    results = np.load(results_file)
+    labels = results['labels']
+    nc_range = results['nc_range']
+    scores = results['full_scores']
+
+    if n_cluster is None:
+        print('Defaulting to highest score clustering')
+        ind = np.argmax(scores)
+        n_c = nc_range[ind]
+    else:
+        ind = np.argwhere(nc_range == n_cluster)
+        n_c = n_cluster
+
+    print(f'Visualizing cluster results of {pdb} for {n_c} clusters')
+
+    if method=='chimerax':
+        chimeraxViz(labels, pdb, **kwargs)
+    elif method=='nglview':
+        view = createCapsidView(pdb)
+        return labels, view
+    else:
+        print('Method must be one of chimerax or nglview')
+
+
+
 
 
 # Adapted from py3dmol tutorial
@@ -270,7 +306,12 @@ def view_pdb_ngl(pdb, capsid, labels, rwb_scale=False):
 
     return view
 
-def createCapsidView(pdb, capsid):
+def createCapsidView(pdb, capsid=None):
+
+    if capsid is None:
+        print('No capsid structure provided, getting capsid.')
+        from pyCapsid.PDB import getCapsid
+        capsid, _, _, _, _, _ = getCapsid(pdb)
 
     import biotite.structure.io as strucio
     strucio.save_structure(pdb + '_capsid.pdb', capsid, hybrid36=True)
