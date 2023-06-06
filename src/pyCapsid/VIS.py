@@ -12,7 +12,7 @@ def visualizeResults(pdb, capsid, labels, method='chimerax', **kwargs):
         print('method must be chimerax or nglview')
 
 def chimeraxViz(labels, pdb, remote=True, chimerax_path=None, pdb_path='.', save_path='.',
-                rwb_scale=False):
+                rwb_scale=False, **kwargs):
     """Launches ChimeraX and runs a script that visualizes the results.
 
     :param labels:
@@ -71,19 +71,21 @@ def visualizeSavedResults(pdb, results_file, n_cluster=None, method='chimerax', 
     import numpy as np
     results = np.load(results_file)
     labels = results['labels']
+
     nc_range = results['nc_range']
-    scores = results['full_scores']
+    scores = results['score']
 
     if n_cluster is None:
         print('Defaulting to highest score clustering')
         ind = np.argmax(scores)
         n_c = nc_range[ind]
     else:
-        ind = np.argwhere(nc_range == n_cluster)
+        ind = np.argwhere(nc_range == n_cluster)[0][0]
         n_c = n_cluster
 
     print(f'Visualizing cluster results of {pdb} for {n_c} clusters')
-
+    labels = labels[ind]
+    print(labels)
     if method=='chimerax':
         chimeraxViz(labels, pdb, **kwargs)
     elif method=='nglview':
