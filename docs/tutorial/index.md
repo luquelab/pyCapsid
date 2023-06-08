@@ -237,6 +237,23 @@ suppress_plots = true
 
 ```
 
+# Visualizing saved results
+The numerical results are saved as compressed .npz files by default and can be opened and used to visualize the results 
+afterwards. This includes the ability to visualize clusters that weren't the highest scoring cluster. In this example
+we visualize the results of clustering the capsid into 20 clusters.
+
+```python
+from pyCapsid.VIS import visualizeSavedResults
+results_file = f'4oq8_final_results_full.npz' # Path of the saved results
+labels_20, view_clusters_20 = visualizeSavedResults('4oq8', results_file, n_cluster=20, method='nglview')
+view_clusters_20
+```
+
+```python
+from pyCapsid.VIS import createClusterRepresentation
+createClusterRepresentation('4oq8', labels_20, view_clusters_20)
+```
+
 # ProDy Integration
 One can make use of pyCapsids faster ENM and NMA module while still being able to use ProDy's other features by performing
 the calculations using pyCapsid and passing the results to ProDy.
