@@ -255,8 +255,10 @@ createClusterRepresentation('4oq8', labels_20, view_clusters_20)
 ```
 
 # ProDy Integration
-One can make use of pyCapsids faster ENM and NMA module while still being able to use ProDy's other features by performing
-the calculations using pyCapsid and passing the results to ProDy.
+[ProDy](http://prody.csb.pitt.edu/) is a free and open-source Python package for protein structural dynamics analysis. 
+Our ENM and NMA modules make performance improvements compared to ProDy, but it still has a large number of useful 
+applications of ENM/NMA results. Luckily one can make use of pyCapsids faster ENM and NMA module while still being able 
+to use ProDy's other features by performing the calculations using pyCapsid and passing the results to ProDy.
 
 ```python
 from prody import ANM, parsePDB
