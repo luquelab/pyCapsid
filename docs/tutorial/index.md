@@ -60,10 +60,10 @@ evals_scaled, evecs_scaled = fitCompareBfactors(evals, evecs, bfactors, pdb)
 from pyCapsid.NMA import calcDistFlucts
 from pyCapsid.QRC import findQuasiRigidClusters
 
-dist_flucts = calcDistFlucts(evals, evecs, coords)
+dist_flucts = calcDistFlucts(evals_scaled, evecs_scaled, coords)
 
 cluster_start = 4
-cluster_stop = 130
+cluster_stop = 100
 cluster_step = 2
 labels, score, residue_scores  = findQuasiRigidClusters(pdb, dist_flucts, cluster_start=cluster_start, cluster_stop=cluster_stop, cluster_step=cluster_step)
 ```
@@ -108,12 +108,15 @@ view_clusters
 
 ![capsid_ngl](4oq8_standard_ng.png){: width="500"}
 
-Once the previous view has been displayed, run the following cell to modify it.
+Do not run this cell until the above cell has finished rendering. If the above view doesn't change coloration, 
+run this cell again.
 
 
 ```python
 from pyCapsid.VIS import createClusterRepresentation
 createClusterRepresentation(pdb, labels, view_clusters)
+# Add rep_type='spacefill' to represent the atoms of the capsid as spheres. This provides less information regarding the proteins but makes it easier to identify the geometry of the clusters
+#createClusterRepresentation(pdb, labels, view_clusters, rep_type='spacefill')
 ```
 
 This should result in the following image:
@@ -125,19 +128,39 @@ has finished rendering.
 Once you've done this use this code to download the results
 
 ```python
-view_clusters.download_image()
+view_clusters.center()
+view_clusters.download_image(factor=2)
 ```
 
-Repeat the same process with a new view to visualize the cluster quality scores.
+Running the same code but replacing labels with residue_scores and adding rwb_scale=True visualizes the quality score of
+each residue. This is a measure of how rigid each residue is with respect to its cluster. Blue residues make up the cores
+of rigid clusters, and red residues represent borders between clusters. 
 ```python
+# This code adds a colorbar based on the residue scores
+print('Each atom in this structure is colored according to the clustering quality score of its residue.')
+import matplotlib.colorbar as colorbar
+import matplotlib.pyplot as plt
+from pyCapsid.VIS import clusters_colormap_hexcolor
+import numpy as np
+hexcolor, cmap = clusters_colormap_hexcolor(residue_scores, rwb_scale=True)
+fig, ax = plt.subplots(figsize=(10, 0.5))
+cb = colorbar.ColorbarBase(ax, orientation='horizontal',
+                            cmap=cmap, norm=plt.Normalize(np.min(residue_scores), np.max(residue_scores)))
+plt.show()
+
+# This cell will create an empty view, which the next cell will 
+# modify to create the final result.
 from pyCapsid.VIS import createCapsidView
 view_scores = createCapsidView(pdb, capsid)
 view_scores
 ```
-
 ```python
 from pyCapsid.VIS import createClusterRepresentation
 createClusterRepresentation(pdb, residue_scores, view_scores, rwb_scale=True)
+```
+```python
+view_scores.center()
+view_scores.download_image(factor=2)
 ```
 
 ![capsid_ngl](4oq8_scores_ngl.png){: width="500"}
