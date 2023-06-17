@@ -257,7 +257,6 @@ chimerax_path = 'C:\Program Files\ChimeraX\bin\ChimeraX.exe'
 
 [plotting]
 suppress_plots = true
-
 ```
 
 # Visualizing saved results
