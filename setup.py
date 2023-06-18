@@ -22,7 +22,7 @@ setup(
         'numpy',
         'scipy',
         'matplotlib',
-        'pillow=9.0.0',
+        'pillow',
         'numba',
         'statsmodels',
         'toml'
