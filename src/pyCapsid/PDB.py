@@ -1,7 +1,7 @@
 """Module with functions for downloading and dealing with PDB/PDBx files."""
 
 
-def getCapsid(pdb, save_pdb_path='./', pdbx=False, local=False, save_full_pdb=False, chains='', chains_clust='', is_ico=False):
+def getCapsid(pdb, save_pdb_path='./', pdbx=False, local=False, save_full_pdb=False, chains=None, chains_clust=None, is_ico=False):
     """Downloads and opens molecular data from a PDB entry or loads data from a local file.
 
     :param pdb: PDB id of entry to download. Can also be the name of a local file

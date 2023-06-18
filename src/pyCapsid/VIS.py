@@ -12,7 +12,7 @@ def visualizeResults(pdb, capsid, labels, method='chimerax', **kwargs):
         print('method must be chimerax or nglview')
 
 def chimeraxViz(labels, pdb, remote=True, chimerax_path=None, pdb_path='.', save_path='.',
-                rwb_scale=False, **kwargs):
+                rwb_scale=False, clust_mask=None, **kwargs):
     """Launches ChimeraX and runs a script that visualizes the results.
 
     :param labels:
@@ -40,13 +40,24 @@ def chimeraxViz(labels, pdb, remote=True, chimerax_path=None, pdb_path='.', save
             print('No chimerax path is given and cannot check default locations')
             chimerax_path = ''
 
+    import matplotlib as mpl
+    norm = mpl.colors.Normalize(vmin=np.min(labels), vmax=np.max(labels))
+
+    if rwb_scale:
+        import matplotlib.pyplot as plt
+        cmap = plt.get_cmap('coolwarm_r')
+        rgba = cmap(norm(labels)) * 255
+    else:
+        cmap = generate_colormap(int(np.max(labels)))
+        rgba = cmap(norm(labels)) * 255
+
     from numpy import save
     from tempfile import NamedTemporaryFile
     with NamedTemporaryFile(suffix='.npy', delete=False) as temp_file:
-        save(temp_file, labels)
-        labels_path = os.path.normpath(temp_file.name)
-        labels_path = labels_path.replace('\\','/') #os.path.abspath(temp_file.name)
-        print(labels_path)
+        save(temp_file, rgba)
+        rgba_path = os.path.normpath(temp_file.name)
+        rgba_path = rgba_path.replace('\\', '/') #os.path.abspath(temp_file.name)
+        print(rgba_path)
 
     # get path to chimerax script
     import pyCapsid.scripts as scpath
@@ -57,11 +68,11 @@ def chimeraxViz(labels, pdb, remote=True, chimerax_path=None, pdb_path='.', save
 
     chimerax_exe = chimerax_path #+ '\\ChimeraX.exe'
     if platform.system()=='Windows':
-        cmd_string = f'""{chimerax_exe}" --script "{script_path} {labels_path} {save_path} {pdb_path} {str(remote)} {pdb} {str(rwb_scale)}""'
+        cmd_string = f'""{chimerax_exe}" --script "{script_path} {rgba_path} {save_path} {pdb_path} {str(remote)} {pdb} {str(rwb_scale)}""'
     elif platform.system()=='Linux':
-        cmd_string = f'{chimerax_exe} --script "{script_path} {labels_path} {save_path} {pdb_path} {str(remote)} {pdb} {str(rwb_scale)}"'
+        cmd_string = f'{chimerax_exe} --script "{script_path} {rgba_path} {save_path} {pdb_path} {str(remote)} {pdb} {str(rwb_scale)}"'
     else:
-        cmd_string = f'{chimerax_exe} --script "{script_path} {labels_path} {save_path} {pdb_path} {str(remote)} {pdb} {str(rwb_scale)}"'
+        cmd_string = f'{chimerax_exe} --script "{script_path} {rgba_path} {save_path} {pdb_path} {str(remote)} {pdb} {str(rwb_scale)}"'
     print(cmd_string)
     os.system(cmd_string)
     temp_file.close()

@@ -76,7 +76,7 @@ from chimerax.std_commands import split
 from numpy.linalg import norm
 import sys
 print(sys.argv)
-label_dir, save_dir, pdb_dir, remote, pdb, rwb_scale = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6])
+color_dir, save_dir, pdb_dir, remote, pdb, rwb_scale = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6])
 
 if remote=='True':
     run(session, f'open {pdb}')
@@ -107,21 +107,21 @@ coords = atoms.scene_coords
 radius = norm(coords, axis=1).max()  # calculate the norms of the x coordinates, and then choose the maximum value
 print("radius_est: ", radius)
 
-labels = np.load(label_dir)
-import matplotlib as mpl
-norm = mpl.colors.Normalize(vmin=np.min(labels), vmax=np.max(labels))
-
-if rwb_scale=='True':
-    import matplotlib.pyplot as plt
-    cmap = plt.get_cmap('coolwarm_r')
-    rgba = cmap(norm(labels))*255
-else:
-    cmap = generate_colormap(int(np.max(labels)))
-    rgba = cmap(norm(labels))*255
+rgba = np.load(color_dir)
+# import matplotlib as mpl
+# norm = mpl.colors.Normalize(vmin=np.min(labels), vmax=np.max(labels))
+#
+# if rwb_scale=='True':
+#     import matplotlib.pyplot as plt
+#     cmap = plt.get_cmap('coolwarm_r')
+#     rgba = cmap(norm(labels))*255
+# else:
+#     cmap = generate_colormap(int(np.max(labels)))
+#     rgba = cmap(norm(labels))*255
 
 residues = atoms.unique_residues
 cx_nr = len(residues)
-enm_nr = labels.shape
+enm_nr = rgba.shape[0]
 
 print('# of residues:', cx_nr)
 print('# of ENM residues:', enm_nr)
