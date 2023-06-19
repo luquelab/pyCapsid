@@ -3,8 +3,10 @@ ENM or provided."""
 
 import numpy as np
 
-def findQuasiRigidClusters(pdb, dist_flucts, n_range=None, cluster_start=4, cluster_stop = 100, cluster_step = 1, cluster_method='discretize', return_type='final',
-                           score_method='median', save_results=True, save_results_path='./', clust_chains = None):
+
+def findQuasiRigidClusters(pdb, dist_flucts, n_range=None, cluster_start=4, cluster_stop=100, cluster_step=1,
+                           cluster_method='discretize', return_type='final',
+                           score_method='median', save_results=True, save_results_path='./', clust_mask=None, clust_filter_method='embedding', **kwargs):
     """Uses spectral clustering to split the residues into clusters with minimal internal distance fluctuations.
 
     :param str pdb:
@@ -22,12 +24,20 @@ def findQuasiRigidClusters(pdb, dist_flucts, n_range=None, cluster_start=4, clus
     if n_range is None:
         n_range = np.arange(cluster_start, cluster_stop, cluster_step)
 
+    if clust_filter_method == 'flucts' and clust_mask is not None:
+        dist_flucts = filterFlucts(dist_flucts, clust_mask)
+        mask = None
+    else:
+        mask = clust_mask
+
     sims = fluctToSims(dist_flucts)
+
     n_vecs = n_range.max()
 
     embedding = calcEmbedding(sims, n_vecs)
 
-    labels, scores, numtypes, full_scores = cluster_embedding(n_range, embedding, method=cluster_method, score_method=score_method)
+    labels, scores, numtypes, full_scores = cluster_embedding(n_range, embedding, method=cluster_method,
+                                                              score_method=score_method, clust_mask=mask)
 
     QRC_time = timer() - QRC_start
     print('QRC time: ', QRC_time)
@@ -43,19 +53,20 @@ def findQuasiRigidClusters(pdb, dist_flucts, n_range=None, cluster_start=4, clus
     final_full_score = full_scores[ind]
     np.savez_compressed(save_results_path + pdb + '_' + return_type + '_results_full', labels=labels, score=scores,
                         nc_range=n_range, cluster_method=cluster_method, numtypes=numtypes, full_scores=full_scores)
-    if return_type=='final':
+    if return_type == 'final':
         if save_results:
-            np.savez_compressed(save_results_path + pdb + '_' + return_type + '_results', labels=final_clusters, score=final_score,
+            np.savez_compressed(save_results_path + pdb + '_' + return_type + '_results', labels=final_clusters,
+                                score=final_score,
                                 nc=final_cluster_num, cluster_method=cluster_method, final_full_score=final_full_score)
         return final_clusters, final_score, final_full_score
-    elif return_type=='full':
+    elif return_type == 'full':
         if save_results:
             np.savez_compressed(save_results_path + pdb + '_' + return_type + '_results', labels=labels, score=scores,
-                                nc_range=n_range, cluster_method=cluster_method, numtypes=numtypes, full_scores=full_scores)
+                                nc_range=n_range, cluster_method=cluster_method, numtypes=numtypes,
+                                full_scores=full_scores)
         return labels, scores, numtypes, full_scores
     else:
         return final_clusters
-
 
 
 def fluctToSims(d):
@@ -73,6 +84,28 @@ def fluctToSims(d):
     sims = sparse.coo_matrix((data, (d.row, d.col)), shape=d.shape)
     sims.eliminate_zeros()
     return sims
+
+import numpy as np
+def filterChains(calphas, clust_ignore_chains):
+    clust_mask = np.full(len(calphas), True)
+    for chain in clust_ignore_chains:
+        mask = np.logical_not(calphas.chain_id == chain)
+        clust_mask = clust_mask & mask
+    print(clust_mask)
+    return clust_mask
+
+def filterEmbedding(vecs, mask):
+    print('Filtering some chains out of clustering process')
+    indices = mask.nonzero()[0]
+    vecs_new = vecs[indices, :].copy()
+    return vecs_new
+
+def filterFlucts(flucts, mask):
+    print('Filtering some chains out of dist_fluct matrix')
+    indices = mask.nonzero()[0]
+    flucts = flucts.tocsr()
+    flucts_new = flucts[:, indices][indices, :].copy()
+    return flucts_new.tocoo()
 
 
 def calcEmbedding(sims, n_vecs):
@@ -92,7 +125,7 @@ def calcEmbedding(sims, n_vecs):
     return X_transformed
 
 
-def cluster_embedding(n_range, maps, method='discretize', score_method='median'):
+def cluster_embedding(n_range, maps, method='discretize', score_method='median', clust_mask=None):
     """
 
     :param n_range:
@@ -117,6 +150,9 @@ def cluster_embedding(n_range, maps, method='discretize', score_method='median')
     # from sklearn.metrics import silhouette_score
     # from sklearn.metrics import davies_bouldin_score
     from .clustering_util import median_score, cluster_types, calcCentroids, calcCosCentroids
+
+    if clust_mask is not None:
+        maps = filterEmbedding(maps, clust_mask)
 
     labels = []
     fullScores = []

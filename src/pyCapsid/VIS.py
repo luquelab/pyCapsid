@@ -51,6 +51,9 @@ def chimeraxViz(labels, pdb, remote=True, chimerax_path=None, pdb_path='.', save
         cmap = generate_colormap(int(np.max(labels)))
         rgba = cmap(norm(labels)) * 255
 
+    if clust_mask is not None:
+        rgba = addUnclusteredColor(rgba, clust_mask)
+
     from numpy import save
     from tempfile import NamedTemporaryFile
     with NamedTemporaryFile(suffix='.npy', delete=False) as temp_file:
@@ -106,6 +109,17 @@ def visualizeSavedResults(pdb, results_file, n_cluster=None, method='chimerax', 
         print('Method must be one of chimerax or nglview')
 
 
+def addUnclusteredColor(rgba, clust_mask):
+    from numpy import insert
+    print(rgba.shape)
+    print(rgba)
+    black = np.array([0,0,0,255])
+    for i,val in enumerate(clust_mask):
+        if not val:
+            rgba = insert(rgba, i, black, axis=0)
+    print(rgba.shape)
+    print(rgba)
+    return rgba
 
 
 
