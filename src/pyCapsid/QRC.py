@@ -24,6 +24,9 @@ def findQuasiRigidClusters(pdb, dist_flucts, n_range=None, cluster_start=4, clus
     if n_range is None:
         n_range = np.arange(cluster_start, cluster_stop, cluster_step)
 
+    if clust_mask is None:
+        clust_mask = np.full(dist_flucts.shape[0], True)
+
     if clust_filter_method == 'flucts' and clust_mask is not None:
         dist_flucts = filterFlucts(dist_flucts, clust_mask)
         mask = None
@@ -52,7 +55,7 @@ def findQuasiRigidClusters(pdb, dist_flucts, n_range=None, cluster_start=4, clus
     final_numtypes = numtypes[ind]
     final_full_score = full_scores[ind]
     np.savez_compressed(save_results_path + pdb + '_' + return_type + '_results_full', labels=labels, score=scores,
-                        nc_range=n_range, cluster_method=cluster_method, numtypes=numtypes, full_scores=full_scores)
+                        nc_range=n_range, cluster_method=cluster_method, numtypes=numtypes, full_scores=full_scores, mask=clust_mask)
     if return_type == 'final':
         if save_results:
             np.savez_compressed(save_results_path + pdb + '_' + return_type + '_results', labels=final_clusters,
