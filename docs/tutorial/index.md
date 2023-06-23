@@ -7,7 +7,7 @@ nav_order: 3
 {:toc}
 
 # Interactive Usage
-The simplest way to follow this tutorial is using this [colab notebook](https://colab.research.google.com/drive/1p4E1ne8t47yGaiKC6NXpDo4TTnPLOrZ5?usp=sharing).
+The simplest way to follow this tutorial is using this [colab notebook](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_tutorial.ipynb).
 This tutorial covers the step by step use pyCapsid to identify the quasi-rigid subunits of an example capsid. This tutorial also comes
 in the form of a jupyter notebook for those who wish to run it locally.
 The example notebook is also provided for local use in the [notebooks folder](https://github.com/luquelab/pyCapsid/tree/main/notebooks).
@@ -167,7 +167,7 @@ view_scores.download_image(factor=2)
 
 
 # Running pyCapsid using a simple config.toml file
-This tutorial also has a corresponding [colab notebook](https://colab.research.google.com/drive/1Ct9Lh6w5qpO_9vGRXt7_9YHcUB9aJL8Z?usp=sharing).
+This tutorial also has a corresponding [colab notebook](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_config_tutorial.ipynb).
 This is a simpler and faster way to run the entire pyCapsid pipeline and save the results by setting the parameters ahead
 of time in a text file. To do this download [this example](https://github.com/luquelab/pyCapsid/blob/main/docs/tutorial/config_simple.toml) 
 from our github or copy and paste the following into a text editor and save the output as 'config.toml'
