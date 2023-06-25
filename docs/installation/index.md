@@ -13,15 +13,20 @@ in which to install pyCapsid. You can get conda [here](https://docs.conda.io/en/
 # Installation
 
 ## Via pip:
+If you have python 3.8-3.10 installed, simply use pip, which will install pyCapsid and all of it's dependencies.
 ~~~~
 pip install pyCapsid
 ~~~~
-This will also install all of pyCapsid's dependencies.
+If you have a version of pyCapsid already installed, use the '--upgrade' flag to update it.
+~~~~
+pip install --upgrade pyCapsid
+~~~~
+
 
 ## Via conda:
-We recommend using conda to create a virtual environment with its own python version.
-First, create a new virtual environment using conda and then activate it.
-
+If you have an incompatible python version and don't want to upgrade we recommend installing and using [conda](https://docs.conda.io/en/latest/miniconda.html) 
+to create a virtual environment with its own python version and install pyCapsid. First, create a new virtual environment 
+with its own Python version using conda and then activate it.
 ~~~~
 conda create -n pycapsid python=3.10 -y
 conda activate pycapsid
