@@ -22,7 +22,6 @@ If you have a version of pyCapsid already installed, use the '--upgrade' flag to
 pip install --upgrade pyCapsid
 ~~~~
 
-
 ## Via conda:
 If you have an incompatible python version and don't want to upgrade we recommend installing and using [conda](https://docs.conda.io/en/latest/miniconda.html) 
 to create a virtual environment with its own python version and install pyCapsid. First, create a new virtual environment 
