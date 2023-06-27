@@ -178,9 +178,11 @@ def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotM
                                                                                    icotol)
     ci = np.abs(ci[0][0] - ci[0][1])
     gamma = (8 * np.pi ** 2) / k
+    ci = (8 * np.pi ** 2) / ci
 
     if is3d:
         gamma = gamma / 3
+        ci = ci / 3
 
     import matplotlib.pyplot as plt
     import matplotlib
