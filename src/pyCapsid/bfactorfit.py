@@ -56,7 +56,7 @@ def springFit(bfactors, sqFlucts):
     a = results.params[-1]
     stderr = results.bse * np.sqrt(bfactors.shape[0])
     pv = results.pvalues
-    ci = results.conf_int(alpha=0.1)
+    ci = results.conf_int(alpha=0.05)
 
     if intercept:
         b = results.params[0]
@@ -179,6 +179,8 @@ def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotM
                                                                                    fitModes, plotModes, forceIco,
                                                                                    icotol)
 
+    k_ci = np.abs(ci[0][0] - ci[0][1])
+    print(f'Scale factor k between predicted fluctuations and B-factors: {k:.2e}±{k_ci:.2e}')
     gamma = (8 * np.pi ** 2) / k
     ci = (8 * np.pi ** 2) / ci
 
@@ -186,7 +188,8 @@ def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotM
         gamma = gamma / 3
         ci = ci / 3
 
-    ci = np.abs(ci[0][0] - ci[0][1])
+    gamma_ci = np.abs(ci[0][0] - ci[0][1])
+    print(f'Estimated spring constant gamma of ENM springs: {gamma:.2e}±{gamma_ci:.2e}')
 
     import matplotlib.pyplot as plt
     import matplotlib
@@ -217,7 +220,7 @@ def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotM
 
     ax.legend()
     fig.suptitle(
-        (fr"Experimental vs Predicted b-factors: ({pdb})" + '\n' + fr"$\gamma = $ {gamma:.2e} $\pm$ {ci:.2e} "
+        (fr"Experimental vs Predicted b-factors: ({pdb})" + '\n' + fr"$\gamma = $ {gamma:.2e} $\pm$ {gamma_ci:.2e} "
                                                                    fr"$\frac{{k_b T}}{{Å^{2}}}$ CC = {coeff:.2f} Icosahedral deviation = {ico_dev:.2f}"),
         fontsize=9)
     fig.tight_layout()
