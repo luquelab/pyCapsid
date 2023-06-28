@@ -50,7 +50,9 @@ def springFit(bfactors, sqFlucts):
         sqFlucts = sm.add_constant(sqFlucts)
     M = sm.RLM(bfactors, sqFlucts, M=sm.robust.norms.HuberT())
     results = M.fit()
-    print(results.summary())
+    # print(results.summary(xname=['Squared Fluctuations'], yname='B-factors', title='Results of fitting predicted squared fluctuations'))
+    print(results.summary2(xname=['Squared Fluctuations'], yname='B-factors',
+                          title='Summary of regression results: predicted squared fluctuations vs B-factors'))
     a = results.params[-1]
     stderr = results.bse * np.sqrt(bfactors.shape[0])
     pv = results.pvalues
@@ -176,13 +178,15 @@ def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotM
     coeff, k, intercept, bfactors_predicted, ci, pv, ico_dev, nmodes = fitBfactors(evals, evecs, bfactors, is3d, isIco,
                                                                                    fitModes, plotModes, forceIco,
                                                                                    icotol)
-    ci = np.abs(ci[0][0] - ci[0][1])
+
     gamma = (8 * np.pi ** 2) / k
     ci = (8 * np.pi ** 2) / ci
 
     if is3d:
         gamma = gamma / 3
         ci = ci / 3
+
+    ci = np.abs(ci[0][0] - ci[0][1])
 
     import matplotlib.pyplot as plt
     import matplotlib
