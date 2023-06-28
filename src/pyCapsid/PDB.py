@@ -29,7 +29,12 @@ def getCapsid(pdb, save_pdb_path='./', pdbx=False, local=False, save_full_pdb=Fa
     if pdbx:
         capsid, calphas, coords, bfactors, chain_starts, title = loadPDBx(filename, pdb, save_full_pdb)
     else:
-        capsid, calphas, coords, bfactors, chain_starts, title = loadPDB(filename, pdb, save_full_pdb)
+        try:
+            capsid, calphas, coords, bfactors, chain_starts, title = loadPDB(filename, pdb, save_full_pdb)
+        except:
+            print('no .pdb file found. Checking for pdbx/mmcif')
+            print('Add pdbx=True if you know you will be fetching a pdbx/mmcif file')
+            capsid, calphas, coords, bfactors, chain_starts, title = loadPDBx(filename, pdb, save_full_pdb)
 
     n_res = len(calphas)
     print(f'# of residues: {n_res}')
@@ -48,8 +53,12 @@ def downloadPDB(pdb, dir='.', pdbx=False):
     if pdbx:
         filename = fetch(pdb, target_path=dir, format='pdbx', overwrite=True, verbose=True)
     else:
-        filename = fetch(pdb, target_path=dir, format='pdb', overwrite=True, verbose=True)
-
+        try:
+            filename = fetch(pdb, target_path=dir, format='pdb', overwrite=True, verbose=True)
+        except:
+            print('no .pdb file found for this PDB id. Checking for pdbx/mmcif')
+            print('Add pdbx=True if you know you will be fetching a pdbx/mmcif file')
+            filename = fetch(pdb, target_path=dir, format='pdbx', overwrite=True, verbose=True)
     return filename
 
 
