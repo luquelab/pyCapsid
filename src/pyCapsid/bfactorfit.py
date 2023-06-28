@@ -96,6 +96,7 @@ def fluctModes(evals, evecs, bfactors, is3d, isIco):
     return coeffs, ico_devs
 
 
+# This really needs a refactoring but lets see if it just works
 def fitBfactors(evals, evecs, bfactors, is3d, isIco=True, fitModes=False, plotModes=False, forceIco=False, icotol=0.002):
     """
 
@@ -110,21 +111,28 @@ def fitBfactors(evals, evecs, bfactors, is3d, isIco=True, fitModes=False, plotMo
     :return:
     """
     n_modes = evals.shape[0]
-    if fitModes:
+    if plotModes:
         coeffs, ico_devs = fluctModes(evals, evecs, bfactors, is3d, isIco)
-        if plotModes:
-            plotByMode(np.arange(1, n_modes), coeffs, 'CC')
-            plotByMode(np.arange(1, n_modes), ico_devs, 'Icosahedral Deviation')
-
-        if forceIco:
-            icoI = np.nonzero(np.array(ico_devs) < icotol)
-            n_m = np.argmax(np.array(coeffs)[icoI])
-            coeff = np.array(coeffs)[icoI][n_m]
-            ico_dev = np.array(ico_devs)[icoI][n_m]
+        plotByMode(np.arange(1, n_modes), coeffs, 'CC')
+        if fitModes:
+            if forceIco:
+                plotByMode(np.arange(1, n_modes), ico_devs, 'Icosahedral Deviation')
+                icoI = np.nonzero(np.array(ico_devs) < icotol)
+                n_m = np.argmax(np.array(coeffs)[icoI])
+                coeff = np.array(coeffs)[icoI][n_m]
+                ico_dev = np.array(ico_devs)[icoI][n_m]
+            else:
+                n_m = np.argmax(coeffs)
+                coeff = coeffs[n_m]
+                ico_dev = ico_devs[n_m]
         else:
-            n_m = np.argmax(coeffs)
-            coeff = coeffs[n_m]
-            ico_dev = ico_devs[n_m]
+            n_m = n_modes
+            flucts = fastFlucts(evals, evecs, n_m, is3d)
+            coeff = np.corrcoef(bfactors, flucts)[1, 0]
+            if isIco:
+                ico_dev = checkIcoFlucts(flucts)
+            else:
+                ico_dev = 0
         flucts = fastFlucts(evals, evecs, n_m, is3d)
     else:
         n_m = n_modes
@@ -160,7 +168,7 @@ def plotByMode(mode_indices, data, datalabel):
 
 
 def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotModes=False, forceIco=True, icotol=0.002,
-                    save=True, save_path='bfactors.png', isIco=True):
+                    save=True, save_path='bfactors.png', isIco=False):
     """
 
     :param isIco:
@@ -179,6 +187,7 @@ def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotM
                                                                                    fitModes, plotModes, forceIco,
                                                                                    icotol)
 
+    print(f'Number of low-frequency modes used: {nmodes}')
     k_ci = np.abs(ci[0][0] - ci[0][1])
     print(f'Scale factor k between predicted fluctuations and B-factors: {k:.2e}±{k_ci:.2e}')
     gamma = (8 * np.pi ** 2) / k
