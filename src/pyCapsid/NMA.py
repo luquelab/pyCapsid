@@ -271,7 +271,7 @@ def fluctPlot(d, title, pdb):
     plt.show()
 
 
-# This is a stupid way to switch this to be in NMA
+# This function calls the relevant function from bfactorfit.py
 def fitCompareBfactors(evals, evecs, bfactors, pdb, is3d=True, fit_modes=True, plot_modes=True, force_ico=False,
                        ico_tol=0.002, is_ico=True, save_bfactors=True, save_bfactors_path='./'):
     """
