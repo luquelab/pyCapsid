@@ -298,4 +298,4 @@ def fitCompareBfactors(evals, evecs, bfactors, pdb, is3d=True, fit_modes=True, p
     print('bfactor fitting time: ', bfactor_time)
     r_evals = evals[:n_modes]*gamma
     r_evecs = evecs[:, :n_modes]
-    return r_evals, r_evecs
+    return r_evals, r_evecs, cc, gamma, n_modes

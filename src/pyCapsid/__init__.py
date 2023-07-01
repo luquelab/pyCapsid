@@ -56,7 +56,7 @@ def run_capsid(params_path):
     evals, evecs = modeCalc(hessian, **params_dict['NMA'])
 
     from .NMA import fitCompareBfactors
-    evals_scaled, evecs_scaled = fitCompareBfactors(evals, evecs, bfactors, pdb, **params_dict['b_factors'])
+    evals_scaled, evecs_scaled, cc, gamma, n_modes = fitCompareBfactors(evals, evecs, bfactors, pdb, **params_dict['b_factors'])
 
     from .NMA import calcDistFlucts
     from .QRC import findQuasiRigidClusters
