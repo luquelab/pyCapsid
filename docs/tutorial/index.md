@@ -49,7 +49,7 @@ This code uses the resulting normal modes and frequencies to predict the b-facto
 
 ```python
 from pyCapsid.NMA import fitCompareBfactors
-evals_scaled, evecs_scaled = fitCompareBfactors(evals, evecs, bfactors, pdb)
+evals_scaled, evecs_scaled, cc, gamma, n_modes = fitCompareBfactors(evals, evecs, bfactors, pdb)
 ```
 
 ![capsid_chx](4oq8_bfactorplot.png){: width="500"}
