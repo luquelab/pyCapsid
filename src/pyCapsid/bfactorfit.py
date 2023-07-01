@@ -200,9 +200,10 @@ def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotM
     gamma_ci = np.abs(ci[0][0] - ci[0][1])
     print(f'Estimated spring constant gamma of ENM springs: {gamma:.2e}±{gamma_ci:.2e}')
 
-    file = './bfactors.npz'
+    file = './b_factors.npz'
     print('Saving B-factor results in' + file)
-    np.savez_compressed(file, bfactors_predicted=bfactors_predicted, CC=coeff, gamma=gamma, gamma_ci=gamma_ci)
+    residue_numbers = np.arange(1, bfactors.shape[0])
+    np.savez_compressed(file, bfactors_predicted=bfactors_predicted, bfactors_experimental=bfactors, CC=coeff, gamma=gamma, gamma_ci=gamma_ci, n_modes=nmodes, n_asym=int(bfactors.shape[0] / 60), residue_numbers=residue_numbers)
     
     import matplotlib.pyplot as plt
     import matplotlib
