@@ -25,7 +25,7 @@ This code acquires the pdb file from the RCSB databank, loads the necessary info
 ```python
 from pyCapsid.PDB import getCapsid
 pdb = '4oq8'
-capsid, calphas, coords, bfactors, chain_starts, title = getCapsid(pdb)
+capsid, calphas, asymmetric_unit, coords, bfactors, chain_starts, title = getCapsid(pdb)
 ```
 
 ## Build ENM Hessian
