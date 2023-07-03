@@ -45,7 +45,7 @@ def run_capsid(params_path):
 
     from .PDB import getCapsid
     pdb = params_dict['PDB']['pdb']
-    capsid, calphas, coords, bfactors, chain_starts, title = getCapsid(**params_dict['PDB'])
+    capsid, calphas, asymmetric_unit, coords, bfactors, chain_starts, title = getCapsid(**params_dict['PDB'])
 
     from .CG import buildENMPreset
     if params_dict['CG']['preset']=='bbENM':

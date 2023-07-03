@@ -338,7 +338,7 @@ def createCapsidView(pdb, capsid=None):
     if capsid is None:
         print('No capsid structure provided, getting capsid.')
         from pyCapsid.PDB import getCapsid
-        capsid, _, _, _, _, _ = getCapsid(pdb)
+        capsid, _, _, _, _, _, _ = getCapsid(pdb)
 
     import biotite.structure.io as strucio
     strucio.save_structure(pdb + '_capsid.pdb', capsid, hybrid36=True)
