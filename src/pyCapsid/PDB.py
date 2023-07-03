@@ -27,14 +27,14 @@ def getCapsid(pdb, save_pdb_path='./', pdbx=False, local=False, save_full_pdb=Fa
         filename = downloadPDB(pdb, save_pdb_path, pdbx)
 
     if pdbx:
-        capsid, calphas, coords, bfactors, chain_starts, title = loadPDBx(filename, pdb, save_full_pdb)
+        capsid, calphas, asym, coords, bfactors, chain_starts, title = loadPDBx(filename, pdb, save_full_pdb)
     else:
         try:
-            capsid, calphas, coords, bfactors, chain_starts, title = loadPDB(filename, pdb, save_full_pdb)
+            capsid, calphas, asym, coords, bfactors, chain_starts, title = loadPDB(filename, pdb, save_full_pdb)
         except:
             print('no .pdb file found. Checking for pdbx/mmcif')
             print('Add pdbx=True if you know you will be fetching a pdbx/mmcif file')
-            capsid, calphas, coords, bfactors, chain_starts, title = loadPDBx(filename, pdb, save_full_pdb)
+            capsid, calphas, asym, coords, bfactors, chain_starts, title = loadPDBx(filename, pdb, save_full_pdb)
 
     n_res = len(calphas)
     print(f'# of residues: {n_res}')
@@ -77,12 +77,17 @@ def loadPDBx(filename, pdb, save):
     pdbx_file = pdbx.PDBxFile()
     pdbx_file.read(filename)
     capsid = pdbx.get_assembly(pdbx_file, assembly_id="1", model=1, extra_fields=['b_factor'])
+    asym = pdbx.get_structure(pdbx_file, model=1, extra_fields=['b_factor'])
 
     capsid = capsid[struc.filter_amino_acids(capsid)]
-
     title = pdb  # pdbx_file.get_category('pdbx_database_related')['details']
 
-    print("Number of protein chains:", struc.get_chain_count(capsid))
+    # capsid = capsid[capsid.filter_amino_acids()].copy()
+
+    capsid = capsid[struc.filter_amino_acids(capsid)]
+    asym = asym[struc.filter_amino_acids(asym)]
+    print("Number of protein chains in full structure:", struc.get_chain_count(capsid))
+    print("Number of protein chains in asymmetric unit:", struc.get_chain_count(asym))
 
     calphas = capsid[capsid.atom_name == 'CA']
     coords = calphas.coord
@@ -94,7 +99,7 @@ def loadPDBx(filename, pdb, save):
     chain_starts = struc.get_chain_starts(calphas)
     chain_starts = np.append(chain_starts, len(calphas))
 
-    return capsid, calphas, coords, calphas.b_factor, chain_starts, title
+    return capsid, calphas, asym, coords, calphas.b_factor, chain_starts, title
 
 def loadPDB(filename, pdb_id, save):
     """Loads PDBx data from a file
@@ -111,13 +116,16 @@ def loadPDB(filename, pdb_id, save):
     pdb_file = pdb.PDBFile()
     pdb_file.read(filename)
     capsid = pdb.get_assembly(pdb_file, assembly_id="1", model=1, extra_fields=['b_factor'])
+    asym = pdb.get_structure(pdb_file, model=1, extra_fields=['b_factor'])
 
     title = pdb_id  # pdbx_file.get_category('pdbx_database_related')['details']
 
     # capsid = capsid[capsid.filter_amino_acids()].copy()
 
     capsid = capsid[struc.filter_amino_acids(capsid)]
-    print("Number of protein chains:", struc.get_chain_count(capsid))
+    asym = asym[struc.filter_amino_acids(asym)]
+    print("Number of protein chains in full structure:", struc.get_chain_count(capsid))
+    print("Number of protein chains in asymmetric unit:", struc.get_chain_count(asym))
 
 
     calphas = capsid[capsid.atom_name == 'CA']
@@ -130,7 +138,7 @@ def loadPDB(filename, pdb_id, save):
     chain_starts = struc.get_chain_starts(calphas)
     chain_starts = np.append(chain_starts, len(calphas))
 
-    return capsid, calphas, coords, calphas.b_factor, chain_starts, title
+    return capsid, calphas, asym, coords, calphas.b_factor, chain_starts, title
 
 
 # def loadPDB(filename, pdb, save):
