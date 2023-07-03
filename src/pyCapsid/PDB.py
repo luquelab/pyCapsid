@@ -39,7 +39,7 @@ def getCapsid(pdb, save_pdb_path='./', pdbx=False, local=False, save_full_pdb=Fa
     n_res = len(calphas)
     print(f'# of residues: {n_res}')
 
-    return capsid, calphas, coords, bfactors, chain_starts, title
+    return capsid, calphas, asym, coords, bfactors, chain_starts, title
 
 
 def downloadPDB(pdb, dir='.', pdbx=False):
