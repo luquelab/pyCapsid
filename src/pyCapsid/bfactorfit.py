@@ -96,7 +96,6 @@ def fluctModes(evals, evecs, bfactors, is3d, isIco):
     return coeffs, ico_devs
 
 
-# This really needs a refactoring but lets see if it just works
 def fitBfactors(evals, evecs, bfactors, is3d, isIco=True, fitModes=False, plotModes=False, forceIco=False, icotol=0.002):
     """
 
@@ -165,6 +164,7 @@ def plotByMode(mode_indices, data, datalabel):
     ax.set_ylabel(datalabel)
     fig.suptitle(datalabel + ' vs number of low frequency modes')
     plt.show()
+    fig.savefig(f'{datalabel}_by_mode.svg')
 
 
 def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotModes=False, forceIco=True, icotol=0.002,
