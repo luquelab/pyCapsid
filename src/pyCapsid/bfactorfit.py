@@ -202,7 +202,7 @@ def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotM
 
     file = './b_factors.npz'
     print('Saving B-factor results in' + file)
-    residue_numbers = np.arange(1, bfactors.shape[0])
+    residue_numbers = np.arange(1, bfactors.shape[0] + 1)
     np.savez_compressed(file, bfactors_predicted=bfactors_predicted, bfactors_experimental=bfactors, CC=coeff, gamma=gamma, gamma_ci=gamma_ci, n_modes=nmodes, n_asym=int(bfactors.shape[0] / 60), residue_numbers=residue_numbers)
     
     import matplotlib.pyplot as plt
