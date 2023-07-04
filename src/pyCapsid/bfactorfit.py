@@ -157,6 +157,7 @@ def plotByMode(mode_indices, data, datalabel):
     :param datalabel:
     """
     import matplotlib.pyplot as plt
+    import numpy as np
     fig, ax = plt.subplots(1, 1)
     ax.plot(mode_indices, data)
     # ax[0].vlines(nModes, np.min(coeffs), np.max(coeffs))
@@ -165,6 +166,7 @@ def plotByMode(mode_indices, data, datalabel):
     fig.suptitle(datalabel + ' vs number of low frequency modes')
     plt.show()
     fig.savefig(f'{datalabel}_by_mode.svg')
+    np.savez(f'{datalabel}_by_mode.npz', mode_indices = mode_indices, data = data)
 
 
 def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotModes=False, forceIco=True, icotol=0.002,
