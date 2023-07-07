@@ -6,8 +6,12 @@ nav_order: 3
 * 
 {:toc}
 
-# Interactive Usage
-The simplest way to follow this tutorial is using this [colab notebook](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_tutorial.ipynb).
+# Google Colab
+The simplest way to use pyCapsid is using this [colab notebook](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_tutorial.ipynb).
+The Colab notebook is self documenting and is designed to be simple to use. The remainder of this tutorial describes using
+pyCapsid locally using python and optionally the jupyter notebook interface.
+
+# Locally via jupyter notebook
 This tutorial covers the step by step use pyCapsid to identify the quasi-rigid subunits of an example capsid. This tutorial also comes
 in the form of a jupyter notebook for those who wish to run it locally.
 The example notebook is also provided for local use in the [notebooks folder](https://github.com/luquelab/pyCapsid/tree/main/notebooks).
