@@ -98,13 +98,13 @@ def filterChains(calphas, clust_ignore_chains):
     return clust_mask
 
 def filterEmbedding(vecs, mask):
-    print('Filtering some chains out of clustering process')
+    #print('Filtering some chains out of clustering process')
     indices = mask.nonzero()[0]
     vecs_new = vecs[indices, :].copy()
     return vecs_new
 
 def filterFlucts(flucts, mask):
-    print('Filtering some chains out of dist_fluct matrix')
+    #print('Filtering some chains out of dist_fluct matrix')
     indices = mask.nonzero()[0]
     flucts = flucts.tocsr()
     flucts_new = flucts[:, indices][indices, :].copy()
