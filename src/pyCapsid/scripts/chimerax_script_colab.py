@@ -120,13 +120,24 @@ if remote=='True':
     run(session, f'open {pdb}')
     run(session, 'view orient')
     run(session, 'lighting full')
+    run(session, 'hide atoms')
+    run(session, 'show cartoons')
     run(session, f'save ../figures/structures/{pdb}_asymmetric_unit.png')
     run(session, 'sym #1 assembly 1 copies True')
     run(session, 'close #1')
     run(session, 'view orient')
+    run(session, 'hide atoms')
+    run(session, 'show cartoons')
     run(session, f'save ../figures/structures/{pdb}_full_capsid.png')
+    run(session, 'rename #2 id #1')
 else:
     run(session, f'open {pdb}')
+    run(session, 'view orient')
+    run(session, 'lighting full')
+    run(session, 'hide atoms')
+    run(session, 'show cartoons')
+    run(session, f'save ../figures/structures/{pdb}_asymmetric_unit.png')
+    run(session, f'save ../figures/structures/{pdb}_full_capsid.png')
 
 # center of mass measurement from ChimeraX tutorial
 run(session, 'sel protein')
@@ -140,9 +151,10 @@ print("modelCenter", modelCenter)
 if modelCenter.any:
     print('Aligning Models')
     modelX, modelY, modelZ = modelCenter
-    run(session, 'move x ' + str(-1 * modelX) + ' coordinateSystem #2 models #2')  # adjust x coordinates
-    run(session, 'move y ' + str(-1 * modelY) + ' coordinateSystem #2 models #2')  # adjust y coordinates
-    run(session, 'move z ' + str(-1 * modelZ) + ' coordinateSystem #2 models #2')  # adjust z coordinates
+    run(session, 'move x ' + str(-1 * modelX) + ' coordinateSystem #1 models #1')  # adjust x coordinates
+    run(session, 'move y ' + str(-1 * modelY) + ' coordinateSystem #1 models #1')  # adjust y coordinates
+    run(session, 'move z ' + str(-1 * modelZ) + ' coordinateSystem #1 models #1')  # adjust z coordinates
+    run(session, 'view orient')
 else:
     print('Models Already Aligned')
 
