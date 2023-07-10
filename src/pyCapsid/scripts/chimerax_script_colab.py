@@ -88,12 +88,50 @@ import matplotlib as mpl
 from numpy.linalg import norm
 import sys
 print(sys.argv)
+
+import argparse
+import os
+
+parser = argparse.ArgumentParser(description='ChimeraX script for visualization of pyCapsid results')
+parser.add_argument('report_dir', help='Location of pyCapsid report chimerax directory')
+parser.add_argument('-nc', help='Number of clusters in the corresponding results you want to visualize', default=None, required=False)
+parser.add_argument('-remote', help='Number of clusters in the corresponding results you want to visualize', default=None, required=False)
+parser.add_argument('-mode', help='Number of clusters in the corresponding results you want to visualize', default='full', required=False)
+parser.add_argument('-pdb', help='Number of clusters in the corresponding results you want to visualize', default=None, required=False)
+args = vars(parser.parse_args())
+report_dir = args['report_dir']
+print(report_dir)
+os.chdir(report_dir)
+
+if args['pdb'] is None:
+    fs = [x for x in os.listdir('./') if x.endswith('.npz')]
+    f = fs[0]
+    pdb = f.split('_final')[0]
+else:
+    pdb = args['pdb']
+
+if args['remote'] is None:
+    files = [x for x in os.listdir('./') if (x.endswith('.pdb') or x.endswith('.cif'))]
+    if len(files) == 0:
+        remote = 'True'
+    elif len(files) == 1:
+        remote = 'False'
+        pdb = files[0]
+    else:
+        raise Exception("More than one .pdb file in directory")
+else:
+    remote = args['remote']
+
+if args['nc'] is None:
+    n_clusters = np.load(f'{pdb}_final_results.npz')['nc']
+    nc_filename = ''
+else:
+    n_clusters = int(args['nc'])
+    nc_filename = f'_{n_clusters}'
+
+
 if len(sys.argv) == 2:
-    report_dir = sys.argv[1]
-    import os
-    os.chdir(report_dir)
-    # defaults
-    rwb_scale = 'False'
+    # defaults for only 1 argument given
     fs = [x for x in os.listdir('./') if x.endswith('.npz')]
     f = fs[0]
     pdb = f.split('_final')[0]
@@ -110,8 +148,7 @@ if len(sys.argv) == 2:
     else:
         raise Exception("More than one .pdb file in directory")
 else:
-    pdb, report_dir, remote, rwb_scale = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-    #...
+    pass
 
 run(session, 'set bg white')
 run(session, 'graphics silhouettes true')
@@ -166,16 +203,21 @@ results = np.load(f'{pdb}_final_results_full.npz')
 labels = results['labels']
 nc_range = results['nc_range']
 scores = results['full_scores']
+print(nc_range)
+print(n_clusters)
+ind = np.argwhere(nc_range == n_clusters)[0][0]
+print(ind)
 
-if n_clusters is None:
-    print('Defaulting to highest score clustering')
-    ind = np.argmax(scores)
-    n_c = nc_range[ind]
-else:
-    ind = np.argwhere(nc_range == n_clusters)[0][0]
-    n_c = n_clusters
 
-print(f'Visualizing cluster results of {pdb} for {n_c} clusters')
+# if n_clusters is None:
+#     print('Defaulting to highest score clustering')
+#     ind = np.argmax(scores)
+#     n_c = nc_range[ind]
+# else:
+#     ind = np.argwhere(nc_range == n_clusters)[0][0]
+#     n_c = n_clusters
+
+print(f'Visualizing cluster results of {pdb} for {n_clusters} clusters')
 labels = labels[ind]
 score = scores[ind]
 
@@ -197,7 +239,7 @@ for i in range(cx_nr):
         at.color = rgba_scores[i, :]
 
 # run(session, 'hkcage 1 0 alpha hexagonal-dual radius ' + str(radius) + ' spherefactor 0.2')
-run(session, f'save ../figures/structures/{pdb}_residue_cluster_scores.png')
+run(session, f'save ../figures/structures/{pdb}_residue_cluster_scores{nc_filename}.png')
 
 print('# of residues:', cx_nr)
 print('# of ENM residues:', enm_nr)
@@ -210,5 +252,5 @@ for i in range(cx_nr):
         at.color = rgba_clusters[i, :]
 
 # run(session, 'hkcage 1 0 alpha hexagonal-dual radius ' + str(radius) + ' spherefactor 0.2')
-run(session, f'save ../figures/structures/{pdb}_highest_quality_clusters.png')
+run(session, f'save ../figures/structures/{pdb}_highest_quality_clusters{nc_filename}.png')
 
