@@ -152,6 +152,6 @@ for i in range(n_frames):
     atoms.scene_coords = osc[i, :, :]
     run(session, 'wait 1')
     #run(session, f'save ../figures/structures/{pdb}_mode_{n_mode}_animation_frame_{i}.png')
-run(session, f'movie encode quality high output ../figures/structures/{pdb}_mode_{n_mode}_animation.png')
+run(session, f'movie encode quality high output ../figures/structures/{pdb}_mode_{n_mode}_animation.mp4')
 
 
