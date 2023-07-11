@@ -48,14 +48,19 @@ import argparse
 import os
 
 parser = argparse.ArgumentParser(description='ChimeraX script for visualization of pyCapsid results')
-parser.add_argument('report_dir', help='Location of pyCapsid report chimerax directory')
+parser.add_argument('-report_dir', help='Location of pyCapsid report chimerax directory', default=None, required=False)
 parser.add_argument('-nmode', help='Number of clusters in the corresponding results you want to visualize', default=0, required=False)
 parser.add_argument('-remote', help='Number of clusters in the corresponding results you want to visualize', default=None, required=False)
 parser.add_argument('-pdb', help='Number of clusters in the corresponding results you want to visualize', default=None, required=False)
 parser.add_argument('-amplitude', help='Number of clusters in the corresponding results you want to visualize', default=None, required=False)
 parser.add_argument('-frames', help='Number of clusters in the corresponding results you want to visualize', default=20, required=False)
 args = vars(parser.parse_args())
-report_dir = args['report_dir']
+
+if args['report_dir'] is None:
+    report_dir = os.path.dirname(sys.argv[0])
+    print(report_dir)
+else:
+    report_dir = args['report_dir']
 print(report_dir)
 os.chdir(report_dir)
 
