@@ -65,7 +65,7 @@ print(report_dir)
 os.chdir(report_dir)
 
 if args['pdb'] is None:
-    fs = [x for x in os.listdir('./') if x.endswith('.npz')]
+    fs = [x for x in os.listdir('./') if x.endswith('_final_results.npz')]
     f = fs[0]
     pdb = f.split('_final')[0]
 else:
