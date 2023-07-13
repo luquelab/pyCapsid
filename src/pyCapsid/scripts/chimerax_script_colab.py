@@ -135,27 +135,6 @@ else:
     n_clusters = int(args['nc'])
     nc_filename = f'_{n_clusters}'
 
-
-if len(sys.argv) == 2:
-    # defaults for only 1 argument given
-    fs = [x for x in os.listdir('./') if x.endswith('.npz')]
-    f = fs[0]
-    pdb = f.split('_final')[0]
-    n_clusters = np.load(f'{pdb}_final_results.npz')['nc']
-
-    # params = np.loadtxt('chimerax_params.txt')
-
-    files = [x for x in os.listdir('./') if (x.endswith('.pdb') or x.endswith('.cif'))]
-    if len(files) == 0:
-        remote = 'True'
-    elif len(files) == 1:
-        remote = 'False'
-        pdb = files[0]
-    else:
-        raise Exception("More than one .pdb file in directory")
-else:
-    pass
-
 run(session, 'set bg white')
 run(session, 'graphics silhouettes true')
 
