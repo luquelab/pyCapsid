@@ -193,15 +193,6 @@ print(n_clusters)
 ind = np.argwhere(nc_range == n_clusters)[0][0]
 print(ind)
 
-
-# if n_clusters is None:
-#     print('Defaulting to highest score clustering')
-#     ind = np.argmax(scores)
-#     n_c = nc_range[ind]
-# else:
-#     ind = np.argwhere(nc_range == n_clusters)[0][0]
-#     n_c = n_clusters
-
 print(f'Visualizing cluster results of {pdb} for {n_clusters} clusters')
 labels = labels[ind]
 score = scores[ind]
@@ -223,7 +214,6 @@ for i in range(cx_nr):
     for at in ats:
         at.color = rgba_scores[i, :]
 
-# run(session, 'hkcage 1 0 alpha hexagonal-dual radius ' + str(radius) + ' spherefactor 0.2')
 run(session, f'save ../figures/structures/{pdb}_residue_cluster_scores{nc_filename}.png')
 
 print('# of residues:', cx_nr)
@@ -236,6 +226,5 @@ for i in range(cx_nr):
     for at in ats:
         at.color = rgba_clusters[i, :]
 
-# run(session, 'hkcage 1 0 alpha hexagonal-dual radius ' + str(radius) + ' spherefactor 0.2')
 run(session, f'save ../figures/structures/{pdb}_highest_quality_clusters{nc_filename}.png')
 
