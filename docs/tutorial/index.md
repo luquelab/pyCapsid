@@ -12,13 +12,13 @@ The Colab notebook is self documenting and is designed to be simple to use. The 
 in the notebook.
 
 ## Quick-start guide
-Follow the steps described below to obtain the dominant dynamics and quasi-rigid units of a protein complex. To help navigate the guide, we recommend displaying the Colab notebook's Table of contents of Colab notebook (open the `View` menu on the top bar and choose `Table of contents`):
+Follow the steps described below to obtain the dominant dynamics and quasi-rigid units of a protein complex. To help navigate the guide, we recommend displaying the Colab notebook's Table of contents (open the `View` menu on the top bar and choose `Table of contents`):
 1. Specify the structure to be analyzed in the [Input structure](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb#scrollTo=Input_structure) section. Run the code block to import the structure to pyCapsid Colab.
 2. Modify the default pyCapsid parameters if necessary in the [pyCapsid parameters](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb#scrollTo=pyCapsid_parameters) section. Run the code block to import the parameters to pyCapsid Colab.
 3. Execute the rest of the notebook, for example, navigating the Colab menu `Runtime` and choosing the option `Run all`. This will install pyCapsid, run the pipeline, and generate and store the results.
   + The pipeline will automatically compress the results in a zip file and download it. Your browser might prompt a request to allow the downloading process.
   + If you encounter any issues in the downloading process, check the section [Problems downloading results?](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb#scrollTo=Problems_downloading_results_)
-  + The execution time and maximum size of the protein complex depend on the computing power and memory of the Colab cloud service used, which depends on the user's Colab plan. The section [Estimate time and memory](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb#scrollTo=Estimate_time_and_memory) contains a code block to estimate the execution time and memeory requirement for the input structure and parameters.
+  + The execution time and maximum size of the protein complex depend on the computing power and memory of the Colab cloud service used, which depends on the user's Colab plan. The section [Estimate time and memory](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb#scrollTo=Estimate_time_and_memory) contains a code block to estimate the execution time and memory requirement for the input structure and parameters.
 4. Extract and read the downloaded report (`pyCapsid_report.*`) for a summary and interpretation of the main results. The report is available in three formats: Markdown, `*.md`, Microsoft Word (`*.docx`), and Web page's HyperText Markup Language (`*.html`). The multi-formatted report aims to facilitate users adapting pyCapsid's results to their publication needs. Check the section [pyCapsid report](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb#scrollTo=pyCapsid_report) for further details.   
    + Additional results are displayed throughout the different subsections in the [Run the pyCapsid pipeline](#scrollTo=Run_the_pyCapsid_pipeline)'s section.
 5. Some images will be missing in `pyCapsid_report.*` and will need to be generated locally using [ChimeraX](https://www.cgl.ucsf.edu/chimerax/). To visualize the clustering results in ChimeraX we provide a python script in the pyCapsid report folder. To use this script, after extracting the pyCapsid_report folder, open ChimeraX and run the following command:
@@ -119,7 +119,7 @@ chimeraxViz(residue_scores, pdb, chimerax_path='C:\\Program Files\\ChimeraX\\bin
 ![capsid_score_chx](4oq8_score_cx.png){: width="500"}
 
 ## Visualize in jupyter notebook with nglview
-You can visualize the results in a jupyter notebook with nglview. The following function returns an nglview view with the 
+You can visualize the results in a jupyter notebook with nglview. The following function returns an NGLView view with the 
 results colored based on cluster. See the nglview documentation for further info on how to create high quality images.
 (http://nglviewer.org/nglview/release/v2.7.7/index.html)
 
@@ -195,7 +195,7 @@ view_scores.download_image(factor=2)
 This tutorial also has a corresponding [colab notebook](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_config_tutorial.ipynb).
 This is a simpler and faster way to run the entire pyCapsid pipeline and save the results by setting the parameters ahead
 of time in a text file. To do this download [this example](https://github.com/luquelab/pyCapsid/blob/main/docs/tutorial/config_simple.toml) 
-from our github or copy and paste the following into a text editor and save the output as 'config.toml'
+from our GitHub or copy and paste the following into a text editor and save the output as 'config.toml'
 
 ### A simple config.toml example
 
