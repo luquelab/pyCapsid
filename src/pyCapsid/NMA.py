@@ -66,7 +66,7 @@ def modeCalc(hess, n_modes=200, eigen_method='eigsh', is3d=True, shift_invert=Tr
         print('gpu eigen')
 
         evals, evecs = clobpcg(sparse_gpu, epredict, M=M, largest=False, tol=0, verbosityLevel=0)
-        if is3d == 'anm':
+        if is3d:
             evals = cp.asnumpy(evals[6:])
             evecs = cp.asnumpy(evecs[:, 6:])
         else:
