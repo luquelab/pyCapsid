@@ -49,11 +49,11 @@ import os
 
 parser = argparse.ArgumentParser(description='ChimeraX script for visualization of pyCapsid results')
 parser.add_argument('-report_dir', help='Location of pyCapsid report chimerax directory', default=None, required=False)
-parser.add_argument('-nmode', help='Number of clusters in the corresponding results you want to visualize', default=0, required=False)
-parser.add_argument('-remote', help='Number of clusters in the corresponding results you want to visualize', default=None, required=False)
-parser.add_argument('-pdb', help='Number of clusters in the corresponding results you want to visualize', default=None, required=False)
-parser.add_argument('-amplitude', help='Number of clusters in the corresponding results you want to visualize', default=None, required=False)
-parser.add_argument('-frames', help='Number of clusters in the corresponding results you want to visualize', default=20, required=False)
+parser.add_argument('-nmode', help='Index of normal mode to visualize', default=0, required=False)
+parser.add_argument('-remote', help='Whether to use a remote structure from the PDB database', default=None, required=False)
+parser.add_argument('-pdb', help='If remote is True or none, PDBID of the target structure. Otherwise, the local filename of the target structure', default=None, required=False)
+parser.add_argument('-amplitude', help='Maximum amplitude of motion along the mode for visualization purposes', default=None, required=False)
+parser.add_argument('-frames', help='Number of frames to generate for the animation', default=20, required=False)
 args = vars(parser.parse_args())
 
 if args['report_dir'] is None:
