@@ -95,9 +95,9 @@ import os
 parser = argparse.ArgumentParser(description='ChimeraX script for visualization of pyCapsid results')
 parser.add_argument('-report_dir', help='Location of pyCapsid report chimerax directory', default=None, required=False)
 parser.add_argument('-nc', help='Number of clusters in the corresponding results you want to visualize', default=None, required=False)
-parser.add_argument('-remote', help='Number of clusters in the corresponding results you want to visualize', default=None, required=False)
+parser.add_argument('-remote', help='Whether to use a remote structure from the PDB database', default=None, required=False)
 parser.add_argument('-mode', help='Number of clusters in the corresponding results you want to visualize', default='full', required=False)
-parser.add_argument('-pdb', help='Number of clusters in the corresponding results you want to visualize', default=None, required=False)
+parser.add_argument('-pdb', help='If remote is True or none, PDBID of the target structure. Otherwise, the local filename of the target structure', default=None, required=False)
 args = vars(parser.parse_args())
 
 if args['report_dir'] is None:
