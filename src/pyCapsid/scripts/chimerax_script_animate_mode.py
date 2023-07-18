@@ -49,7 +49,7 @@ import os
 
 parser = argparse.ArgumentParser(description='ChimeraX script for visualization of pyCapsid results')
 parser.add_argument('-report_dir', help='Location of pyCapsid report chimerax directory', default=None, required=False)
-parser.add_argument('-nmode', help='Index of normal mode to visualize', default=0, required=False)
+parser.add_argument('-nmode', help='Index of normal mode to visualize', default=None, required=False)
 parser.add_argument('-remote', help='Whether to use a remote structure from the PDB database', default=None, required=False)
 parser.add_argument('-pdb', help='If remote is True or none, PDBID of the target structure. Otherwise, the local filename of the target structure', default=None, required=False)
 parser.add_argument('-amplitude', help='Maximum amplitude of motion along the mode for visualization purposes', default=None, required=False)
@@ -89,7 +89,17 @@ else:
     max_amplitude = float(args['amplitude'])
 
 if args['nmode'] is None:
-    n_mode = 0 # change to finding first non-degenerate mode
+    modes = np.load(f'{pdb}_modes.npz')
+    evals = modes['eigen_vals']
+    uniques, inds, counts = np.unique(evals.round(decimals=8), return_index=True, return_counts=True)
+    icoEvalInds = inds[counts == 1]
+    print('Indices of non-degenerate eigenmodes: ', icoEvalInds)
+    if len(icoEvalInds) == 0:
+        print('No non-degenerate modes found')
+        n_mode = 0
+    else:
+        print('Visualizing lowest frequency non-degenerate mode')
+        n_mode=icoEvalInds[0]
 else:
     n_mode = int(args['nmode'])
 
