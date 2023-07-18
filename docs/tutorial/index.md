@@ -7,9 +7,12 @@ nav_order: 3
 {:toc}
 
 # Running pyCapsid remotely on Google Colab
-The simplest way to use pyCapsid is using this [colab notebook](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb).
-The Colab notebook is self documenting and is designed to be simple to use. The following quick-start guide is also included
-in the notebook.
+The simplest way to use pyCapsid is using this [colab notebook](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb)
+which runs pyCapsid on a free Google cloud-based platform in a Jupyter environment. The Colab notebook is self documenting and is designed to be simple to use. 
+The Colab notebook has built in methods for visualizing the results for small 
+structures using NGLView, but we recommend installing molecular visualization software 
+[UCSF ChimeraX](https://luquelab.github.io/pyCapsid/installation/#visualization-in-chimerax) locally for high-quality visualizations of larger structures.
+The following quick-start guide is also included in the notebook.
 
 ## Quick-start guide
 Follow the steps described below to obtain the dominant dynamics and quasi-rigid units of a protein complex. To help navigate the guide, we recommend displaying the Colab notebook's Table of contents (open the `View` menu on the top bar and choose `Table of contents`):

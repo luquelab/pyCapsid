@@ -5,9 +5,12 @@ nav_order: 2
 ---
 
 # Running remotely with Google Colab
-The simplest way to use pyCapsid is using this [colab notebook](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb).
-This requires no installation, but we still recommend installing ChimeraX (see below) locally for visualizing the results.
-The Colab notebook is self documenting and is designed to be simple to use.
+The simplest way to use pyCapsid is using this [colab notebook](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb)
+which runs pyCapsid on a free Google cloud-based platform in a Jupyter environment. The Colab notebook is self-documenting 
+and is designed to be simple to use. The Colab notebook has built in methods for visualizing the results for small 
+structures using NGLView, but we recommend installing molecular visualization software 
+[UCSF ChimeraX](#visualization-in-chimerax) locally for high-quality visualizations of larger structures.
+
 
 # Requirements
 Requires python 3.8-3.10. If you have an older version of python you may download a new version of python from 
@@ -39,11 +42,13 @@ conda activate pycapsid
 conda install -c luque_lab -c conda-forge pycapsid
 ~~~~
 
-## Visualization in ChimeraX
-For the best visualization of the results we recommend downloading and installing [ChimeraX](https://www.cgl.ucsf.edu/chimerax/download.html).
+# Visualization in ChimeraX
+
+For the highest quality visualization of the results we recommend downloading and installing [UCSF ChimeraX](https://www.cgl.ucsf.edu/chimerax/download.html).
+
 pyCapsid has been tested on ChimeraX versions 1.5 and 1.6.
 
-## Visualization in jupyter notebook with NGLView
+# Visualization in jupyter notebook with NGLView
 To install the necessary packages for visualizing the results in a jupyter notebook, 
 Via pip:
 ~~~~
