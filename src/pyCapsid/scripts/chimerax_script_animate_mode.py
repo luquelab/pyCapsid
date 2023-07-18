@@ -54,6 +54,7 @@ parser.add_argument('-remote', help='Whether to use a remote structure from the 
 parser.add_argument('-pdb', help='If remote is True or none, PDBID of the target structure. Otherwise, the local filename of the target structure', default=None, required=False)
 parser.add_argument('-amplitude', help='Maximum amplitude of motion along the mode for visualization purposes', default=None, required=False)
 parser.add_argument('-frames', help='Number of frames to generate for the animation', default=20, required=False)
+parser.add_argument('-save_frames', help='Whether to save the individual frames used to create the image', default=False, required=False)
 args = vars(parser.parse_args())
 
 if args['report_dir'] is None:
@@ -107,6 +108,8 @@ if args['frames'] is None:
     n_frames = 20
 else:
     n_frames = int(args['frames'])
+
+save_frames = args['save_frames']
 
 run(session, 'set bg white')
 run(session, 'graphics silhouettes true')
@@ -167,6 +170,9 @@ for i in range(n_frames):
     atoms.scene_coords = osc[i, :, :]
     run(session, 'wait 1')
     #run(session, f'save ../figures/structures/{pdb}_mode_{n_mode}_animation_frame_{i}.png')
-run(session, f'movie encode quality high output ../figures/structures/{pdb}_mode_{n_mode}_animation.mp4')
+if save_frames:
+    run(session, f'movie encode quality high resetMode keep output ../figures/structures/{pdb}_mode_{n_mode}_animation.mp4')
+else:
+    run(session, f'movie encode quality high output ../figures/structures/{pdb}_mode_{n_mode}_animation.mp4')
 
 
