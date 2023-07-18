@@ -32,7 +32,7 @@ def buildENMPreset(coords, preset='ANM', **kwargs):
     elif preset == 'bbENM':
         cutoff = 7.5
         l_backbone=1
-        k_backbone = 100
+        k_backbone = 10
         if 'chain_starts' not in kwargs:
             raise ValueError("No chain information provided. Indices of chain starts must be provided as chain_starts")
         chain_starts = kwargs.pop('chain_starts')
