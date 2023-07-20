@@ -14,7 +14,7 @@ structures using NGLView, but we recommend installing molecular visualization so
 [UCSF ChimeraX](https://luquelab.github.io/pyCapsid/installation/#visualization-in-chimerax) locally for high-quality visualizations of larger structures.
 The following quick-start guide is also included in the notebook.
 
-## Quick-start guide
+## Colab quick-start guide
 Follow the steps described below to obtain the dominant dynamics and quasi-rigid units of a protein complex. To help navigate the guide, we recommend displaying the Colab notebook's Table of contents (open the `View` menu on the top bar and choose `Table of contents`):
 1. Specify the structure to be analyzed in the [Input structure](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb#scrollTo=Input_structure) section. Run the code block to import the structure to pyCapsid Colab.
 2. Modify the default pyCapsid parameters if necessary in the [pyCapsid parameters](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb#scrollTo=pyCapsid_parameters) section. Run the code block to import the parameters to pyCapsid Colab.
@@ -34,6 +34,9 @@ runscript browse
 ```
 This will create the 4 images in the pyCapsid_report/figures/structures/ folder which will be displayed in the .html and .md reports.
 6. Modify and re-run the section [Generate advanced analysis](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb#scrollTo=Generate_advanced_analysis) to obtain advanced analyses using results stored during the execution of the pyCapsid pipeline.
+
+### Colab output example
+An example of what the completed pyCapsid_report.md downloaded by the notebook will look like is shown [here](https://github.com/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_report_example).
 
 # Locally via jupyter notebook
 This tutorial covers the step by step use pyCapsid to identify the quasi-rigid subunits of an example capsid. This tutorial also comes
