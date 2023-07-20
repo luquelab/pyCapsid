@@ -10,7 +10,7 @@
 
 package:
   name: pycapsid
-  version: 0.5.0
+  version: 0.5.1
 
 source:
   path: ..
@@ -54,7 +54,7 @@ requirements:
     - scipy
     - matplotlib-base
     - matplotlib
-    - numba
+    - numba>=0.57
     - statsmodels
     - toml
 
