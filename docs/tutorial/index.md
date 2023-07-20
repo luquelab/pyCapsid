@@ -36,7 +36,7 @@ This will create the 4 images in the pyCapsid_report/figures/structures/ folder 
 6. Modify and re-run the section [Generate advanced analysis](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb#scrollTo=Generate_advanced_analysis) to obtain advanced analyses using results stored during the execution of the pyCapsid pipeline.
 
 ### Colab output example
-An example of what the completed pyCapsid_report.md downloaded by the notebook will look like is shown [here](https://github.com/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_report_example).
+An example of what the completed pyCapsid_report.md downloaded by the notebook will look like is shown [here](https://github.com/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_report_example/pyCapsid_report.md).
 
 # Locally via jupyter notebook
 This tutorial covers the step by step use pyCapsid to identify the quasi-rigid subunits of an example capsid. This tutorial also comes
