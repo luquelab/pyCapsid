@@ -16,24 +16,23 @@ The following quick-start guide is also included in the notebook.
 
 ## Colab quick-start guide
 Follow the steps described below to obtain the dominant dynamics and quasi-rigid units of a protein complex. To help navigate the guide, we recommend displaying the Colab notebook's Table of contents (open the `View` menu on the top bar and choose `Table of contents`):
-1. Specify the structure to be analyzed in the [Input structure](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb#scrollTo=Input_structure) section. Run the code block to import the structure to pyCapsid Colab.
-2. Modify the default pyCapsid parameters if necessary in the [pyCapsid parameters](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb#scrollTo=pyCapsid_parameters) section. Run the code block to import the parameters to pyCapsid Colab.
-3. Execute the rest of the notebook, for example, navigating the Colab menu `Runtime` and choosing the option `Run all`. This will install pyCapsid, run the pipeline, and generate and store the results.
-  + The pipeline will automatically compress the results in a zip file and download it. Your browser might prompt a request to allow the downloading process.
+1. Specify the structure to be analyzed in the [Input structure](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb#scrollTo=Input_structure) section. Run the code block to set the parameters and, if not fetching a remote structure, upload the structure file.
+2. Modify the default pyCapsid parameters if necessary in the [pyCapsid parameters](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb#scrollTo=pyCapsid_parameters) section. Run the code block to set the parameters.
+3. Execute the rest of the notebook by navigating the Colab menu `Runtime` and choosing the option `Run all` or `Run after` in the cell after the pyCapsid parameters. This will install pyCapsid, run the pipeline, and generate and store the results.
+  + The pipeline will automatically compress and donwload the otuputs in two zip files. Your browser might prompt a request to allow the downloading process. `pyCapsid_report.zip` contains key results, a report summarizing them, and instructions for visualizing the results in ChimeraX. `pyCapsid_results.zip` contains all of the relevant data files created by pyCapsid and a readme describing their contents. 
   + If you encounter any issues in the downloading process, check the section [Problems downloading results?](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb#scrollTo=Problems_downloading_results_)
-  + The execution time and maximum size of the protein complex depend on the computing power and memory of the Colab cloud service used, which depends on the user's Colab plan. The section [Estimate time and memory](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb#scrollTo=Estimate_time_and_memory) contains a code block to estimate the execution time and memory requirement for the input structure and parameters.
+  + The execution time and maximum size of the protein complex depend on the computing power and memory of the Colab cloud service used, which depends on the user's Colab plan. The section [Estimate time and memory](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb#scrollTo=Estimate_time_and_memory) gives an estimate of the time and memory requirements based on the number of residues in the structure.
 4. Extract and read the downloaded report (`pyCapsid_report.*`) for a summary and interpretation of the main results. The report is available in three formats: Markdown, `*.md`, Microsoft Word (`*.docx`), and Web page's HyperText Markup Language (`*.html`). The multi-formatted report aims to facilitate users adapting pyCapsid's results to their publication needs. Check the section [pyCapsid report](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb#scrollTo=pyCapsid_report) for further details.   
-   + Additional results are displayed throughout the different subsections in the [Run the pyCapsid pipeline](#scrollTo=Run_the_pyCapsid_pipeline)'s section.
-5. Some images will be missing in `pyCapsid_report.*` and will need to be generated locally using [ChimeraX](https://www.cgl.ucsf.edu/chimerax/). To visualize the clustering results in ChimeraX we provide a python script in the pyCapsid report folder. To use this script, after extracting the pyCapsid_report folder, open ChimeraX and run the following command:
-```
-runscript "path/to/pyCapsid_report/chimerax/chimerax_script_colab.py"
-```
-Alternatively you can use the following command, which will open a window and  prompt you to find and select the script:
+   + Additional results are displayed throughout the different subsections in the [Run the pyCapsid pipeline](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb#scrollTo=Run_the_pyCapsid_pipeline)'s section.
+5. The 3D images of the protein complex will be missing in `pyCapsid_report.*`. You will need to generate them using [ChimeraX](https://www.cgl.ucsf.edu/chimerax/). We recommend downloading and installing ChimeraX from [here](https://www.cgl.ucsf.edu/chimerax/download.html). To visualize the quasi-rigid domains obtained, open a new session in ChimeraX and run the following instruction in the command line to open a file browser in ChimeraX:
 ```
 runscript browse
 ```
-This will create the 4 images in the pyCapsid_report/figures/structures/ folder which will be displayed in the .html and .md reports.
-6. Modify and re-run the section [Generate advanced analysis](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb#scrollTo=Generate_advanced_analysis) to obtain advanced analyses using results stored during the execution of the pyCapsid pipeline.
+Then, inside the browser, navigate in the `pyCapsid_report/ChimeraX/` folder and open the script `chimerax_script_colab.py`. 
+This will generate a 3D model of the protein complex coloring the quasi-rigid domains in ChimeraX and store snapshots in the folder
+`pyCapsid_report/figures/structures/` that will be visible in the `.html` and `.md` reports. To generate an animation of the dynamics
+of the lowest-frequency non-degenerate mode, start a new ChimeraX session and follow the same steps above, but opening instead the script 
+6. Optionally, read the section [Generate advanced analysis](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb#scrollTo=Generate_advanced_analysis) to learn how to obtain advanced analyses using results stored during the execution of the pyCapsid pipeline.
 
 ### Colab output example
 An example of what the completed pyCapsid_report.md downloaded by the notebook will look like is shown [here](https://github.com/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_report_example/pyCapsid_report.md).
