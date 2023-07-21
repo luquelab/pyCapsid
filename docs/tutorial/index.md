@@ -197,7 +197,7 @@ view_scores.download_image(factor=2)
 
 
 # Running pyCapsid using a simple config.toml file
-This tutorial also has a corresponding [colab notebook](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_config_tutorial.ipynb).
+This tutorial also has a corresponding [example notebook](https://github.com/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_config_example.ipynb).
 This is a simpler and faster way to run the entire pyCapsid pipeline and save the results by setting the parameters ahead
 of time in a text file. To do this download [this example](https://github.com/luquelab/pyCapsid/blob/main/docs/tutorial/config_simple.toml) 
 from our GitHub or copy and paste the following into a text editor and save the output as 'config.toml'
