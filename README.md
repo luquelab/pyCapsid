@@ -19,7 +19,9 @@ conda install -c luque_lab -c conda-forge pycapsid
 Documentation is provided on our github pages site: [https://luquelab.github.io/pyCapsid/](https://luquelab.github.io/pyCapsid/)
 
 ## Examples
-An example notebook is provided in the [notebooks folder](https://github.com/luquelab/pyCapsid/tree/main/notebooks).
+We recommend using this [Colab notebook](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb)
+as the simplest way to use pyCapsid.
+Example notebooks are provided in the [notebooks folder](https://github.com/luquelab/pyCapsid/tree/main/notebooks).
 An accompanying tutorial is provided in the documentation.
 
 ## Github Repository
