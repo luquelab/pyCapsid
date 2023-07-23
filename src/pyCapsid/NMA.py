@@ -1,6 +1,6 @@
 """Module with functions for calculating the normal modes and frequencies of a given hessian. Eigenvalue/vector functions.
 Also contains functions for calculating mechanical properties from NMA results. I.e. squared fluctuations, distance
-fluctuations, compressibility, collectivity etc."""
+fluctuations, etc."""
 import numba as nb
 import numpy as np
 
