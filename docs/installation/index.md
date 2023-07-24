@@ -48,8 +48,8 @@ For the highest quality visualization of the results we recommend downloading an
 
 pyCapsid has been tested on ChimeraX versions 1.5 and 1.6.
 
-# Visualization in jupyter notebook with NGLView
-To install the necessary packages for visualizing the results in a jupyter notebook, 
+# Visualization in Jupyter Notebook with NGLView
+To install the necessary packages for visualizing the results in a Jupyter notebook, 
 Via pip:
 ~~~~
 pip install jupyterlab ipywidgets==7.7.2 nglview
