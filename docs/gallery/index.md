@@ -7,6 +7,7 @@ nav_order: 4
 # Results Gallery
 
 ## Results from the application of pyCapsid to a set of HK97-fold protein shells. 
+Data covering the application of pyCapsid to this set of HK97-fold protein shells is provided [here.](https://github.com/luquelab/pyCapsid/blob/main/results/pyCapsid_hk97_data_cbrown_thesis.csv)
 
 ![myimg](figure_complete_capsid_gallery.png){: width="1800"}
 
