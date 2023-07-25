@@ -1,0 +1,27 @@
+﻿PDB,Capsid,Abbreviation,Residues,MCPs,CPs,Reinforcement,Resolution,T-number,Spring_constant,Spring_stderr,Spring_R^2,CC_uENM,CC_bGNM,CC_ANM,Clusters,Outliers,CQS,Icos_class,Memory,Runtime,pyCap_runtime,ProDy_runtime,pyCap_memory,ProDy_memory
+2e0z,Pyrococcus furiosus VLP,P furio enc,42000,180,180,,3.6,3,0.64,0.08,0.965,0.764,0.56,0.7,32,,350,3 H,1880,400,182,904,1340,640
+2ft1,Escherichia coli bacteriophage Hong Kong 97 head II,Phage HK97 Head II,115140,420,420,,3.9,7,0.65,0.04,,0.36,,,72,60,4.2,,7700,11884,,,,
+3j40,Salmonella anatum bacteriophage epsilon15,Phage epsilon15,187320,420,840,2-fold Axis,4.5,7,17.7,0.06,,0.38,,0.378,282,,5.9,Rh*,16300,24032,3940,8920,1300,740
+3j4u,Bordetella baceriophage BPP-1,Phage BPP-1,195240,420,840,2-fold Axis,3.5,7,8.8,0.3,,0.476,,0.431,210,,8.6,9.33 TD,25620,19485,,,,
+3j7v,Escherichia coli bacteriophage T7 procapsid,Phage T7 procap,126720,420,420,,4.6,7,5.7,0.06,,0.1,,,132,60,14.5,,12304,13302,,,,
+3j7w,Escherichia coli bacteriophage T7 mature capsid,Phage T7,144060,420,420,,3.6,7,4.15,0.13,,0.36,,0.275,72,,5.7,,15472,21428,1395,5690,2430,1270
+5l35,Shigella flexneri bacteriophage Sf6,Phage SF6,177240,420,420,,2.89,7,2.6,0.07,,0.46,,0.434,72,,7.3,7 H,19626,52608,,,,
+5uu5,Salmonella bacteriophage P22 virion,Phage P22,180600,420,420,,3.3,7,11.7,0.4,,0.548,,0.495,72,,4.2,7 H,19842,14639,3776,7874,5600,2200
+5vf3,Escherichia coli bacteriophage T4 isometric capsid,Phage T4 isometric,406860,780,1560,3-fold Axis*,3.3,13,19.6,0.2,,0.34,,,492,,3.3,,84000,128000,,,,
+5zap,Herpes simplex virus type 2 B capsid,HSV-2 B capsid,1687980,960,1920,3-fold Axis*,3.1,16,,,,0.46,,,482,,10,,,,,,,
+6b23,Staphylococcus aureus pathogenicity island 1 procapsid,SaPI1 procap,73920,240,240,,3.8,4,6.1,0.7,,0.652,,,240,60,26.4,,6181,4343,625,3639,5830,5830
+6c21,Staphylococcus aureus phage 80alpha mature capsid,Phage 80alpha,115500,420,420,,5.2,7,4.3,0.3,,0.225,,,140,,3.5,,9260,8346,,,,
+6i9e,Thermus thermophilus bacteriophage P23-45 empty capsid,Phage P23-45 ,233100,420,840,3-fold Axis,3.74,7,2,0.15,,0.45,,,140,,6.3,7 HD,46000,31000,,,,
+6iat,Staphylococcus aureus phage P68,Phage P68,104760,240,240,,3.3,4,19.7,0.5,0.98,0.78,,-0.06,12,,4.4,1*,9200,3600,2098,3216,13100,3160
+6j3q,Cyanophage Microcystis wesenbergii Mic1,Phage Mic 1,344880,780,1560,2-fold Axis,3.53,13,0.11,0.01,,0.54,,0.4,390,,4.8,17.33 T,38300,86800,,,,
+6nj8,Quasibacillus thermotolerans encapsulin,Q thermo enc,67740,240,240,,3.85,4,0.47,0.06,0.96,0.348,0.54,0.28,42,,6.7,4 H,4317.5,1180,624,1712,,
+6xgq,Salmonella serovars bacteriophage YSD1 capsid,Phage YSD1,199080,420,840,3-fold Axis,3.8,7,3.5,0.35,,0.244,,0.244,212,,5.1,9.33 T,25100,20304,,,,
+7dn2,Helicobacter pylori bacteriophage KHP30,Phage KHP30,266460,540,1080,3-fold Axis,2.7,9,9.3,0.18,,0.76,,,272,,7.2,12 T,45355,52528,,,,
+7eel,Cyanophage Pam1 capsid,Phage Pam1,212100,420,840,3-fold & 2-fold Axis,3.26,7,0.2,0.004,,0.63,,0.5,212,,9.3,,44000,28000,,,,
+7f2p,Helicobacter pylori bacteriophage KHP40,Phage KHP40,265200,540,1080,3-fold Axis,3,9,7.4,0.17,,0.83,,,272,,7.6,,44781,39339,,,,
+7f38,Cyanophage A-1(L),Phage A-1(L),195420,540,540,,3.35,9,5.7,0.5,,0.42,,,540,,4.2,,21000,26000,,,,
+7kmx,Virbio myoviridae phage XM1,Phage XM1,190680,420,840,3-fold Axis,3.2,7,6.1,0.57,,0.3,,,212,,14,9.33 T,21000,42607,,,,
+7kq5,Thermatoga maritima encapsulin,T marit enc,15900,60,60,,2,1,2,0.3,0.975,0.68,0.666,0.088,120,,4.9,1 H,840,120,109,231,,
+7s20,Myxococcus xanthus encapsulin 1,M xant enc 1,49860,180,180,,3.4,3,0.34,0.04,0.954,0.63,0.64,,12,,4.4,1*,3200,1100,610,1230,,
+7s21,Myxococcus xanthus encapsulin 2,M xant enc 2,15900,60,60,,3.4,1,0.38,0.07,0.975,0.83,0.8,,120,,5,1 H,760,140,106,206,,
+EMD-21123,Actinobacteriophage Patience,Phage Patience,268020,420,1260,3-fold Axis,2.4,7,4.1,0.3,,0.875,,,482,,6.9,9.33 T,49618,32662,,,,

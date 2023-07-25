@@ -1,4 +1,4 @@
-# Descritption
+# Description
 This folder contains the files associated with the performance analysis of pyCapsid
 
 ## Files
