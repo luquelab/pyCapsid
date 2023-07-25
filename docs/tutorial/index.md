@@ -37,13 +37,13 @@ of the lowest-frequency non-degenerate mode, start a new ChimeraX session and fo
 ### Colab output example
 An example of what the completed pyCapsid_report.md downloaded by the notebook will look like is shown [here](https://github.com/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_report_example/pyCapsid_report.md).
 
-# Locally via jupyter notebook
+# Locally via Jupyter Notebook
 This tutorial covers the step by step use pyCapsid to identify the quasi-rigid subunits of an example capsid. This tutorial also comes
-in the form of a jupyter notebook for those who wish to run it locally.
+in the form of a Jupyter notebook for those who wish to run it locally.
 The example notebook is also provided for local use in the [notebooks folder](https://github.com/luquelab/pyCapsid/tree/main/notebooks).
 
 Once the package and other dependencies are [installed](https://luquelab.github.io/pyCapsid/installation/), download the 
-notebook and run the following command in its directory to launch jupyter notebook.
+notebook and run the following command in its directory to launch Jupyter Notebook.
 
 ~~~~
 jupyter notebook
@@ -123,8 +123,8 @@ chimeraxViz(residue_scores, pdb, chimerax_path='C:\\Program Files\\ChimeraX\\bin
 
 ![capsid_score_chx](4oq8_score_cx.png){: width="500"}
 
-## Visualize in jupyter notebook with nglview
-You can visualize the results in a jupyter notebook with nglview. The following function returns an NGLView view with the 
+## Visualize in Jupyter Notebook with nglview
+You can visualize the results in a Jupyter notebook with nglview. The following function returns an NGLView view with the 
 results colored based on cluster. See the nglview documentation for further info on how to create high quality images.
 (http://nglviewer.org/nglview/release/v2.7.7/index.html)
 
