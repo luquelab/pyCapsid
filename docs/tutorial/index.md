@@ -31,7 +31,7 @@ runscript browse
 Then, inside the browser, navigate in the `pyCapsid_report/ChimeraX/` folder and open the script `chimerax_script_colab.py`. 
 This will generate a 3D model of the protein complex coloring the quasi-rigid domains in ChimeraX and store snapshots in the folder
 `pyCapsid_report/figures/structures/` that will be visible in the `.html` and `.md` reports. To generate an animation of the dynamics
-of the lowest-frequency non-degenerate mode, start a new ChimeraX session and follow the same steps above, but opening instead the script `chimerax_script_animate_mode.py`
+of the lowest-frequency non-degenerate mode, start a new ChimeraX session and follow the same steps above, but opening instead the script `chimerax_script_animate_mode.py`.
 6. Optionally, read the section [Generate advanced analysis](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb#scrollTo=Generate_advanced_analysis) to learn how to obtain advanced analyses using results stored during the execution of the pyCapsid pipeline.
 
 ### Colab output example
