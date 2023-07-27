@@ -1,6 +1,6 @@
 [PDB]
 pdb = '4oq8' # PDB ID of structure
-save_all_path = './4oq8/' # where to save the results
+save_all_path = './4oq8' # where to save the results
 
 [CG]
 preset = 'U-ENM' # Model Preset To Use

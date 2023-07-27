@@ -198,7 +198,7 @@ view_scores.download_image(factor=2)
 
 # Running pyCapsid using a simple config.toml file
 This tutorial also has a corresponding [example notebook](https://github.com/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_config_example.ipynb).
-This is a simpler and faster way to run the entire pyCapsid pipeline and save the results by setting the parameters ahead
+This is a simpler and faster way to run the entire pyCapsid pipeline as outlined in the colab notebook and save the results by setting the parameters ahead
 of time in a text file. To do this download [this example](https://github.com/luquelab/pyCapsid/blob/main/docs/tutorial/config_simple.toml) 
 from our GitHub or copy and paste the following into a text editor and save the output as 'config.toml'
 
@@ -207,7 +207,7 @@ from our GitHub or copy and paste the following into a text editor and save the 
 ```toml
 [PDB]
 pdb = '4oq8' # PDB ID of structure
-save_all_path = './4oq8/' # where to save the results
+save_all_path = './4oq8' # where to save the results
 
 [CG]
 preset = 'U-ENM' # Model Preset To Use
@@ -235,8 +235,8 @@ specified settings. Make sure to either run python in the same directory as the 
 path to the file in the python code.
 
 ```python
-from pyCapsid import run_capsid
-run_capsid('config.toml')
+from pyCapsid import run_capsid_report
+run_capsid_report('config.toml')
 ```
 
 ### A more complex config.toml
@@ -247,21 +247,21 @@ pdb = '4oq8' # PDB ID of structure
 pdbx = false
 local = false
 save_full_pdb = true
-save_all_path = './4oq8/' # will be prepended to all other save_paths
-save_pdb_path = 'pdb/'
+save_all_path = './4oq8' # will be prepended to all other save_paths
+save_pdb_path = '/'
 
 [CG]
 preset = 'U-ENM'
 save_hessian = true
 save_kirchhoff = true
-save_cg_path = 'matrices/'
+save_cg_path = '/'
 
 [NMA]
 n_modes = 200
 eigen_method = 'eigsh'
 shift_invert = true
 save_modes = true
-save_mode_path = 'modes/'
+save_mode_path = '/'
 
 [b_factors]
 fit_modes = true
@@ -269,7 +269,7 @@ plot_modes = false
 force_ico = true
 ico_tol = 0.002
 save_bfactors = true
-save_bfactors_path = 'bfactors/'
+save_bfactors_path = '/'
 
 
 [QRC]
@@ -280,7 +280,7 @@ cluster_method = 'discretize'
 score_method = 'median'
 return_type = 'final'
 save_results =  true
-save_results_path =  'results/'
+save_results_path =  '/'
 
 [VIS]
 chimerax_path = 'C:\Program Files\ChimeraX\bin\ChimeraX.exe'
