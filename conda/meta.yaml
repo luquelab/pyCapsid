@@ -10,7 +10,7 @@
 
 package:
   name: pycapsid
-  version: 0.5.2
+  version: 0.5.3
 
 source:
   path: ..
@@ -57,6 +57,7 @@ requirements:
     - numba>=0.57
     - statsmodels
     - toml
+    - markdown
 
 test:
   # Some packages might need a `test/commands` key to check CLI.
