@@ -248,7 +248,7 @@ pdbx = false
 local = false
 save_full_pdb = true
 save_all_path = './4oq8' # will be prepended to all other save_paths
-save_pdb_path = 'pdb/'
+save_pdb_path = '/'
 
 [CG]
 preset = 'U-ENM'
