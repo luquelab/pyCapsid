@@ -38,9 +38,6 @@ def create_directories(params_dict):
 
 
 
-
-
-
 def run_capsid(params_path):
     from timeit import default_timer as timer
     pycap_start = timer()
