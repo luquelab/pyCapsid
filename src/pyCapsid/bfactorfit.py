@@ -96,7 +96,7 @@ def fluctModes(evals, evecs, bfactors, is3d, isIco):
     return coeffs, ico_devs
 
 
-def fitBfactors(evals, evecs, bfactors, is3d, isIco=True, fitModes=False, plotModes=False, forceIco=False, icotol=0.002):
+def fitBfactors(evals, evecs, bfactors, is3d, isIco=True, fitModes=False, plotModes=False, forceIco=False, icotol=0.002, save_path='./'):
     """
 
     :param evals:
@@ -112,10 +112,10 @@ def fitBfactors(evals, evecs, bfactors, is3d, isIco=True, fitModes=False, plotMo
     n_modes = evals.shape[0]
     if plotModes:
         coeffs, ico_devs = fluctModes(evals, evecs, bfactors, is3d, isIco)
-        plotByMode(np.arange(1, n_modes), coeffs, 'CC')
+        plotByMode(np.arange(1, n_modes), coeffs, 'CC', save_path=save_path)
         if fitModes:
             if forceIco:
-                plotByMode(np.arange(1, n_modes), ico_devs, 'Icosahedral Deviation')
+                plotByMode(np.arange(1, n_modes), ico_devs, 'Icosahedral Deviation', save_path=save_path)
                 icoI = np.nonzero(np.array(ico_devs) < icotol)
                 n_m = np.argmax(np.array(coeffs)[icoI])
                 coeff = np.array(coeffs)[icoI][n_m]
@@ -149,7 +149,7 @@ def fitBfactors(evals, evecs, bfactors, is3d, isIco=True, fitModes=False, plotMo
     return coeff, k, intercept, bfactors_predicted, ci, pv, ico_dev, n_m
 
 
-def plotByMode(mode_indices, data, datalabel):
+def plotByMode(mode_indices, data, datalabel, save_path='./'):
     """
 
     :param mode_indices:
@@ -165,12 +165,12 @@ def plotByMode(mode_indices, data, datalabel):
     ax.set_ylabel(datalabel)
     fig.suptitle(datalabel + ' vs number of low frequency modes')
     plt.show()
-    fig.savefig(f'{datalabel}_by_mode.svg')
-    np.savez(f'{datalabel}_by_mode.npz', mode_indices = mode_indices, data = data)
+    fig.savefig(f'{save_path}{datalabel}_by_mode.svg')
+    np.savez(f'{save_path}{datalabel}_by_mode.npz', mode_indices = mode_indices, data = data)
 
 
 def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotModes=False, forceIco=True, icotol=0.002,
-                    save=True, save_path='bfactors.png', isIco=False):
+                    save=True, save_path='./', isIco=False):
     """
 
     :param isIco:
@@ -187,7 +187,7 @@ def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotM
     """
     coeff, k, intercept, bfactors_predicted, ci, pv, ico_dev, nmodes = fitBfactors(evals, evecs, bfactors, is3d, isIco,
                                                                                    fitModes, plotModes, forceIco,
-                                                                                   icotol)
+                                                                                   icotol, save_path=save_path)
 
     print(f'Number of low-frequency modes used: {nmodes}')
     k_ci = np.abs(ci[0][0] - ci[0][1])
@@ -202,7 +202,7 @@ def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotM
     gamma_ci = np.abs(ci[0][0] - ci[0][1])
     print(f'Estimated spring constant gamma of ENM springs: {gamma:.2e}±{gamma_ci:.2e}')
 
-    file = './b_factors.npz'
+    file = f'{save_path}b_factors.npz'
     print('Saving B-factor results in' + file)
     residue_numbers = np.arange(1, bfactors.shape[0] + 1)
     np.savez_compressed(file, bfactors_predicted=bfactors_predicted, bfactors_experimental=bfactors, CC=coeff, gamma=gamma, gamma_ci=gamma_ci, k=k, k_ci=k_ci, n_modes=nmodes, n_asym=int(bfactors.shape[0] / 60), residue_numbers=residue_numbers)
