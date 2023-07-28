@@ -16,6 +16,8 @@ fit_modes = true # Whether to select the number of modes used to maximize correl
 [QRC]
 
 [VIS]
+method = 'chimerax'
 chimerax_path = 'C:\Program Files\ChimeraX\bin\ChimeraX.exe'
 
 [plotting]
+
