@@ -96,7 +96,7 @@ parser = argparse.ArgumentParser(description='ChimeraX script for visualization 
 parser.add_argument('-report_dir', help='Location of pyCapsid report chimerax directory. Only needed if this script is in a separate directory.', default=None, required=False)
 parser.add_argument('-nc', help='Number of clusters in the corresponding results you want to visualize', default=None, required=False)
 parser.add_argument('-remote', help='Whether to use a remote structure from the PDB database', default=None, required=False)
-parser.add_argument('-mode', help='Whether to end on the cluster results or quality score results for further visualization.', default='full', required=False)
+parser.add_argument('-mode', help='Whether to end on one visualization or the other, or create a duplicate mode for the cluster results and quality score results for further visualization. Options are: cluster, score, both', default='cluster', required=False)
 parser.add_argument('-pdb', help='If remote is True or none, PDBID of the target structure. Otherwise, the local filename of the target structure', default=None, required=False)
 args = vars(parser.parse_args())
 
@@ -135,6 +135,8 @@ else:
     n_clusters = int(args['nc'])
     nc_filename = f'_{n_clusters}'
 
+vis_mode = args['mode']
+
 run(session, 'set bg white')
 run(session, 'graphics silhouettes true')
 
@@ -165,6 +167,8 @@ else:
 run(session, 'sel protein')
 run(session, 'del ~sel')
 run(session, 'sel clear')
+if vis_mode == 'both':
+    run(session, f'combine #1 close true modelId 1 name {pdb}_copy')
 atoms = all_objects(session).atoms  # getting atom list
 coords = atoms.scene_coords  # getting atom coords
 modelCenter = coords.mean(axis=0)  # calculate center of mass
@@ -184,6 +188,7 @@ coords = atoms.scene_coords
 radius = norm(coords, axis=1).max()  # calculate the norms of the x coordinates, and then choose the maximum value
 print("radius_est: ", radius)
 
+
 results = np.load(f'{pdb}_final_results_full.npz')
 labels = results['labels']
 nc_range = results['nc_range']
@@ -199,7 +204,8 @@ score = scores[ind]
 
 rgba_scores = getRGBA(score, rwb_scale='True')
 rgba_clusters = getRGBA(labels, rwb_scale='False')
-print(rgba_scores)
+
+# Score visualization
 residues = atoms.unique_residues
 cx_nr = len(residues)
 enm_nr = rgba_scores.shape[0]
@@ -207,24 +213,38 @@ enm_nr = rgba_scores.shape[0]
 print('# of residues:', cx_nr)
 print('# of ENM residues:', enm_nr)
 
+if vis_mode == 'score':
+    rgba_one = rgba_clusters
+    rgba_two = rgba_scores
+elif vis_mode == 'clusters':
+    rgba_one = rgba_scores
+    rgba_two = rgba_clusters
+else:
+    rgba_one = rgba_scores
+    rgba_two = rgba_clusters
+
 for i in range(cx_nr):
     res = residues[i]
-    res.ribbon_color = rgba_scores[i, :]
+    res.ribbon_color = rgba_one[i, :]
     ats = res.atoms
     for at in ats:
-        at.color = rgba_scores[i, :]
+        at.color = rgba_one[i, :]
 
 run(session, f'save ../figures/structures/{pdb}_residue_cluster_scores{nc_filename}.png')
 
-print('# of residues:', cx_nr)
-print('# of ENM residues:', enm_nr)
+# Cluster visualization
+if vis_mode == 'both':
+    run(session, 'combine #1 name scores')
+    run(session, 'hide #2 models')
 
+# atoms_2 = session.models[1].atoms
+# residues_2 = atoms_2.unique_residues
 for i in range(cx_nr):
     res = residues[i]
-    res.ribbon_color = rgba_clusters[i, :]
+    res.ribbon_color = rgba_two[i, :]
     ats = res.atoms
     for at in ats:
-        at.color = rgba_clusters[i, :]
+        at.color = rgba_two[i, :]
 
 run(session, f'save ../figures/structures/{pdb}_highest_quality_clusters{nc_filename}.png')
 
