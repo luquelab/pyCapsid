@@ -265,7 +265,7 @@ save_mode_path = '/'
 
 [b_factors]
 fit_modes = true
-plot_modes = false
+plot_modes = true
 force_ico = true
 ico_tol = 0.002
 save_bfactors = true
