@@ -1,5 +1,6 @@
 # Colormap generation taken from stackexchange
 # https://stackoverflow.com/questions/42697933/colormap-with-maximum-distinguishable-colours
+
 def generate_colormap(number_of_distinct_colors: int = 80):
     import math
 
@@ -73,9 +74,12 @@ def getRGBA(values, rwb_scale):
     return rgba
 
 from chimerax.core.commands import *
+from chimerax.core import objects
 from chimerax.std_commands import *
 from chimerax.core.commands import all_objects
 from chimerax.core.commands import run
+from chimerax.std_commands import show
+from chimerax.std_commands import hide
 from chimerax.atomic.molsurf import MolecularSurface
 from chimerax.atomic import *
 import numpy as np
@@ -97,6 +101,7 @@ parser.add_argument('-report_dir', help='Location of pyCapsid report chimerax di
 parser.add_argument('-nc', help='Number of clusters in the corresponding results you want to visualize', default=None, required=False)
 parser.add_argument('-remote', help='Whether to use a remote structure from the PDB database', default=None, required=False)
 parser.add_argument('-mode', help='Whether to end on one visualization or the other, or create a duplicate model for the cluster results and quality score results for further visualization. Options are: cluster, score, both', default='cluster', required=False)
+parser.add_argument('-allClusters', help='Whether to create an individual snapshot of each cluster', default=False, required=False)
 parser.add_argument('-pdb', help='If remote is True or none, PDBID of the target structure. Otherwise, the local filename of the target structure', default=None, required=False)
 args = vars(parser.parse_args())
 
@@ -136,6 +141,7 @@ else:
     nc_filename = f'_{n_clusters}'
 
 vis_mode = args['mode']
+all_clusters = args['allClusters']
 
 run(session, 'set bg white')
 run(session, 'graphics silhouettes true')
@@ -143,7 +149,7 @@ run(session, 'graphics silhouettes true')
 if remote=='True':
     run(session, f'open {pdb}')
     run(session, 'view orient')
-    run(session, 'lighting full')
+    run(session, 'lighting soft')
     run(session, 'hide atoms')
     run(session, 'show cartoons')
     run(session, f'save ../figures/structures/{pdb}_asymmetric_unit.png')
@@ -157,7 +163,7 @@ if remote=='True':
 else:
     run(session, f'open {pdb}')
     run(session, 'view orient')
-    run(session, 'lighting full')
+    run(session, 'lighting soft')
     run(session, 'hide atoms')
     run(session, 'show cartoons')
     run(session, f'save ../figures/structures/{pdb}_asymmetric_unit.png')
@@ -216,21 +222,63 @@ print('# of ENM residues:', enm_nr)
 if vis_mode == 'score':
     rgba_one = rgba_clusters
     rgba_two = rgba_scores
+    filename_1 = 'highest_quality_clusters'
+    filename_2 = 'residue_cluster_scores'
 elif vis_mode == 'clusters':
     rgba_one = rgba_scores
     rgba_two = rgba_clusters
+    filename_2 = 'highest_quality_clusters'
+    filename_1 = 'residue_cluster_scores'
 else:
     rgba_one = rgba_scores
     rgba_two = rgba_clusters
+    filename_2 = 'highest_quality_clusters'
+    filename_1 = 'residue_cluster_scores'
 
-for i in range(cx_nr):
-    res = residues[i]
-    res.ribbon_color = rgba_one[i, :]
-    ats = res.atoms
-    for at in ats:
-        at.color = rgba_one[i, :]
 
-run(session, f'save ../figures/structures/{pdb}_residue_cluster_scores{nc_filename}.png')
+if all_clusters:
+    # Color clusters normally
+    for i in range(cx_nr):
+        res = residues[i]
+        res.ribbon_color = rgba_one[i, :]
+        ats = res.atoms
+        for at in ats:
+            at.color = rgba_one[i, :]
+    # hide everything
+    run(session, 'hide all ribbons')
+    # Show each cluster individually
+    # Get indices of each cluster
+    label_nums = np.unique(labels)
+    clusters_residues = []
+    for num in label_nums:
+        c_index = np.where(labels == num)[0]
+        cluster_residues = []
+        # Gather cluster residues in a list
+        for i in c_index:
+            cluster_residues.append(residues[i])
+        clusters_residues.append(cluster_residues)
+    #print(cluster_residues)
+    for i, clust in enumerate(clusters_residues):
+        cluster_obj = objects.Objects()
+        for residue_obj in clust:
+            cluster_obj.add_atoms(residue_obj.atoms)
+        show.show(session, objects=cluster_obj, target={'models', 'cartoons'})
+        #select.select(session, cluster_obj, residues=True)
+        #run(session, 'show sel ribbons')
+        run(session, 'view orient')
+        run(session, f'save ../figures/structures/{pdb}_{filename_1}{nc_filename}_cluster_{i}.png')
+        hide.hide(session, cluster_obj, target={'models', 'cartoons'})
+    run(session, 'show all cartoons')
+else:
+    for i in range(cx_nr):
+        res = residues[i]
+        res.ribbon_color = rgba_one[i, :]
+        ats = res.atoms
+        for at in ats:
+            at.color = rgba_one[i, :]
+
+run(session, 'view orient')
+run(session, f'save ../figures/structures/{pdb}_{filename_1}{nc_filename}.png')
 
 # Cluster visualization
 if vis_mode == 'both':
@@ -239,12 +287,46 @@ if vis_mode == 'both':
 
 # atoms_2 = session.models[1].atoms
 # residues_2 = atoms_2.unique_residues
-for i in range(cx_nr):
-    res = residues[i]
-    res.ribbon_color = rgba_two[i, :]
-    ats = res.atoms
-    for at in ats:
-        at.color = rgba_two[i, :]
+if all_clusters:
+    for i in range(cx_nr):
+        res = residues[i]
+        res.ribbon_color = rgba_two[i, :]
+        ats = res.atoms
+        for at in ats:
+            at.color = rgba_two[i, :]
+    # hide everything
+    run(session, 'hide all ribbons')
+    # Show each cluster individually
+    # Get indices of each cluster
+    label_nums = np.unique(labels)
+    clusters_residues = []
+    for num in label_nums:
+        c_index = np.where(labels == num)[0]
+        cluster_residues = []
+        # Gather cluster residues in a list
+        for i in c_index:
+            cluster_residues.append(residues[i])
+        clusters_residues.append(cluster_residues)
+    # print(cluster_residues)
+    for i, clust in enumerate(clusters_residues):
+        cluster_obj = objects.Objects()
+        for residue_obj in clust:
+            cluster_obj.add_atoms(residue_obj.atoms)
+        show.show(session, objects=cluster_obj, target={'models', 'cartoons'})
+        # select.select(session, cluster_obj, residues=True)
+        # run(session, 'show sel ribbons')
+        run(session, 'view orient')
+        run(session, f'save ../figures/structures/{pdb}_{filename_2}{nc_filename}_cluster_{i}.png')
+        hide.hide(session, cluster_obj, target={'models', 'cartoons'})
+    run(session, 'show all cartoons')
+else:
+    for i in range(cx_nr):
+        res = residues[i]
+        res.ribbon_color = rgba_two[i, :]
+        ats = res.atoms
+        for at in ats:
+            at.color = rgba_two[i, :]
 
-run(session, f'save ../figures/structures/{pdb}_highest_quality_clusters{nc_filename}.png')
+run(session, 'view orient')
+run(session, f'save ../figures/structures/{pdb}_{filename_2}{nc_filename}.png')
 
