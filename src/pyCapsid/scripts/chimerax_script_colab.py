@@ -101,7 +101,9 @@ parser.add_argument('-report_dir', help='Location of pyCapsid report chimerax di
 parser.add_argument('-nc', help='Number of clusters in the corresponding results you want to visualize', default=None, required=False)
 parser.add_argument('-remote', help='Whether to use a remote structure from the PDB database', default=None, required=False)
 parser.add_argument('-mode', help='Whether to end on one visualization or the other, or create a duplicate model for the cluster results and quality score results for further visualization. Options are: cluster, score, both', default='cluster', required=False)
+parser.add_argument('-addClusterIDs', help='Whether to add custom cluster_id attr to each residue', default=False, required=False)
 parser.add_argument('-allClusters', help='Whether to create an individual snapshot of each cluster', default=False, required=False)
+parser.add_argument('-clusterChains', help='Whether to change chain_ids to reflect clusters', default=False, required=False)
 parser.add_argument('-pdb', help='If remote is True or none, PDBID of the target structure. Otherwise, the local filename of the target structure', default=None, required=False)
 args = vars(parser.parse_args())
 
@@ -142,6 +144,8 @@ else:
 
 vis_mode = args['mode']
 all_clusters = args['allClusters']
+cluster_models = args['clusterChains']
+add_cluster_id = args['addClusterIDs']
 
 run(session, 'set bg white')
 run(session, 'graphics silhouettes true')
@@ -208,6 +212,8 @@ print(f'Visualizing cluster results of {pdb} for {n_clusters} clusters')
 labels = labels[ind]
 score = scores[ind]
 
+
+
 rgba_scores = getRGBA(score, rwb_scale='True')
 rgba_clusters = getRGBA(labels, rwb_scale='False')
 
@@ -218,6 +224,24 @@ enm_nr = rgba_scores.shape[0]
 
 print('# of residues:', cx_nr)
 print('# of ENM residues:', enm_nr)
+
+if add_cluster_id:
+    label_nums = np.unique(labels)
+    clusters_residues = []
+    for num in label_nums:
+        c_index = np.where(labels == num)[0]
+        cluster_residues = []
+        # Gather cluster residues in a list
+        for i in c_index:
+            cluster_residues.append(residues[i])
+        clusters_residues.append(cluster_residues)
+    for i, clust in enumerate(clusters_residues):
+        cluster_obj = objects.Objects()
+        for residue_obj in clust:
+            cluster_obj.add_atoms(residue_obj.atoms)
+        select.select(session, cluster_obj, residues=True)
+        run(session, f'setattr sel residues cluster_id {i} create true')
+
 
 if vis_mode == 'score':
     rgba_one = rgba_clusters
@@ -263,8 +287,9 @@ if all_clusters:
         for residue_obj in clust:
             cluster_obj.add_atoms(residue_obj.atoms)
         show.show(session, objects=cluster_obj, target={'models', 'cartoons'})
-        #select.select(session, cluster_obj, residues=True)
-        #run(session, 'show sel ribbons')
+        if cluster_models:
+            select.select(session, cluster_obj, residues=True)
+            run(session, f'changechains sel clust_{i}')
         run(session, 'view orient')
         run(session, f'save ../figures/structures/{pdb}_{filename_1}{nc_filename}_cluster_{i}.png')
         hide.hide(session, cluster_obj, target={'models', 'cartoons'})
