@@ -292,6 +292,7 @@ if all_clusters:
         run(session, f'save ../figures/structures/{pdb}_{filename_1}{nc_filename}_cluster_{i}.png')
         hide.hide(session, cluster_obj, target={'models', 'cartoons'})
     run(session, 'show all cartoons')
+    run(session, 'select clear')
 else:
     for i in range(cx_nr):
         res = residues[i]
@@ -308,8 +309,7 @@ if vis_mode == 'both':
     run(session, 'combine #1 name scores')
     run(session, 'hide #2 models')
 
-# atoms_2 = session.models[1].atoms
-# residues_2 = atoms_2.unique_residues
+
 if all_clusters:
     for i in range(cx_nr):
         res = residues[i]
