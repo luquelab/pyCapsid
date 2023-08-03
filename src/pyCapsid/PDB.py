@@ -1,7 +1,7 @@
 """Module with functions for downloading and dealing with PDB/PDBx files."""
 
 
-def getCapsid(pdb, save_pdb_path='./', pdbx=False, local=False, save_full_pdb=False, chains=None, chains_clust=None, is_ico=False):
+def getCapsid(pdb, save_pdb_path='./', pdbx=False, local=False, save_full_pdb=False, assembly_id=1, chains=None, chains_clust=None, is_ico=False):
     """Downloads and opens molecular data from a PDB entry or loads data from a local file.
 
     :param pdb: PDB id of entry to download. Can also be the name of a local file
@@ -27,14 +27,14 @@ def getCapsid(pdb, save_pdb_path='./', pdbx=False, local=False, save_full_pdb=Fa
         filename = downloadPDB(pdb, save_pdb_path, pdbx)
 
     if pdbx:
-        capsid, calphas, asym, coords, bfactors, chain_starts, title = loadPDBx(filename, pdb, save_full_pdb)
+        capsid, calphas, asym, coords, bfactors, chain_starts, title = loadPDBx(filename, pdb, save_full_pdb, assembly_id=assembly_id)
     else:
         try:
-            capsid, calphas, asym, coords, bfactors, chain_starts, title = loadPDB(filename, pdb, save_full_pdb)
+            capsid, calphas, asym, coords, bfactors, chain_starts, title = loadPDB(filename, pdb, save_full_pdb, assembly_id=assembly_id)
         except:
             print('no .pdb file found. Checking for pdbx/mmcif')
             print('Add pdbx=True if you know you will be fetching a pdbx/mmcif file')
-            capsid, calphas, asym, coords, bfactors, chain_starts, title = loadPDBx(filename, pdb, save_full_pdb)
+            capsid, calphas, asym, coords, bfactors, chain_starts, title = loadPDBx(filename, pdb, save_full_pdb, assembly_id=assembly_id)
 
     n_res = len(calphas)
     print(f'# of residues: {n_res}')
@@ -62,7 +62,7 @@ def downloadPDB(pdb, dir='.', pdbx=False):
     return filename
 
 
-def loadPDBx(filename, pdb, save):
+def loadPDBx(filename, pdb, save, assembly_id=1):
     """Loads PDBx data from a file
 
     :param filename: Name of local file
@@ -76,8 +76,12 @@ def loadPDBx(filename, pdb, save):
 
     pdbx_file = pdbx.PDBxFile()
     pdbx_file.read(filename)
-    capsid = pdbx.get_assembly(pdbx_file, assembly_id="1", model=1, extra_fields=['b_factor'])
-    asym = pdbx.get_structure(pdbx_file, model=1, extra_fields=['b_factor'])
+    if assembly_id is not None:
+        capsid = pdbx.get_assembly(pdbx_file, assembly_id=str(assembly_id), model=1, extra_fields=['b_factor'])
+        asym = pdbx.get_structure(pdbx_file, model=1, extra_fields=['b_factor'])
+    else:
+        asym = pdbx.get_structure(pdbx_file, model=1, extra_fields=['b_factor'])
+        capsid = asym
 
     capsid = capsid[struc.filter_amino_acids(capsid)]
     title = pdb  # pdbx_file.get_category('pdbx_database_related')['details']
@@ -101,7 +105,7 @@ def loadPDBx(filename, pdb, save):
 
     return capsid, calphas, asym, coords, calphas.b_factor, chain_starts, title
 
-def loadPDB(filename, pdb_id, save):
+def loadPDB(filename, pdb_id, save, assembly_id=1):
     """Loads PDBx data from a file
 
     :param filename: Name of local file
@@ -115,8 +119,12 @@ def loadPDB(filename, pdb_id, save):
 
     pdb_file = pdb.PDBFile()
     pdb_file.read(filename)
-    capsid = pdb.get_assembly(pdb_file, assembly_id="1", model=1, extra_fields=['b_factor'])
-    asym = pdb.get_structure(pdb_file, model=1, extra_fields=['b_factor'])
+    if assembly_id is not None:
+        capsid = pdb.get_assembly(pdb_file, assembly_id=str(assembly_id), model=1, extra_fields=['b_factor'])
+        asym = pdb.get_structure(pdb_file, model=1, extra_fields=['b_factor'])
+    else:
+        asym = pdb.get_structure(pdb_file, model=1, extra_fields=['b_factor'])
+        capsid = asym
 
     title = pdb_id  # pdbx_file.get_category('pdbx_database_related')['details']
 
@@ -126,7 +134,6 @@ def loadPDB(filename, pdb_id, save):
     asym = asym[struc.filter_amino_acids(asym)]
     print("Number of protein chains in full structure:", struc.get_chain_count(capsid))
     print("Number of protein chains in asymmetric unit:", struc.get_chain_count(asym))
-
 
     calphas = capsid[capsid.atom_name == 'CA']
     coords = calphas.coord
