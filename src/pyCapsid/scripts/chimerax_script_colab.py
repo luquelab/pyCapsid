@@ -287,9 +287,6 @@ if all_clusters:
         for residue_obj in clust:
             cluster_obj.add_atoms(residue_obj.atoms)
         show.show(session, objects=cluster_obj, target={'models', 'cartoons'})
-        if cluster_models:
-            select.select(session, cluster_obj, residues=True)
-            run(session, f'changechains sel clust_{i}')
         run(session, 'view orient')
         run(session, f'save ../figures/structures/{pdb}_{filename_1}{nc_filename}_cluster_{i}.png')
         hide.hide(session, cluster_obj, target={'models', 'cartoons'})
@@ -338,8 +335,6 @@ if all_clusters:
         for residue_obj in clust:
             cluster_obj.add_atoms(residue_obj.atoms)
         show.show(session, objects=cluster_obj, target={'models', 'cartoons'})
-        # select.select(session, cluster_obj, residues=True)
-        # run(session, 'show sel ribbons')
         run(session, 'view orient')
         run(session, f'save ../figures/structures/{pdb}_{filename_2}{nc_filename}_cluster_{i}.png')
         hide.hide(session, cluster_obj, target={'models', 'cartoons'})
