@@ -80,6 +80,7 @@ from chimerax.core.commands import all_objects
 from chimerax.core.commands import run
 from chimerax.std_commands import show
 from chimerax.std_commands import hide
+from chimerax.std_commands import select
 from chimerax.atomic.molsurf import MolecularSurface
 from chimerax.atomic import *
 import numpy as np
@@ -103,7 +104,7 @@ parser.add_argument('-remote', help='Whether to use a remote structure from the 
 parser.add_argument('-mode', help='Whether to end on one visualization or the other, or create a duplicate model for the cluster results and quality score results for further visualization. Options are: cluster, score, both', default='cluster', required=False)
 parser.add_argument('-addClusterIDs', help='Whether to add custom cluster_id attr to each residue', default=False, required=False)
 parser.add_argument('-allClusters', help='Whether to create an individual snapshot of each cluster', default=False, required=False)
-parser.add_argument('-clusterChains', help='Whether to change chain_ids to reflect clusters', default=False, required=False)
+#parser.add_argument('-clusterChains', help='Whether to change chain_ids to reflect clusters', default=False, required=False)
 parser.add_argument('-pdb', help='If remote is True or none, PDBID of the target structure. Otherwise, the local filename of the target structure', default=None, required=False)
 args = vars(parser.parse_args())
 
@@ -144,7 +145,7 @@ else:
 
 vis_mode = args['mode']
 all_clusters = args['allClusters']
-cluster_models = args['clusterChains']
+#cluster_models = args['clusterChains']
 add_cluster_id = args['addClusterIDs']
 
 run(session, 'set bg white')
