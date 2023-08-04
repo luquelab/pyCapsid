@@ -417,3 +417,56 @@ def createClusterRepresentation(pdb, labels, view, rwb_scale=False, rep_type='ca
     view.center()
     print('rendering')
     #view.render_image()
+
+
+def chimeraxReportScriptVis(report_path, remote=True, chimerax_path=None, **kwargs):
+    """Launches ChimeraX and runs a script that visualizes the results.
+
+    :param labels:
+    :param pdb:
+    :param remote:
+    :param chimerax_path:
+    :param pdb_path:
+    :param save_path:
+    :param script_path:
+    :param labels_path:
+    :return:
+    """
+
+    import os
+    import platform
+
+    if 'offscreen' in kwargs:
+        offscreen = kwargs['offscreen']
+    else:
+        offscreen = False
+
+    if chimerax_path is None:
+        print('No chimerax path specified, checking in default locations for your OS')
+        if platform.system() == 'Linux':
+            chimerax_path = 'usr/bin/chimerax'
+        elif platform.system() == 'Windows':
+            chimerax_path = 'C:\\Program Files\\ChimeraX\\bin\\ChimeraX.exe'
+        elif platform.system() == 'Darwin':
+            chimerax_path = '/Applications/ChimeraX'
+        else:
+            print('No chimerax path is given and cannot check default locations')
+            chimerax_path = ''
+
+    # get path to chimerax script
+    import os
+
+    script_path = f'{report_path}/chimerax/chimerax_script_colab.py'
+
+    chimerax_exe = chimerax_path  # + '\\ChimeraX.exe'
+    if platform.system() == 'Windows':
+        cmd_string = f'""{chimerax_exe}" --script "{script_path}""'
+    elif platform.system() == 'Linux':
+        cmd_string = f'{chimerax_exe} --script "{script_path}"'
+    else:
+        cmd_string = f'{chimerax_exe} --script "{script_path}"'
+
+    if offscreen:
+        cmd_string = cmd_string + ' --offscreen'
+    print(cmd_string)
+    os.system(cmd_string)
