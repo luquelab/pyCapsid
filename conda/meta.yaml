@@ -10,7 +10,7 @@
 
 package:
   name: pycapsid
-  version: 0.5.5
+  version: 0.5.6
 
 source:
   path: ..
@@ -58,6 +58,7 @@ requirements:
     - statsmodels
     - toml
     - markdown
+    - seaborn
 
 test:
   # Some packages might need a `test/commands` key to check CLI.
