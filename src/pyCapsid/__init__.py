@@ -289,11 +289,11 @@ def createReport(pdb, save_all_path, n_modes_best, residue_scores, asymmetric_un
     path_target = dir_loc + '/' + file_name
 
     npz = cc_modes
-    df = pd.DataFrame(data=[npz['mode_indices'], npz['data']]).T
+    df = pd.DataFrame(data=[npz['mode_indices']+1, npz['data']]).T
     df.columns = ['Modes', 'CC']
     df_cc_modes = df
     df_cc_modes.to_csv(path_target, index=False)
-    cc_best = df_cc_modes[df_cc_modes['Modes'] == n_modes_best]['CC'].values[0]
+    cc_best = df_cc_modes[df_cc_modes['Modes'] == n_modes_best+1]['CC'].values[0]
 
     ## Generate plots
     plt.ioff()  # Comment this command to display figure in the notebook
@@ -303,7 +303,7 @@ def createReport(pdb, save_all_path, n_modes_best, residue_scores, asymmetric_un
     ax.set_title('Agreement between predicted and empirical B-factors')
     ax.set_xlabel('Number of modes')
     ax.set_ylabel('Correlation coefficient (CC)')
-    ax.vlines(x=n_modes_best, ymin=0, ymax=cc_best, color='black')
+    ax.vlines(x=n_modes_best+1, ymin=0, ymax=cc_best, color='black')
     # plt.show(fig) ## Comment out to display figure in notebook
 
     ## Save plots
@@ -425,7 +425,7 @@ def createReport(pdb, save_all_path, n_modes_best, residue_scores, asymmetric_un
     df_bfactors_asym.to_csv(path_target, index=False)
 
     ## Generate plots
-    df = df_bfactors_asym
+    df = df_bfactors
     plt.ioff()  # Comment this command to display figure in the notebook
     sns.set_style('darkgrid')
     fig, ax = plt.subplots(1, 1, figsize=(6, 4.5))
@@ -793,7 +793,7 @@ def createReport(pdb, save_all_path, n_modes_best, residue_scores, asymmetric_un
     f.write('\n' + text)
 
     f.write('\n')
-    text = 'Optimal number of modes reproducing B-factors: ' + str(n_modes_best)
+    text = 'Optimal number of modes reproducing B-factors: ' + str(n_modes_best + 1)
     f.write('\n' + text)
 
     f.write('\n')

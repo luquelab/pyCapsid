@@ -125,7 +125,7 @@ def fitBfactors(evals, evecs, bfactors, is3d, isIco=True, fitModes=False, plotMo
                 coeff = coeffs[n_m]
                 ico_dev = ico_devs[n_m]
         else:
-            n_m = n_modes
+            n_m = n_modes - 1
             flucts = fastFlucts(evals, evecs, n_m, is3d)
             coeff = np.corrcoef(bfactors, flucts)[1, 0]
             if isIco:
@@ -134,7 +134,7 @@ def fitBfactors(evals, evecs, bfactors, is3d, isIco=True, fitModes=False, plotMo
                 ico_dev = 0
         flucts = fastFlucts(evals, evecs, n_m, is3d)
     else:
-        n_m = n_modes
+        n_m = n_modes - 1
         flucts = fastFlucts(evals, evecs, n_m, is3d)
         coeff = np.corrcoef(bfactors, flucts)[1, 0]
         if isIco:
