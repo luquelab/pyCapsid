@@ -85,7 +85,7 @@ else:
     remote = args['remote']
 
 if args['amplitude'] is None:
-    max_amplitude = None # change to finding first non-degenerate mode
+    max_amplitude = 3
 else:
     max_amplitude = float(args['amplitude'])
 
