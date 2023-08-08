@@ -115,7 +115,7 @@ def calcCovMat(evals, evecs, n_modes, coords, fluct_cutoff, is3d=True):
     return covariance
 
 
-def calcDistFlucts(evals, evecs, coords, fluct_cutoff=7.5, is3d=True):
+def calcDistFlucts(evals, evecs, coords, fluct_cutoff=7.5, is3d=True, **kwargs):
     """Calculates a sparse covariance matrix from the low frequency modes.
 
     :param evals:

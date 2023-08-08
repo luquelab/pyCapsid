@@ -70,7 +70,7 @@ def run_capsid(params_path):
     from .NMA import calcDistFlucts
     from .QRC import findQuasiRigidClusters
 
-    dist_flucts = calcDistFlucts(evals_scaled, evecs, coords)
+    dist_flucts = calcDistFlucts(evals_scaled, evecs, coords, **params_dict['QRC'])
 
 
     if not 'cluster_stop' in params_dict['QRC'].keys():
@@ -147,7 +147,7 @@ def run_capsid_report(params_path):
     from pyCapsid.NMA import calcDistFlucts
     from pyCapsid.QRC import findQuasiRigidClusters
 
-    dist_flucts = calcDistFlucts(evals_scaled, evecs, coords)
+    dist_flucts = calcDistFlucts(evals_scaled, evecs, coords, **params_dict['QRC'])
 
     if not 'cluster_stop' in params_dict['QRC'].keys():
         print('No cluster range specified, defaulting to: 4-[number of chains]')
