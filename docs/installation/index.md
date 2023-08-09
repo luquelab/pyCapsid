@@ -35,12 +35,22 @@ If you have an incompatible python version and don't want to upgrade we recommen
 to create a virtual environment with its own python version and install pyCapsid. First, create a new virtual environment 
 with its own Python version using conda and then activate it.
 ~~~~
-conda create -n pycapsid python=3.10 -y
+conda create -n pycapsid -y
 conda activate pycapsid
 ~~~~
 ~~~~
 conda install -c luque_lab -c conda-forge pycapsid
 ~~~~
+
+## GPU acceleration with CuPy (experimental)
+[Cupy](https://cupy.dev/) may be used to accelerate the calculation of low-frequency modes on GPUs using CUDA. To install
+cupy alongside pyCapsid, use the following command to install them together:
+~~~~
+conda install -c luque_lab -c conda-forge pycapsid cupy
+~~~~
+This may take some time to install. For further information on installing cupy see cupy's [installation documentation](https://docs.cupy.dev/en/stable/install.html).
+The speed improvement from GPU acceleration will depend heavily on your GPU, and will be limited by the memory available 
+to your GPU.
 
 # Visualization in ChimeraX
 
