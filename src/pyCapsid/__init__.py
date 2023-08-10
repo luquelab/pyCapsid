@@ -44,7 +44,10 @@ def run_capsid(params_path):
 
     params_dict = read_config(params_path)
     create_directories(params_dict)
-    params_dict['PDB'].pop('save_all_path')
+
+    save_all_path = params_dict['PDB'].pop('save_all_path')
+    import shutil
+    shutil.copy(params_path, save_all_path)
 
     if 'suppress_plots' in params_dict['plotting'].keys():
         if params_dict['plotting']['suppress_plots']:
@@ -122,6 +125,8 @@ def run_capsid_report(params_path):
     params_dict = read_config(params_path)
     create_directories(params_dict)
     save_all_path = params_dict['PDB'].pop('save_all_path')
+    import shutil
+    shutil.copy(params_path, save_all_path)
 
     if 'suppress_plots' in params_dict['plotting'].keys():
         if params_dict['plotting']['suppress_plots']:
