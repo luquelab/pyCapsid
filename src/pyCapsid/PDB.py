@@ -95,6 +95,17 @@ def loadPDBx(filename, pdb, save, assembly_id=1):
     calphas = capsid[capsid.atom_name == 'CA']
     coords = calphas.coord
 
+    # Add mass info
+    residue_starts = struc.get_residue_starts(capsid, add_exclusive_stop=True)
+    masses = []
+    from biotite.structure.info import mass
+    for i in range(len(residue_starts) - 1):
+        res_start = residue_starts[i]
+        res_stop = residue_starts[i + 1]
+        m = mass(capsid[res_start:res_stop])
+        masses.append(m)
+    calphas.set_annotation('masses', masses)
+
     if save:
         print('Saving complete capsid PDBx')
         strucio.save_structure(pdb + '_capsid.pdbx', capsid)
@@ -136,6 +147,17 @@ def loadPDB(filename, pdb_id, save, assembly_id=1):
 
     calphas = capsid[capsid.atom_name == 'CA']
     coords = calphas.coord
+
+    # Add mass info
+    residue_starts = struc.get_residue_starts(capsid, add_exclusive_stop=True)
+    masses = []
+    from biotite.structure.info import mass
+    for i in range(len(residue_starts) - 1):
+        res_start = residue_starts[i]
+        res_stop = residue_starts[i + 1]
+        m = mass(capsid[res_start:res_stop])
+        masses.append(m)
+    calphas.set_annotation('masses', masses)
 
     if save:
         print('Saving complete capsid PDB')

@@ -5,7 +5,7 @@ import numba as nb
 import numpy as np
 
 
-def modeCalc(hess, n_modes=200, eigen_method='eigsh', is3d=True, shift_invert=True, save_modes=True, save_mode_path='./'):
+def modeCalc(hess, n_modes=200, eigen_method='eigsh', is3d=True, shift_invert=True, save_modes=True, save_mode_path='./', use_mass = False, masses = None):
     """Calculate the 'n_modes' lowest frequency modes of the system by calculating the smallest eigenvalues and eigenvectors
     of the hessian matrix.
 
@@ -20,37 +20,44 @@ def modeCalc(hess, n_modes=200, eigen_method='eigsh', is3d=True, shift_invert=Tr
 
     n_dim = hess.shape[0]
 
-    # if useMass:
-    #     from scipy.sparse import diags
-    #     if model == 'anm':
-    #         masses = np.repeat(masses, 3)
-    #
-    #     mass = np.tile(masses, 60)
-    #     print('mass variance: ', np.std(mass))
-    #     print('mass mean: ', np.mean(mass))
-    #     print('mass min: ', np.min(mass))
-    #     print('mass max: ', np.max(mass))
-    #     Mass = diags(mass)
-    # else:
-
-
-    # from scipy.sparse import identity
-    # Mass = identity(n_dim)
+    if use_mass:
+        from scipy.sparse import diags
+        print('mass variance: ', np.std(masses))
+        print('mass mean: ', np.mean(masses))
+        print('mass min: ', np.min(masses))
+        print('mass max: ', np.max(masses))
+        if is3d:
+            masses = np.repeat(masses, 3)
+        Mass = diags(masses)
+        print('Using mass matrix for generalized eigenvalue problem')
+        print(Mass)
+    else:
+        from scipy.sparse import identity
+        Mass = identity(n_dim)
 
     if eigen_method == 'eigsh':
         from scipy.sparse.linalg import eigsh
         if shift_invert:
             print('Using shift-invert for increased performance with increased memory usage.')
-            evals, evecs = eigsh(hess, k=n_modes, sigma=1e-10, which='LA')
+            if use_mass:
+                evals, evecs = eigsh(hess, M=Mass, k=n_modes, sigma=1e-10, which='LA')
+            else:
+                evals, evecs = eigsh(hess, k=n_modes, sigma=1e-10, which='LA')
         else:
-            evals, evecs = eigsh(hess, k=n_modes, which='SA')
+            if use_mass:
+                evals, evecs = eigsh(hess, M=Mass, k=n_modes, which='SA')
+            else:
+                evals, evecs = eigsh(hess, k=n_modes, which='SA')
             evals = evals[6:]
             evecs = evecs[:, 6:]
     elif eigen_method == 'lobpcg':
         from scipy.sparse.linalg import lobpcg
 
         epredict = np.random.rand(n_dim, n_modes + 6)
-        evals, evecs = lobpcg(hess, epredict, largest=False, tol=0, maxiter=n_dim)
+        if use_mass:
+            evals, evecs = lobpcg(hess, epredict, B=Mass, largest=False, tol=0, maxiter=n_dim)
+        else:
+            evals, evecs = lobpcg(hess, epredict, largest=False, tol=0, maxiter=n_dim)
         evals = evals[6:]
         evecs = evecs[:, 6:]
     elif eigen_method == 'lobcuda':
@@ -65,7 +72,7 @@ def modeCalc(hess, n_modes=200, eigen_method='eigsh', is3d=True, shift_invert=Tr
         M = LinearOperator(hess.shape, lu.solve)
         print('gpu eigen')
 
-        evals, evecs = clobpcg(sparse_gpu, epredict, M=M, largest=False, tol=0, verbosityLevel=0)
+        evals, evecs = clobpcg(sparse_gpu, epredict, M=M, B=Mass, largest=False, tol=0, verbosityLevel=0)
         if is3d:
             evals = cp.asnumpy(evals[6:])
             evecs = cp.asnumpy(evecs[:, 6:])

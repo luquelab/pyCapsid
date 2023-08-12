@@ -143,7 +143,10 @@ def run_capsid_report(params_path):
     kirch, hessian = buildENMPreset(coords, **params_dict['CG'])
 
     from pyCapsid.NMA import modeCalc
-    evals, evecs = modeCalc(hessian, **params_dict['NMA'])
+    if params_dict['NMA']['use_mass']:
+        evals, evecs = modeCalc(hessian, masses=calphas.masses, **params_dict['NMA'])
+    else:
+        evals, evecs = modeCalc(hessian, **params_dict['NMA'])
 
     from pyCapsid.NMA import fitCompareBfactors
     evals_scaled, evecs_scaled, cc, gamma, n_modes = fitCompareBfactors(evals, evecs, bfactors, pdb,
