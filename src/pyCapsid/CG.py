@@ -16,7 +16,7 @@ def buildENMPreset(coords, preset='ANM', **kwargs):
     :return: A tuple of sparse matrices. The kirchoff matrix and the hessian matrix
     :rtype: (scipy.sparse.csr_matrix, scipy.sparse.csr_matrix)
     """
-    model_presets = ['ANM', 'GNM', 'U-ENM', 'bbENM', 'none']
+    model_presets = ['ANM', 'GNM', 'U-ENM', 'bbENM', 'custom']
     print('Building hessian for model preset: ', preset)
     if preset == 'ANM':
         cutoff = 15
@@ -37,8 +37,9 @@ def buildENMPreset(coords, preset='ANM', **kwargs):
             raise ValueError("No chain information provided. Indices of chain starts must be provided as chain_starts")
         chain_starts = kwargs.pop('chain_starts')
         return buildENM(coords, cutoff=cutoff, chain_starts=chain_starts, l_backbone=l_backbone, k_backbone=k_backbone, **kwargs)
-    elif preset == 'none':
+    elif preset == 'custom':
         print('No preset specified, using defaults and whatever specific parameters were specified.')
+        return buildENM(coords, **kwargs)
     else:
         raise ValueError("Invalid model preset. Expected one of: %s" % model_presets)
 

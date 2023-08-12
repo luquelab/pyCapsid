@@ -267,8 +267,18 @@ run_capsid_report('config.toml')
   + `cluster_start` (*integer*) - specifies the minimum number of clusters used in the clustering analysis to identify the optimal quasi-rigid mechanical units. The minimum value is 3.
   + `cluster_stop` (*integer*) - specifies the maximum number of clusters used in the clustering analysis to identify the optimal quasi-rigid mechanical units. The number of residues in the structure represents an upper value. The default value is 100. The recommended value should be at least the number of proteins in the structure. Ideally, the value should be the number of proteins times the number of expected protein domains defining the protein fold.
   + `cluster_step` (*integer*) - specifies the steps taken when exploring the range of clusters to determine the optimal quasi-rigid mechanical units. The default value is 2. It is recommended to refine the search in a sub-region once a potential optimal result has been identified.
-  + `fluct_cutoff` (*float*)
+  + `fluct_cutoff` (*float*) - When calculating distance fluctuations, only calculate them for residues within a cutoff distance in angstroms.
   + `cluster_method` What method to use to cluster the embedded points.
+    + `discretize`: Adapted from scikit-learn function based on a clustering method specifically for spectral clustering described in [Multiclass Spectral Clustering](https://doi.org/10.1109/ICCV.2003.1238361)
+    + `kmeans`: sklearn.cluster.k_means. A more general clustering method.
+  + `score_method` How to determine the quality score of each cluster.
+    + `median`: Use the median quality score of each residue in the cluster.
+    + `mean`: Use the mean quality score of each residue in the cluster.
++ VIS
+  + `method`
+  + `chimerax_path`
++ plotting
+  + `suppress_plots` (*true/false*) - Suppress interactive plots while running pyCapsid.
 ```toml
 [PDB]
 pdb = '4oq8' # PDB ID of structure
