@@ -239,8 +239,36 @@ from pyCapsid import run_capsid_report
 run_capsid_report('config.toml')
 ```
 
-### A more complex config.toml
-
+### pyCapsid config.toml parameters
++ PDB
+  + `pdb` (*string*) - PDB id of entry to download. If local is True, then the filename of a local file.
+  + `pdbx` (*true/false*) - Whether the target structure should be acquired in pdbx/mmcif format.
+  + `local` (*true/false*) - Whether to instead use a local file
+  + `assembly_id` (*integer*) - specifies the biological assembly. If not set it defaults to 1. If no assembly info is provided in the structures set this value to None.
++ CG
+  + `preset` specifies the elastic network model used to coarse-grained the protein complex. There are four different models that can be specified. Each model sets certain parameters. Additional parameters can be provided to modify the models. Read the [API documentation for buildENM](https://luquelab.github.io/pyCapsid/api_reference/#pycapsidenmbuildenmcoords-cutoff10-gnmfalse-fanm1-wfuncpower-base_dist1-d_power0-backbonefalse-k_backbone1-l_backbone1-chain_startsnone) to see the parameters. 
+    + `ANM`: Anisotropic network model with a default cutoff of 15Å and no distance weighting.
+    + `GNM`: Gaussian network model (no three-dimensional directionality) with a default cutoff of 7.5Å and no distance weighting.
+    + `U-ENM`: Unified elastic network Model with a default cutoff of 7.5Å and a default anisotropy parameter (f_anm) of 0.1. It is the **default** and **recommended** option.
+    + `bbENM`: Backbone-enhanced Elastic network model with a default cutoff of 7.5Å and no distance weighting.
+    + `none`: Use specific parameters set in the config file. Read the [API documentation for buildENM](https://luquelab.github.io/pyCapsid/api_reference/#pycapsidenmbuildenmcoords-cutoff10-gnmfalse-fanm1-wfuncpower-base_dist1-d_power0-backbonefalse-k_backbone1-l_backbone1-chain_startsnone) to see the parameters. 
+  + `save_hessian` (*true/false*) - Whether to save the resulting hessian matrix.
++ NMA
+  + `n_modes` (*integer*) - specifies the number of modes to be used to calculate the dynamics. Must be an integer. The default value is 200. However, while using 200 modes can yield good results, we recommend using more modes for larger structures. Increasing the number of modes often improves the accuracy but results in longer computational times. The `fit_modes` option described below can assist in selecting the optimal value for this parameter.
+  + `eigen_method` What method to use to calculate the lowest-frequency modes. Three available methods.
+    + `eigsh`: scipy.sparse.linalg.eigsh with shift_invert. Default CPU method. Set the parameter `shift_invert = false` when using this for reduced performance and better memory usage.
+    + `lobpcg`: scipy.sparse.linalg.lobpcg. Less memory intensive than eigsh, but can be slower and has less precise results for symmetric structures.
+    + `lobcuda`: `cupyx.scipy.sparse.linalg.lobpcg`. CUDA accelerated lobpcg, requires CUDA and cupy package.
++ b_factors
+  + `fit_modes` (*true/false*) - If true pyCapsid will select the number of low-frequency modes used in further calculations by finding the number of modes (less than n_modes) that results in the best correlation with experimental B-factors. If true pyCapsid will also provide a plot showing how correlation with B-factors changes with the number of modes used. If false, all modes calculated will be used.
+  + `force_ico` (*true/false*) - If true use a number of modes that result in icosahedrally symmetric squared fluctuations.
+  + `ico_tol` (*float*) - Acceptable deviation in icosahedral symmetry if `force_ico` is true.
++ QRC
+  + `cluster_start` (*integer*) - specifies the minimum number of clusters used in the clustering analysis to identify the optimal quasi-rigid mechanical units. The minimum value is 3.
+  + `cluster_stop` (*integer*) - specifies the maximum number of clusters used in the clustering analysis to identify the optimal quasi-rigid mechanical units. The number of residues in the structure represents an upper value. The default value is 100. The recommended value should be at least the number of proteins in the structure. Ideally, the value should be the number of proteins times the number of expected protein domains defining the protein fold.
+  + `cluster_step` (*integer*) - specifies the steps taken when exploring the range of clusters to determine the optimal quasi-rigid mechanical units. The default value is 2. It is recommended to refine the search in a sub-region once a potential optimal result has been identified.
+  + `fluct_cutoff` (*float*)
+  + `cluster_method` What method to use to cluster the embedded points.
 ```toml
 [PDB]
 pdb = '4oq8' # PDB ID of structure
@@ -266,10 +294,8 @@ save_mode_path = '/'
 [b_factors]
 fit_modes = true
 plot_modes = true
-force_ico = true
+force_ico = false
 ico_tol = 0.002
-save_bfactors = true
-save_bfactors_path = '/'
 
 
 [QRC]
@@ -278,9 +304,6 @@ cluster_stop = 100
 cluster_step = 2
 cluster_method = 'discretize'
 score_method = 'median'
-return_type = 'final'
-save_results =  true
-save_results_path =  '/'
 
 [VIS]
 chimerax_path = 'C:\Program Files\ChimeraX\bin\ChimeraX.exe'

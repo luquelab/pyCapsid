@@ -10,7 +10,6 @@ def getCapsid(pdb, save_pdb_path='./', pdbx=False, local=False, save_full_pdb=Fa
     :param local: Whether to instead load a local file
     :param save_full_pdb: Whether to save a copy of the complete assembly as pdb/pdbx. Useful for some visualizations.
     :param chains: List of chains from the entry to include in the ENM model. Not implemented
-    :param chains_clust: List of chains that will be assigned to quasi-rigid clusters. Must be a subset of 'chains'. Not implemented
     """
 
 
