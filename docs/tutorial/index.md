@@ -267,7 +267,7 @@ run_capsid_report('config.toml')
   + `cluster_start` (*integer*) - specifies the minimum number of clusters used in the clustering analysis to identify the optimal quasi-rigid mechanical units. The minimum value is 3.
   + `cluster_stop` (*integer*) - specifies the maximum number of clusters used in the clustering analysis to identify the optimal quasi-rigid mechanical units. The number of residues in the structure represents an upper value. The default value is 100. The recommended value should be at least the number of proteins in the structure. Ideally, the value should be the number of proteins times the number of expected protein domains defining the protein fold.
   + `cluster_step` (*integer*) - specifies the steps taken when exploring the range of clusters to determine the optimal quasi-rigid mechanical units. The default value is 2. It is recommended to refine the search in a sub-region once a potential optimal result has been identified.
-  + `fluct_cutoff` (*float*) - When calculating distance fluctuations, only calculate them for residues within a cutoff distance in angstroms.
+  + `fluct_cutoff` (*float*) - When calculating distance fluctuations, only calculate them for residues within a cutoff distance in angstroms. Larger values will bias the results towards larger clusters. Default is 7.5.
   + `cluster_method` What method to use to cluster the embedded points.
     + `discretize`: Adapted from scikit-learn function based on a clustering method specifically for spectral clustering described in [Multiclass Spectral Clustering](https://doi.org/10.1109/ICCV.2003.1238361)
     + `kmeans`: sklearn.cluster.k_means. A more general clustering method.
@@ -275,8 +275,10 @@ run_capsid_report('config.toml')
     + `median`: Use the median quality score of each residue in the cluster.
     + `mean`: Use the mean quality score of each residue in the cluster.
 + VIS
-  + `method`
-  + `chimerax_path`
+  + `method` How to visualize the results for the full capsid:
+    + `chimerax`: Using ChimeraX. If `chimerax_path` is set correctly this will automatically open ChimeraX and visualize the results.
+    + `nglview`: Only works in a jupyter notebook environment. Uses NGLView to create an interactive widget in the notebook.
+  + `chimerax_path`: Complete path to the chimerax executable if using `method = 'chimerax'`.
 + plotting
   + `suppress_plots` (*true/false*) - Suppress interactive plots while running pyCapsid.
 ```toml
