@@ -279,6 +279,7 @@ run_capsid_report('config.toml')
     + `chimerax`: Using ChimeraX. If `chimerax_path` is set correctly this will automatically open ChimeraX and visualize the results.
     + `nglview`: Only works in a jupyter notebook environment. Uses NGLView to create an interactive widget in the notebook.
   + `chimerax_path`: Complete path to the chimerax executable if using `method = 'chimerax'`.
+  + `offscreen` (*true/false*) - If true use the offscreen rendering option of ChimeraX. This allows for the visualization of results on a system without a built-in display. Only works on Linux.
 + plotting
   + `suppress_plots` (*true/false*) - Suppress interactive plots while running pyCapsid.
 ```toml
