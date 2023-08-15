@@ -671,6 +671,9 @@ def createReport(pdb, save_all_path, n_modes_best, residue_scores, asymmetric_un
         line = f'Both scripts can be modified to fit the users needs. To do this reference the ChimeraX commands (https://www.cgl.ucsf.edu/chimerax/docs/user/index.html) and the ChimeraX Python API (https://www.cgl.ucsf.edu/chimerax/docs/devel/index.html#).'
         file.write('\n' + line)
 
+    # KEY RESULTS DICTIONARY WHICH WILL BE SAVED AS CSV
+    key_results = {}
+
     # Generate markdown output file
     dir_loc = report_dir
     file_name = file_md
@@ -699,11 +702,13 @@ def createReport(pdb, save_all_path, n_modes_best, residue_scores, asymmetric_un
     f.write('\n')
     import biotite.structure as struc
     n_asym_residues = struc.get_residue_count(asymmetric_unit)
+    key_results['n_asym_residues'] = n_asym_residues
     text = 'Number of residues in the asymmetric unit: ' + str(n_asym_residues)
     f.write('\n' + text)
 
     f.write('\n')
     n_asym_chains = struc.get_chain_count(asymmetric_unit)
+    key_results['n_asym_chains'] = n_asym_chains
     text = 'Number of protein chains in the asymmetric unit: ' + str(n_asym_chains)
     f.write('\n' + text)
 
@@ -722,11 +727,13 @@ def createReport(pdb, save_all_path, n_modes_best, residue_scores, asymmetric_un
     f.write('\n' + text)
 
     f.write('\n')
+    key_results['n_full_residues'] = n_full_residues
     text = 'Number of residues in the protein complex: ' + str(n_full_residues)
     f.write('\n' + text)
 
     f.write('\n')
     n_full_chains = int(asym_factor * n_asym_chains)
+    key_results['n_full_chains'] = n_full_chains
     text = 'Number of protein chains in the protein complex: ' + str(n_full_chains)
     f.write('\n' + text)
 
@@ -761,10 +768,12 @@ def createReport(pdb, save_all_path, n_modes_best, residue_scores, asymmetric_un
     f.write('\n' + text)
 
     f.write('\n')
+    key_results['ENM_model'] = ENM_model
     text = 'Elastic model used: ' + str(ENM_model)
     f.write('\n' + text)
 
     f.write('\n')
+    key_results['gamma'] = str(round(gamma, 2))
     text = 'Calibrated stiffness constant (gamma): ' + str(round(gamma, 2))
     f.write('\n' + text)
     f.write('\n')
@@ -798,10 +807,12 @@ def createReport(pdb, save_all_path, n_modes_best, residue_scores, asymmetric_un
     f.write('\n' + text)
 
     f.write('\n')
+    key_results['n_modes_optimal'] = n_modes_best + 1
     text = 'Optimal number of modes reproducing B-factors: ' + str(n_modes_best + 1)
     f.write('\n' + text)
 
     f.write('\n')
+    key_results['CC'] = CC
     text = 'Correlation between empirical and predicted B-factors: ' + str(round(CC, 2))
     f.write('\n' + text)
 
@@ -860,6 +871,7 @@ def createReport(pdb, save_all_path, n_modes_best, residue_scores, asymmetric_un
     f.write('\n' + text)
 
     f.write('\n')
+    key_results['n_clusters_optimal'] = nc
     text = 'Number of optimal quasi-rigid mechanical units identified: ' + str(nc)
     f.write('\n' + text)
 
@@ -932,6 +944,13 @@ def createReport(pdb, save_all_path, n_modes_best, residue_scores, asymmetric_un
 
     # Close ouptut file
     f.close()
+
+    # WRITE KEY_RESULTS CSV
+    import csv
+    with open(f'{report_dir}/pyCapsid_key_results.csv', 'w') as csv_file:
+        writer = csv.writer(csv_file)
+        for key, value in key_results.items():
+            writer.writerow([key, value])
 
     import markdown
     # Generate HTML version
