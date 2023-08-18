@@ -284,42 +284,38 @@ run_capsid_report('config.toml')
   + `suppress_plots` (*true/false*) - Suppress interactive plots while running pyCapsid.
 ```toml
 [PDB]
-pdb = '4oq8' # PDB ID of structure
+pdb = '4oq8'
 pdbx = false
 local = false
-save_full_pdb = true
-save_all_path = './4oq8' # will be prepended to all other save_paths
-save_pdb_path = '/'
+assembly_id = 1
+save_all_path = './4oq8'
 
 [CG]
 preset = 'U-ENM'
 save_hessian = true
-save_kirchhoff = true
-save_cg_path = '/'
 
 [NMA]
 n_modes = 200
 eigen_method = 'eigsh'
 shift_invert = true
-save_modes = true
-save_mode_path = '/'
 
 [b_factors]
 fit_modes = true
-plot_modes = true
 force_ico = false
 ico_tol = 0.002
-
 
 [QRC]
 cluster_start = 10
 cluster_stop = 100
 cluster_step = 2
+fluct_cutoff = 7.5
 cluster_method = 'discretize'
 score_method = 'median'
 
 [VIS]
+method = 'chimerax'
 chimerax_path = 'C:\Program Files\ChimeraX\bin\ChimeraX.exe'
+offscreen = false
 
 [plotting]
 suppress_plots = true
