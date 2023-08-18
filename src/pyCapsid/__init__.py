@@ -179,7 +179,7 @@ def run_capsid_report(params_path):
     from pyCapsid.VIS import visualizeResults
 
     createReport(pdb, save_all_path, n_modes, residue_scores, asymmetric_unit, calphas, params_dict['CG']['preset'], cc,
-                 gamma, n_modes)
+                 gamma, n_modes, pycap_time)
 
     if vis_method == 'chimerax':
         report_path = f'{save_all_path}/{pdb}_pyCapsid_report'
@@ -205,7 +205,7 @@ def run_capsid_report(params_path):
 
 
 def createReport(pdb, save_all_path, n_modes_best, residue_scores, asymmetric_unit, calphas, ENM_model, cc, gamma,
-                 n_modes):
+                 n_modes, pycap_time):
     # Prepare file names
     file_name = 'pyCapsid_report'
     file_md = file_name + '.md'  # Markdown
@@ -946,6 +946,7 @@ def createReport(pdb, save_all_path, n_modes_best, residue_scores, asymmetric_un
     f.close()
 
     # WRITE KEY_RESULTS CSV
+    key_results['main_pycap_time'] = pycap_time
     import csv
     with open(f'{report_dir}/pyCapsid_key_results.csv', 'w') as csv_file:
         writer = csv.writer(csv_file)
