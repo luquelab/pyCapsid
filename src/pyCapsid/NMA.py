@@ -176,7 +176,7 @@ def gCon_c(evals, evecs, row, col):
     return np.array(data)
 
 
-@nb.njit(parallel=True)
+@nb.njit(parallel=False)
 def cov(evals, evecs, i, j):
     """
 
