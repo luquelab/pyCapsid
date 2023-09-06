@@ -282,6 +282,7 @@ run_capsid_report('config.toml')
   + `offscreen` (*true/false*) - If true use the offscreen rendering option of ChimeraX. This allows for the visualization of results on a system without a built-in display. Only works on Linux.
 + plotting
   + `suppress_plots` (*true/false*) - Suppress interactive plots while running pyCapsid.
+
 ```toml
 [PDB]
 pdb = '4oq8'
