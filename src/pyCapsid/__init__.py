@@ -140,19 +140,25 @@ def run_capsid_report(params_path):
     from pyCapsid.CG import buildENMPreset
     if params_dict['CG']['preset'] == 'bbENM':
         params_dict['CG']['chain_starts'] = chain_starts
+
+    if params_dict['CG']['preset'] == 'GNM':
+        is3d = False
+    else:
+        is3d = True
+
     kirch, hessian = buildENMPreset(coords, **params_dict['CG'])
 
     from pyCapsid.NMA import modeCalc
-    evals, evecs = modeCalc(hessian, **params_dict['NMA'])
+    evals, evecs = modeCalc(hessian, is3d=is3d, **params_dict['NMA'])
 
     from pyCapsid.NMA import fitCompareBfactors
-    evals_scaled, evecs_scaled, cc, gamma, n_modes = fitCompareBfactors(evals, evecs, bfactors, pdb,
+    evals_scaled, evecs_scaled, cc, gamma, n_modes = fitCompareBfactors(evals, evecs, bfactors, pdb, is3d=is3d,
                                                                         **params_dict['b_factors'])
 
     from pyCapsid.NMA import calcDistFlucts
     from pyCapsid.QRC import findQuasiRigidClusters
 
-    dist_flucts = calcDistFlucts(evals_scaled, evecs, coords, **params_dict['QRC'])
+    dist_flucts = calcDistFlucts(evals_scaled, evecs, coords, is3d=is3d, **params_dict['QRC'])
 
     if not 'cluster_stop' in params_dict['QRC'].keys():
         print('No cluster range specified, defaulting to: 4-[number of chains]')
