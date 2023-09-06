@@ -165,4 +165,3 @@ def plotScores(pdb, n_range, scores, ntypes, save=True, save_path='score.png'):
         fig.savefig(f'{save_path}results_plot.svg')
 
     plt.show()
-

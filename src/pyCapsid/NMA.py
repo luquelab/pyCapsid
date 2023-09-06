@@ -158,7 +158,7 @@ def con_c(evals, evecs, row, col):
     return np.array(data)
 
 
-@nb.njit()
+#@nb.njit()
 def gCon_c(evals, evecs, row, col):
     """
 
@@ -171,12 +171,11 @@ def gCon_c(evals, evecs, row, col):
     data = []
     for k in range(row.shape[0]):
         i, j = (row[k], col[k])
-        c = gCov(evals, evecs, i, j)
-        data.append(c)
+        data.append(gCov(evals, evecs, i, j))
     return np.array(data)
 
 
-@nb.njit(parallel=True)
+@nb.njit(parallel=False)
 def cov(evals, evecs, i, j):
     """
 
@@ -193,7 +192,7 @@ def cov(evals, evecs, i, j):
     tr1 = 0
     # tr2 = 0
     # tr3 = 0
-    for n in nb.prange(n_e):
+    for n in range(n_e):
         l = evals[n]
         tr1 += 1 / l * (evecs[3 * i, n] * evecs[3 * j, n] + evecs[3 * i + 1, n] * evecs[3 * j + 1, n] + evecs[
             3 * i + 2, n] * evecs[3 * j + 2, n])
