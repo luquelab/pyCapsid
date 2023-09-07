@@ -149,7 +149,18 @@ def run_capsid_report(params_path):
     kirch, hessian = buildENMPreset(coords, **params_dict['CG'])
 
     from pyCapsid.NMA import modeCalc
-    evals, evecs = modeCalc(hessian, is3d=is3d, **params_dict['NMA'])
+
+    if 'load_modes_file' in params_dict['NMA'].keys():
+        import numpy as np
+        try:
+            modes = np.load(params_dict['NMA']['load_modes_file'])
+            evals = modes['eigen_vals']
+            evecs = modes['eigen_vecs']
+        except:
+            print('Loading modes failed. Calculating modes')
+            evals, evecs = modeCalc(hessian, is3d=is3d, **params_dict['NMA'])
+    else:
+        evals, evecs = modeCalc(hessian, is3d=is3d, **params_dict['NMA'])
 
     from pyCapsid.NMA import fitCompareBfactors
     evals_scaled, evecs_scaled, cc, gamma, n_modes = fitCompareBfactors(evals, evecs, bfactors, pdb, is3d=is3d,
