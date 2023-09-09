@@ -1,3 +1,9 @@
+---
+layout: default
+title: 3nap pyCapsid Report
+nav_order: 1
+parent: Gallery
+---
 
 # pyCapsid Report
 August 23, 2023

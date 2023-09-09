@@ -1,6 +1,8 @@
 ---
 layout: default
 title: 3cji pyCapsid Report
+nav_order: 1
+parent: Gallery
 ---
 
 # pyCapsid Report

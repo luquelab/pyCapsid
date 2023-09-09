@@ -2,7 +2,7 @@
 layout: default
 title: Gallery
 nav_order: 4
-has_children: True
+has_children: False
 ---
 
 # Results Gallery

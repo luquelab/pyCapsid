@@ -1,3 +1,9 @@
+---
+layout: default
+title: 2ms2 pyCapsid Report
+nav_order: 1
+parent: Gallery
+---
 
 # pyCapsid Report
 August 28, 2023
