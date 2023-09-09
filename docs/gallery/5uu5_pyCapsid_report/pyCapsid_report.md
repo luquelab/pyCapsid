@@ -1,3 +1,9 @@
+---
+layout: default
+title: 5uu5 pyCapsid Report
+nav_order: 1
+parent: Gallery
+---
 
 # pyCapsid Report
 September 08, 2023

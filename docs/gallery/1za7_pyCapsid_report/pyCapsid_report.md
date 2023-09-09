@@ -1,4 +1,9 @@
-
+---
+layout: default
+title: 1za7 pyCapsid Report
+nav_order: 1
+parent: Gallery
+---
 # pyCapsid Report
 September 06, 2023
 
