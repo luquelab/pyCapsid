@@ -16,22 +16,31 @@ Data covering the application of pyCapsid to this set of HK97-fold protein shell
 
 ### Seneca Valley Virus (PDBID: 3cji)
 [Full pyCapsid Report](https://luquelab.github.io/pyCapsid/gallery/3cji_pyCapsid_report/pyCapsid_report.html)
+
 ![1](3cji_cluster_quality.svg)
 ![2](3cji_highest_quality_clusters.png)
 
 ### Triatoma Virus (PDBID: 3nap)
+[Full pyCapsid Report](https://luquelab.github.io/pyCapsid/gallery/3nap_pyCapsid_report/pyCapsid_report.html)
+
 ![1](3nap_cluster_quality.svg)
 ![2](3nap_highest_quality_clusters.png)
 
 ### Bacteriophage MS2 (PDBID: 2ms2)
+[Full pyCapsid Report](https://luquelab.github.io/pyCapsid/gallery/2ms2_pyCapsid_report/pyCapsid_report.html)
+
 ![1](2ms2_cluster_quality.svg)
 ![2](2ms2_highest_quality_clusters.png)
 
 ### Hepatitis B Virus (PDBID: 2g33)
+[Full pyCapsid Report](https://luquelab.github.io/pyCapsid/gallery/2g33_pyCapsid_report/pyCapsid_report.html)
+
 ![1](2g33_cluster_quality.svg)
 ![2](2g33_highest_quality_clusters.png)
 
 ### Cowpea Chlorotic Mottle Virus (PDBID: 1za7)
+[Full pyCapsid Report](https://luquelab.github.io/pyCapsid/gallery/1za7_pyCapsid_report/pyCapsid_report.html)
+
 ![1](2g33_cluster_quality.svg)
 ![2](2g33_highest_quality_clusters.png)
 
