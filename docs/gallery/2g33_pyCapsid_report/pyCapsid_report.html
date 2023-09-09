@@ -1,0 +1,59 @@
+<h1>pyCapsid Report</h1>
+<p>September 04, 2023</p>
+<h2>Input structure</h2>
+<p>Identifier: 2g33</p>
+<p>Number of residues in the asymmetric unit: 588</p>
+<p>Number of protein chains in the asymmetric unit: 4</p>
+<p>Multiplying factor to generate the complete protein complex: 60</p>
+<ul>
+<li>
+<p>If the multiplying factor is one (<em>m = 1</em>), the protein complex and the asymmetric unit are the same.</p>
+</li>
+<li>
+<p>If the multiplying factor is larger than one (<em>m &gt; 1</em>), the protein complex is <em>m</em> times the asymmetric unit.</p>
+</li>
+</ul>
+<p>Number of residues in the protein complex: 35280</p>
+<p>Number of protein chains in the protein complex: 240</p>
+<hr />
+<p><strong>Figure: Asymmetric unit</strong> (below). Ribbon diagram of the protein complex's asymmetric unit.</p>
+<p><img alt="Asymmetric unit" src="./figures/structures/2g33_asymmetric_unit.png" /></p>
+<hr />
+<p><strong>Figure: Full protein complex</strong> (below). Ribbon diagram of the full protein complex.</p>
+<p><img alt="Full protein complex" src="./figures/structures/2g33_full_capsid.png" /></p>
+<hr />
+<h2>Elastic network model</h2>
+<p>Elastic model used: U-ENM</p>
+<p>Calibrated stiffness constant (gamma): 0.16</p>
+<ul>
+<li>This constant was fitted to scale the model to the structure, assuming a linear relationship between the residues fluctuations and B-factors.</li>
+</ul>
+<hr />
+<p><strong>Figure: Model calibration</strong> (below). The empirical B-factors are plotted against the predicted fluctuations. A regression line was fitted. From the slope (a), the calibration constant (gamma) was obtained using the formula: <em>gamma = (8(pi)^2)/(3a)</em>.</p>
+<p><img alt="Model calibration" src="./figures/b_factors/b_factors_fit.svg" />
+<img alt="" src="./2g33_thesis/2g33_pyCapsid_report/figures/b_factors/b_factors_fit.svg" /></p>
+<h2>Normal mode analysis (NMA)</h2>
+<p>Optimal number of modes reproducing B-factors: 799</p>
+<p>Correlation between empirical and predicted B-factors: 0.57</p>
+<hr />
+<p><strong>Figure: Selection of the best number of modes</strong> (below). Correlation coefficient obtained comparing the experimental B-factors with respect the B-factors predicted an increasing number of low frequency modes. The black line higlights the number of modes that yield the optimal correlation coefficient with the empirical B-factors.</p>
+<p><img alt="Selection of the best number of modes" src="./figures/cc_modes/cc_modes.svg" />
+<img alt="" src="./2g33_thesis/2g33_pyCapsid_report/figures/cc_modes/cc_modes.svg" /></p>
+<p><strong>Figure: Correlation of B-factors</strong> (below). Empirical (blue) and predicted (orange) B-factors for each residue in the asymmetric unit.</p>
+<p><img alt="Correlation of B-factors" src="./figures/b_factors/b_factors.svg" />
+<img alt="" src="./2g33_thesis/2g33_pyCapsid_report/figures/b_factors/b_factors.svg" /></p>
+<hr />
+<h2>Quasi-rigid mechanical units</h2>
+<p>Number of optimal quasi-rigid mechanical units identified: 120</p>
+<p><strong>Figure: Optimal clustering selection</strong> (below). Quality score (top) and number of unique clusters (bottom) obtained as a function of the number of clusters tested. The black lines in each plot higlight the quality score and number of unique clusters for the optimal number of clusters identified.
+<img alt="" src="./figures/cluster_quality/cluster_quality.svg" />
+<img alt="" src="./2g33_thesis/2g33_pyCapsid_report/figures/cluster_quality/cluster_quality.svg" /></p>
+<hr />
+<p><strong>Figure: Quasi-rigid clusters</strong> (below). Ribbon representation of the complete structure, with each residue colored according to its cluster membership. Residues with the same color are members of the same quasi-rigid cluster.</p>
+<p><img alt="" src="./figures/structures/2g33_highest_quality_clusters.png" /></p>
+<p><strong>Figure: Residue cluster quality score</strong> (below). Ribbon representation of the complete structure, with each residue colored according to its cluster quality score.  This is a measure of how rigid each residue is with respect to its cluster. Blue residues make up the cores of rigid clusters, and red residues represent borders between clusters.</p>
+<p><img alt="" src="./figures/structures/2g33_residue_cluster_scores.png" /></p>
+<p><img alt="" src="./figures/cluster_quality/quality_score_colorbar.svg" /></p>
+<h1>Missing images in the report?</h1>
+<p>To render the missing images locally using ChimeraX, check the 'chimerax' folder of the report, and follow the instructions provided in the readme file. This will automatically place the images in the .md and .html versions. For the word document, copy and paste the relevant images directly into the document.</p>
+<p>If you were visualizing the results using NGLView, you should have several images downloaded corresponding to the relevant images. After extracting "pyCapsid_report.zip", place the corresponding images from your download folder into "pyCapsid_report/figures/structures/" replacing the empty images in that folder. This will fix the issue for the .md and .html versions. For the word document, copy and paste the relevant images directly into the document.</p>
