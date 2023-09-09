@@ -41,8 +41,8 @@ Data covering the application of pyCapsid to this set of HK97-fold protein shell
 ### Cowpea Chlorotic Mottle Virus (PDBID: 1za7)
 [Full pyCapsid Report](https://luquelab.github.io/pyCapsid/gallery/1za7_pyCapsid_report/pyCapsid_report.html)
 
-![1](2g33_cluster_quality.svg)
-![2](2g33_highest_quality_clusters.png)
+![1](1za7_cluster_quality.svg)
+![2](1za7_highest_quality_clusters.png)
 
 ## Comparisons with previous methods
 
