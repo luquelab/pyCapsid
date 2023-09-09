@@ -1,0 +1,9 @@
+n_asym_residues,799
+n_asym_chains,4
+n_full_residues,47940
+n_full_chains,240
+ENM_model,U-ENM
+gamma,0.11
+n_modes_optimal,799
+CC,0.6374138516108163
+n_clusters_optimal,12
