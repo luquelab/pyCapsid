@@ -38,6 +38,13 @@ Data covering the application of pyCapsid to this set of HK97-fold protein shell
 ![1](2g33_cluster_quality.svg)
 ![2](2g33_highest_quality_clusters.png)
 
+### Phage P22 (PDBID: 5uu5)
+[Full pyCapsid Report](https://luquelab.github.io/pyCapsid/gallery/5uu5_pyCapsid_report/pyCapsid_report.html)
+
+![1](./5uu5_pyCapsid_report/figures/cluster_quality/cluster_quality.svg)
+![2](./5uu5_pyCapsid_report/figures/structures/5uu5_highest_quality_clusters.png)
+![2](./5uu5_pyCapsid_report/figures/structures/5uu5_highest_quality_clusters_72.png)
+
 ### Cowpea Chlorotic Mottle Virus (PDBID: 1za7)
 [Full pyCapsid Report](https://luquelab.github.io/pyCapsid/gallery/1za7_pyCapsid_report/pyCapsid_report.html)
 
