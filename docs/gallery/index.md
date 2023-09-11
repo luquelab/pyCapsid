@@ -12,7 +12,7 @@ Data covering the application of pyCapsid to this set of HK97-fold protein shell
 
 ![myimg](figure_complete_capsid_gallery.png){: width="1800"}
 
-## Prediction of disassembly units
+## Successful prediction of disassembly units
 
 ### Seneca Valley Virus (PDBID: 3cji)
 [Full pyCapsid Report](https://luquelab.github.io/pyCapsid/gallery/3cji_pyCapsid_report/pyCapsid_report.html)
@@ -44,6 +44,8 @@ Data covering the application of pyCapsid to this set of HK97-fold protein shell
 ![1](./5uu5_pyCapsid_report/figures/cluster_quality/cluster_quality.svg)
 ![2](./5uu5_pyCapsid_report/figures/structures/5uu5_highest_quality_clusters.png)
 ![2](./5uu5_pyCapsid_report/figures/structures/5uu5_highest_quality_clusters_72.png)
+
+## Unsuccessful prediction of disassembly units
 
 ### Cowpea Chlorotic Mottle Virus (PDBID: 1za7)
 [Full pyCapsid Report](https://luquelab.github.io/pyCapsid/gallery/1za7_pyCapsid_report/pyCapsid_report.html)
