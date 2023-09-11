@@ -80,7 +80,8 @@ disassembly unit.
 ### Cowpea Chlorotic Mottle Virus (PDBID: [1za7](https://doi.org/10.2210/pdb1ZA7/pdb))
 
 pyCapsid’s b-factor predictions have a correlation coefficient of 0.08 with the experimental b-factors at 800 modes. 
-pyCapsid identifies the rigid clusters as the 180 MCPs, one MCP per cluster. Experimental results do not support this 
+pyCapsid identifies rigid clusters primarily as the 180 MCPs, one MCP per cluster, with 14 additional clusters formed by 
+extended domains of the proteins inside the capsid. Experimental results do not support this 
 and suggest that the capsid disassembles into dimeric groups. [[8]](https://doi.org/10.1016/j.jviromet.2007.07.020) The low 
 correlation coefficient indicates that pyCapsid, with its default settings, doesn’t effectively describe the dynamics of
 the capsid and thus wouldn’t accurately predict disassembly units. CCMV also undergoes a swelling transition before 
