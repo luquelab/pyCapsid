@@ -4,8 +4,9 @@ title: 1za7 pyCapsid Report
 nav_order: 1
 parent: Gallery
 ---
+
 # pyCapsid Report
-September 06, 2023
+September 12, 2023
 
 ## Input structure
 Identifier: 1za7
@@ -42,7 +43,7 @@ Number of protein chains in the protein complex: 180
 
 Elastic model used: U-ENM
 
-Calibrated stiffness constant (gamma): 0.26
+Calibrated stiffness constant (gamma): 0.38
 
 + This constant was fitted to scale the model to the structure, assuming a linear relationship between the residues fluctuations and B-factors.
 
@@ -55,9 +56,9 @@ Calibrated stiffness constant (gamma): 0.26
 
 ## Normal mode analysis (NMA)
 
-Optimal number of modes reproducing B-factors: 799
+Optimal number of modes reproducing B-factors: 5738
 
-Correlation between empirical and predicted B-factors: 0.08
+Correlation between empirical and predicted B-factors: 0.56
 
 ***
 
@@ -75,7 +76,7 @@ Correlation between empirical and predicted B-factors: 0.08
 
 ## Quasi-rigid mechanical units
 
-Number of optimal quasi-rigid mechanical units identified: 194
+Number of optimal quasi-rigid mechanical units identified: 180
 
 
 **Figure: Optimal clustering selection** (below). Quality score (top) and number of unique clusters (bottom) obtained as a function of the number of clusters tested. The black lines in each plot higlight the quality score and number of unique clusters for the optimal number of clusters identified.
