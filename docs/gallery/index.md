@@ -72,20 +72,32 @@ disassembly unit.
 [Full pyCapsid Report](https://luquelab.github.io/pyCapsid/gallery/5uu5_pyCapsid_report/pyCapsid_report.html)
 
 ![1](./5uu5_pyCapsid_report/figures/cluster_quality/cluster_quality.svg)
-![2](c)
+![2](./5uu5_pyCapsid_report/figures/structures/5uu5_highest_quality_clusters.png)
 ![2](./5uu5_pyCapsid_report/figures/structures/5uu5_highest_quality_clusters_72.png)
 
 ## Unsuccessful prediction of disassembly units
+
+### Phage HK97 (PDBID: [2ft1](https://doi.org/10.2210/pdb2FT1/pdb))
+
+pyCapsid’s b-factor predictions have a correlation coefficient of 0.55 with the experimental b-factors at 10000 modes. 
+pyCapsid identifies the rigid clusters as primarily the core residues of the 420 MCPs and 64 clusters corresponding to 
+small extended domains of less than 10 residues for a total of 484 clusters. HK97 has also been observed to form the 
+“wiffle ball” structures as in P22. [[8]](https://doi.org/10.1016/j.jmb.2005.02.045) pyCapsid didn’t successfully predict pentameric disassembly units in this case, unlike in P22, but the prediction of individual MCPs isn’t inconsistent with pentamers.
+
+[Full pyCapsid Report](https://luquelab.github.io/pyCapsid/gallery/2ft1_pyCapsid_report/pyCapsid_report.html)
+
+![1](./2ft1_pyCapsid_report/figures/cluster_quality/cluster_quality.svg)
+![2](./2ft1_pyCapsid_report/figures/structures/2ft1_highest_quality_clusters.png)
 
 ### Cowpea Chlorotic Mottle Virus (PDBID: [1za7](https://doi.org/10.2210/pdb1ZA7/pdb))
 
 pyCapsid’s b-factor predictions have a correlation coefficient of 0.56 with the experimental b-factors at 6000 modes. 
 pyCapsid identifies the rigid clusters as the 180 MCPs, one MCP per cluster. Experimental results do not support this 
-and suggest that the capsid disassembles into dimeric groups. [[8]](https://doi.org/10.1016/j.jviromet.2007.07.020) This
+and suggest that the capsid disassembles into dimeric groups. [[9]](https://doi.org/10.1016/j.jviromet.2007.07.020) This
 capsid requires a large number of modes to yield accurate correlations, with a CC of only 0.08 at 800 modes. This suggests
 that there may be something unique about the dynamics of the capsid that may make it more difficult for ENM/NMA methods 
 describe. CCMV also undergoes a swelling transition before disassembly, and this intermediate swollen state may have 
-different rigid subunits than the native state, explaning pyCapsid's incorrect disassembly prediction. [[9]](https://doi.org/10.1016/S0969-2126(01)00135-6)
+different rigid subunits than the native state, explaning pyCapsid's incorrect disassembly prediction. [[10]](https://doi.org/10.1016/S0969-2126(01)00135-6)
 
 [Full pyCapsid Report](https://luquelab.github.io/pyCapsid/gallery/1za7_pyCapsid_report/pyCapsid_report.html)
 
