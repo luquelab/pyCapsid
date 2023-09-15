@@ -64,10 +64,11 @@ as the disassembly unit matching our prediction. [[5]](https://doi.org/10.1021/a
 ### Phage P22 (PDBID: [5uu5](https://doi.org/10.2210/pdb5UU5/pdb))
 
 pyCapsid’s b-factor predictions have a correlation coefficient of 0.6 with the experimental b-factors at 3800 modes. 
-pyCapsid identifies the rigid clusters as 12 pentamers containing 5 MCPs each and 60 hexamers containing 6 MCPs each. 
+pyCapsid identifies the rigid clusters as either 12 mpentons containing 35 MCPs each or as 12 pentamers containing 5 MCPs 
+each and 60 hexamers containing 6 MCPs each. These correspond to the peaks in the quality score at 12 and 72.
 Heating the expanded shell of P22 has been shown to cause the pentamers to release, resulting in a “wiffle ball” 
-structure. [[7]](https://doi.org/10.1016/j.bbagen.2018.03.006) This is consistent with our prediction of the pentamers as a 
-disassembly unit.
+structure. [[7]](https://doi.org/10.1016/j.bbagen.2018.03.006) This is consistent with the prediction at 72 clusters which
+includes pentamers as a rigid subunit.
 
 [Full pyCapsid Report](https://luquelab.github.io/pyCapsid/gallery/5uu5_pyCapsid_report/pyCapsid_report.html)
 
