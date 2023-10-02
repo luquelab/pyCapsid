@@ -110,6 +110,11 @@ def fitBfactors(evals, evecs, bfactors, is3d, isIco=True, fitModes=False, plotMo
     :return:
     """
     n_modes = evals.shape[0]
+    if np.var(bfactors)==0:
+        print('Warning! Experimental b-factors have zero variance. pyCapsid will add random noise to b-factors to calculate a spring constant. The CC values will not be accurate and all modes will be used.')
+        fitModes = False
+        forceIco = False
+
     if plotModes:
         coeffs, ico_devs = fluctModes(evals, evecs, bfactors, is3d, isIco)
         plotByMode(np.arange(1, n_modes), coeffs, 'CC', save_path=save_path)
