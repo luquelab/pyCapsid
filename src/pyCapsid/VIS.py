@@ -368,7 +368,10 @@ def createClusterRepresentation(pdb, labels, view, rwb_scale=False, rep_type='ca
     hexcolor, cmap = clusters_colormap_hexcolor(labels, rwb_scale)
     clust_scheme = cluster_scheme(mol, hexcolor, labels)
 
-    view.clear_representations()
+    n_components = view.n_components
+    for i in range(n_components):
+        view.clear_representations(component=i)
+
     import nglview as ngl
     color_scheme = ngl.color._ColorScheme(clust_scheme, label="scheme_regions")
     view._remote_call("setSize", target='Widget', args=['800px', '800px'])
