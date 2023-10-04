@@ -10,7 +10,7 @@
 
 package:
   name: pycapsid
-  version: 0.5.8
+  version: 0.5.9
 
 source:
   path: ..

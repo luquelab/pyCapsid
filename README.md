@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/555994409.svg)](https://zenodo.org/badge/latestdoi/555994409)
+
 # pyCapsid
 
 ## Description

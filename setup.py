@@ -5,7 +5,7 @@ from setuptools import setup
 long_description = open("README.md").read()
 setup(
     name='pyCapsid',
-    version='0.5.8',
+    version='0.5.9',
     description='A set of computational tools written in python for the analysis of viral capsids',
     long_description =long_description,
     long_description_content_type='text/markdown',
