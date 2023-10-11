@@ -6,7 +6,7 @@ parent: Gallery
 ---
 
 # pyCapsid Report
-August 23, 2023
+October 06, 2023
 
 ## Input structure
 Identifier: 3nap
@@ -43,7 +43,7 @@ Number of protein chains in the protein complex: 180
 
 Elastic model used: U-ENM
 
-Calibrated stiffness constant (gamma): 0.29
+Calibrated stiffness constant (gamma): 0.36
 
 + This constant was fitted to scale the model to the structure, assuming a linear relationship between the residues fluctuations and B-factors.
 
@@ -56,9 +56,9 @@ Calibrated stiffness constant (gamma): 0.29
 
 ## Normal mode analysis (NMA)
 
-Optimal number of modes reproducing B-factors: 1199
+Optimal number of modes reproducing B-factors: 3319
 
-Correlation between empirical and predicted B-factors: 0.42
+Correlation between empirical and predicted B-factors: 0.63
 
 ***
 
