@@ -27,7 +27,7 @@ procapsid of the virus dissociates into pentamers, matching our prediction. [[1]
 
 ### Triatoma Virus (PDBID: [3nap](https://doi.org/10.2210/pdb3NAP/pdb))
 
-pyCapsid’s b-factor predictions have a correlation coefficient of 0.42 with the experimental b-factors at 1200 modes. 
+pyCapsid’s b-factor predictions have a correlation coefficient of 0.63 with the experimental b-factors at 3319 modes. 
 pyCapsid identifies the rigid clusters as 12 pentons, each containing 15 MCPs. Both experiments and molecular dynamics 
 simulations have been applied to explore the disassembly of this capsid, and both identify the pentons as the disassembly
 unit, matching our prediction. [[2]](https://doi.org/10.1371/journal.pcbi.1006082) [[3]](https://doi.org/10.1099/vir.0.048553-0)
