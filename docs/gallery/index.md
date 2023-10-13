@@ -73,8 +73,7 @@ includes pentamers as a rigid subunit.
 [Full pyCapsid Report](https://luquelab.github.io/pyCapsid/gallery/5uu5_pyCapsid_report/pyCapsid_report.html)
 
 ![1](./5uu5_pyCapsid_report/figures/cluster_quality/cluster_quality.svg)
-![2](./5uu5_pyCapsid_report/figures/structures/5uu5_highest_quality_clusters.png)
-![2](./5uu5_pyCapsid_report/figures/structures/5uu5_highest_quality_clusters_72.png)
+![2](./5uu5_pyCapsid_report/figures/structures/5uu5_both_12_72.png)
 
 ## Unsuccessful prediction of disassembly units
 
