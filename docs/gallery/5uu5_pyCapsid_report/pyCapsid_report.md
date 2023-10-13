@@ -87,7 +87,7 @@ Number of optimal quasi-rigid mechanical units identified: 12
 
 **Figure: Quasi-rigid clusters** (below). Ribbon representation of the complete structure, with each residue colored according to its cluster membership. Residues with the same color are members of the same quasi-rigid cluster.
 
-![](./figures/structures/5uu5_highest_quality_clusters.png)
+![](./figures/structures/5uu5_both_12_72.png)
 
 **Figure: Residue cluster quality score** (below). Ribbon representation of the complete structure, with each residue colored according to its cluster quality score.  This is a measure of how rigid each residue is with respect to its cluster. Blue residues make up the cores of rigid clusters, and red residues represent borders between clusters.
 
