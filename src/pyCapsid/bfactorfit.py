@@ -112,11 +112,13 @@ def fitBfactors(evals, evecs, bfactors, is3d, isIco=True, fitModes=False, plotMo
     n_modes = evals.shape[0]
     if np.var(bfactors)==0:
         print('Warning! Experimental b-factors have zero variance. pyCapsid will add random noise to b-factors to calculate a spring constant. The CC values will not be accurate and all modes will be used.')
+        fitModes = False
+        forceIco = False
         if np.mean(bfactors)==0:
             print('Warning! Experimental b-factors have zero value. pyCapsid will add one to b-factors to allow for fitting. The CC values and spring constant will not be accurate and all modes will be used.')
             bfactors = bfactors + 1
-        fitModes = False
-        forceIco = False
+        bfactors += np.random.randn(*bfactors.shape)*0.01
+
 
     if plotModes:
         coeffs, ico_devs = fluctModes(evals, evecs, bfactors, is3d, isIco)
@@ -193,10 +195,10 @@ def fitPlotBfactors(evals, evecs, bfactors, pdb, is3d=True, fitModes=True, plotM
     :param icotol:
     :return:
     """
-    if np.var(bfactors)==0:
-        print('Warning! Experimental b-factors have zero variance. pyCapsid will not provide CC, spring constant, and linear fit results as they are not meaningful without comparison to B-factors.')
-        fitModes = False
-        forceIco = False
+    # if np.var(bfactors)==0:
+    #     print('Warning! Experimental b-factors have zero variance. pyCapsid will not provide CC, spring constant, and linear fit results as they are not meaningful without comparison to B-factors.')
+    #     fitModes = False
+    #     forceIco = False
     coeff, k, intercept, bfactors_predicted, ci, pv, ico_dev, nmodes = fitBfactors(evals, evecs, bfactors, is3d, isIco,
                                                                                    fitModes, plotModes, forceIco,
                                                                                    icotol, save_path=save_path)
