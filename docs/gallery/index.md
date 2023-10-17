@@ -75,6 +75,16 @@ includes pentamers as a rigid subunit.
 ![1](./5uu5_pyCapsid_report/figures/cluster_quality/cluster_quality.svg)
 ![2](./5uu5_pyCapsid_report/figures/structures/5uu5_both_12_72.png)
 
+### Phage P22 Procapsid (PDBID: [2xyy](hhttps://doi.org/10.2210/pdb2XYY/pdb))
+
+This model has no b-factor information so results for the CC and spring constant aren't provided.
+pyCapsid identifies the rigid clusters as 420 individual proteins.
+
+[Full pyCapsid Report](https://luquelab.github.io/pyCapsid/gallery/2xyy_pyCapsid_report/pyCapsid_report.html)
+
+![1](./2xyy_pyCapsid_report/figures/cluster_quality/cluster_quality.svg)
+![2](./2xyy_pyCapsid_report/figures/structures/2xyy_highest_quality_clusters.png)
+
 ### Phage HK97 (PDBID: [2ft1](https://doi.org/10.2210/pdb2FT1/pdb))
 
 pyCapsid’s b-factor predictions have a correlation coefficient of 0.55 with the experimental b-factors at 10000 modes. 

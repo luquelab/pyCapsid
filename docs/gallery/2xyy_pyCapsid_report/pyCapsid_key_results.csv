@@ -1,0 +1,10 @@
+n_asym_residues,2912
+n_asym_chains,7
+n_full_residues,174720
+n_full_chains,420
+ENM_model,U-ENM
+gamma,14.86
+n_modes_optimal,4000
+CC,0.001412812404629128
+n_clusters_optimal,420
+main_pycap_time,17247.841387933004
