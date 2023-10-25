@@ -26,6 +26,14 @@ as the simplest way to use pyCapsid.
 Example notebooks are provided in the [notebooks folder](https://github.com/luquelab/pyCapsid/tree/main/notebooks).
 An accompanying tutorial is provided in the documentation.
 
+### Tutorial Videos
+
+The following video tutorials provide instructions on how to use the colab notebook and visualize the results in ChimeraX.
+
+[pyCapsid Colab Tutorial](https://youtu.be/fTFCaCD2T54?si=prWvKh7wnnxF4BN0)
+
+[pyCapsid ChimeraX Visualization Tutorial](https://youtu.be/CzyebqU5GNI?si=EIZVeZk3vHJz_2Gb)
+
 ## Github Repository
 The Github Repository of this project: [https://github.com/luquelab/pyCapsid](https://github.com/luquelab/pyCapsid)
 
