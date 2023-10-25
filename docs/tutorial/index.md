@@ -38,12 +38,11 @@ of the lowest-frequency non-degenerate mode, start a new ChimeraX session and fo
 
 ### Running the pyCapsid Colab Notebook
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/ZUUSRTSYJy8?si=Bbt7f_8cznaNx_NO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/fTFCaCD2T54?si=mwOP6GCrQSkbTWB4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 ### Visualizing the results in ChimeraX
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/cM370jKE5fg?si=qwzWdc8J3MhFDInW" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/CzyebqU5GNI?si=jEJbZAGKBSIC7PL1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 ## Colab output example
 An example of what the completed pyCapsid_report.md downloaded by the notebook will look like is shown [here](https://github.com/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_report_example/pyCapsid_report.md).
 
