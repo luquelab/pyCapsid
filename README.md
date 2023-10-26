@@ -30,7 +30,7 @@ An accompanying tutorial is provided in the documentation.
 
 The following video tutorials provide instructions on how to use the colab notebook and visualize the results in ChimeraX.
 
-[pyCapsid Colab Tutorial](https://youtu.be/fTFCaCD2T54?si=prWvKh7wnnxF4BN0)
+[pyCapsid Colab Tutorial](https://youtu.be/5iPD-SExk1U)
 
 [pyCapsid ChimeraX Visualization Tutorial](https://youtu.be/CzyebqU5GNI?si=EIZVeZk3vHJz_2Gb)
 

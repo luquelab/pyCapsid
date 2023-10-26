@@ -38,7 +38,7 @@ of the lowest-frequency non-degenerate mode, start a new ChimeraX session and fo
 
 ### Running the pyCapsid Colab Notebook
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/fTFCaCD2T54?si=mwOP6GCrQSkbTWB4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/5iPD-SExk1U?si=nGoK0OoKnaElWMZJ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 ### Visualizing the results in ChimeraX
 
