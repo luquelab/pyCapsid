@@ -3,7 +3,10 @@
 # pyCapsid
 
 ## Description
-A python package for identification of dominant motions and rigid domains of protein shells using Elastic Network Models.
+A Python package for identifying dominant motions and rigid domains of protein shells using Elastic Network Models.
+
+## Associated Peer-Reviewed Publication
+Brown, Colin, Anuradha Agarwal, and Antoni Luque. "pyCapsid: Identifying dominant dynamics and quasi-rigid mechanical units in protein shells." *Bioinformatics*, 40(1), btad761, **2024**. <https://doi.org/10.1093/bioinformatics/btad761>
 
 ## Installation
 The package requires python >3.7 and < 3.11, we reccommend python 3.10.
@@ -18,7 +21,7 @@ conda install -c luque_lab -c conda-forge pycapsid
 ~~~~
 
 ## Documentation
-Documentation is provided on our github pages site: [https://luquelab.github.io/pyCapsid/](https://luquelab.github.io/pyCapsid/)
+Documentation is provided on our GitHub pages site: [https://luquelab.github.io/pyCapsid/](https://luquelab.github.io/pyCapsid/)
 
 ## Examples
 We recommend using this [Colab notebook](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb)
@@ -28,11 +31,7 @@ An accompanying tutorial is provided in the documentation.
 
 ### Tutorial Videos
 
-The following video tutorials provide instructions on how to use the colab notebook and visualize the results in ChimeraX.
-
-[pyCapsid Colab Tutorial](https://youtu.be/5iPD-SExk1U)
-
-[pyCapsid ChimeraX Visualization Tutorial](https://youtu.be/CzyebqU5GNI?si=EIZVeZk3vHJz_2Gb)
+The [pyCapsid YouTube playlist](https://www.youtube.com/playlist?list=PLoqX8Gr-Q1jaDwF8phzP2MfVsMw71IdOt) includes video tutorials with instructions on using the Colab notebook and visualizing the results in ChimeraX.
 
 ## Github Repository
 The Github Repository of this project: [https://github.com/luquelab/pyCapsid](https://github.com/luquelab/pyCapsid)
