@@ -9,7 +9,7 @@ A Python package for identifying dominant motions and rigid domains of protein s
 Brown, Colin, Anuradha Agarwal, and Antoni Luque. "pyCapsid: Identifying dominant dynamics and quasi-rigid mechanical units in protein shells." *Bioinformatics*, 40(1), btad761, **2024**. <https://doi.org/10.1093/bioinformatics/btad761>
 
 ## Installation
-The package requires python >3.7 and < 3.11, we reccommend python 3.10.
+The package requires Python>3.7 and < 3.11; we recommend Python 3.10.
 Via pip:
 ~~~~
 pip install pyCapsid
@@ -49,13 +49,13 @@ FOLDER: /data
 --> This folder contains the raw data associated with the project and the potential references.
 
 FOLDER: /docs
---> This folder contains the manuscript, digital copies of the cited references, figures, and other associated files for publication.
+--> This folder contains the manuscript and digital copies of the cited references, figures, and other associated files for publication.
 
 FOLDER: /results
 --> This folder contains the results, performance analysis, and commented references associated with the project.
 
 FOLDER: /src
---> This folder contains source code of the package.
+--> This folder contains the source code of the package.
 
 The syntax of markdown files (.md) is CommonMark unless specified otherwise (https://commonmark.org/help/)
 
