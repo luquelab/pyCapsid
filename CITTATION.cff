@@ -1,0 +1,32 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Brown"
+  given-names: "Colin"
+- family-names: "Agarwal"
+  given-names: "Anuradha"
+- family-names: "Luque"
+  given-names: "Antoni"
+  orcid: "https://orcid.org/0000-0002-5817-4914"
+title: "pyCapsid"
+version: 0.5.8
+doi: 10.5281/zenodo.8408578
+date-released: 2023-10-04
+url: "https://github.com/luquelab/pycapsid"
+preferred-citation:
+  type: article
+  authors:
+  - family-names: "Brown"
+    given-names: "Colin"
+  - family-names: "Agarwal"
+    given-names: "Anuradha"
+  - family-names: "Luque"
+    given-names: "Antoni"
+    orcid: "https://orcid.org/0000-0002-5817-4914"
+  doi: "10.1093/bioinformatics/btad761" 
+  journal: "Bioinformatics"
+  start: btad761 # First page number
+  title: "pyCapsid:identifying dominant dynamics and quasi-rigid mechanical units in protein shells"
+  issue: 1
+  volume: 4
+  year: 2024
