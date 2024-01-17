@@ -39,8 +39,8 @@ The online documentation includes a page with [tutorials](https://luquelab.githu
 
 The [pyCapsid YouTube playlist](https://www.youtube.com/playlist?list=PLoqX8Gr-Q1jaDwF8phzP2MfVsMw71IdOt) includes video tutorials with instructions on using the Colab notebook and visualizing the results in ChimeraX.
 
-## Github Repository
-The GitHub repository's URL address for pyCapsid is <https://github.com/luquelab/pyCapsid>.
+## Repository
+pyCapsid is available as a GitHub repository at <https://github.com/luquelab/pyCapsid> and in Zenodo at the permanent [DOI 10.5281/zenodo.8408578](https://zenodo.org/doi/10.5281/zenodo.8408578). 
 
 ## Project History
 This is an evolving repository
