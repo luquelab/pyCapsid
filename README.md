@@ -53,24 +53,12 @@ This is an evolving repository:
 ## Folder's content
 
 + `/bin`: Basic scripts and executable files.
-
-### /conda
-Files needed to deploy in Conda's repository.
-
-### /data
-Raw data associated with the project and the potential references.
-
-### /docs
-This folder contains the project's documentation.
-
-### /notebooks
-Notebooks associated with the project.
-
-### /results
-This folder contains the results, performance analysis, and commented references associated with the project.
-
-### /src/pyCapsid
-Package's source codes.
++ `/conda`: Files needed to deploy in Conda's repository.
++ `/data`: Raw data associated with the project and the potential references.
++ `/docs`: This folder contains the project's documentation.
++ `/notebooks`: Notebooks associated with the project.
++ `/results`: This folder contains the results, performance analysis, and commented references associated with the project.
++ `/src/pyCapsid`: Package's source codes.
 
 
 
