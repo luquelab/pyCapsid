@@ -45,7 +45,7 @@ pyCapsid is available as a GitHub repository at <https://github.com/luquelab/pyC
 ## Project History
 This is an evolving repository:
 + Started: 2022-10-24
-+ Ended: ongoing
++ Ended: Ongoing
 
 
 ## FILES & FOLDERS
