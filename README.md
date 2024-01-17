@@ -10,9 +10,9 @@ The quickest way to use pyCapsid is as a [Google Colab notebook](https://colab.r
 The methodology and application of pyCapsid were recently peer-reviewed and published in Bioinformatics by Oxford Academic:
 + Brown, Colin, Anuradha Agarwal, and Antoni Luque. "pyCapsid: Identifying dominant dynamics and quasi-rigid mechanical units in protein shells." *Bioinformatics*, 40(1), btad761, **2024**. <https://doi.org/10.1093/bioinformatics/btad761>
 
+Below, we provide a basic description of the package and repository. We recommend visiting the [pyCapsid's online documentation](https://luquelab.github.io/pyCapsid/) for a more detailed guide to using pyCapsid.
 
-## Associated Peer-Reviewed Publication
-
+pyCapsid is under an MIT license. If you use pyCapsid on any scientific or scholarly work, please cite the above reference to support this academic and open-source initiative from the [Luque lab](https://luquelab.github.io/website).
 
 ## Installation
 The package requires Python>3.7 and < 3.11; we recommend Python 3.10.
