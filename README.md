@@ -43,8 +43,9 @@ The [pyCapsid YouTube playlist](https://www.youtube.com/playlist?list=PLoqX8Gr-Q
 pyCapsid is available as a GitHub repository at <https://github.com/luquelab/pyCapsid> and in Zenodo at the permanent [DOI 10.5281/zenodo.8408578](https://zenodo.org/doi/10.5281/zenodo.8408578). 
 
 ## Project History
-This is an evolving repository
-Started: 2022-10-24
+This is an evolving repository:
++ Started: 2022-10-24
++ Ended: ongoing
 
 
 ## FILES & FOLDERS
