@@ -50,7 +50,7 @@ This is an evolving repository:
 + Ended: Ongoing
 
 
-## Folder's content
+## Folders' description
 
 + [`/bin`](/docs): Basic scripts and executable files.
 + [`/conda`](/conda): Files needed to deploy in Conda's repository.
