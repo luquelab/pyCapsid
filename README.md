@@ -5,10 +5,14 @@
 ## Description
 pyCapsid is a Python package that identifies dominant motions, rigid domains, and disassembly units of protein shells (and other macromolecular complexes), combining elastic network models and clustering methods. The input of pyCapsid is a molecular structure from the Protein Data Bank (PDBid) or in PDB format. The output of pyCapsid includes a report that includes key analyses and figures. 
 
+The quickest way to use pyCapsid is as a [Google Colab notebook](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb) in the cloud. It only requires a Google account and can analyze from small to medium capsids. For the analysis of larger capsids or high-throughput studies, it is recommended to install pyCapsid from the Python repositories [PIP](https://pypi.org/project/pyCapsid/) or [Conda](https://anaconda.org/luque_lab/pycapsid).
+
+The methodology and application of pyCapsid were recently peer-reviewed and published in Bioinformatics by Oxford Academic:
++ Brown, Colin, Anuradha Agarwal, and Antoni Luque. "pyCapsid: Identifying dominant dynamics and quasi-rigid mechanical units in protein shells." *Bioinformatics*, 40(1), btad761, **2024**. <https://doi.org/10.1093/bioinformatics/btad761>
 
 
 ## Associated Peer-Reviewed Publication
-Brown, Colin, Anuradha Agarwal, and Antoni Luque. "pyCapsid: Identifying dominant dynamics and quasi-rigid mechanical units in protein shells." *Bioinformatics*, 40(1), btad761, **2024**. <https://doi.org/10.1093/bioinformatics/btad761>
+
 
 ## Installation
 The package requires Python>3.7 and < 3.11; we recommend Python 3.10.
