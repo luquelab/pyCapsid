@@ -14,8 +14,8 @@ Below, we provide a basic description of the package and repository. We recommen
 
 pyCapsid is under an MIT license. If you use pyCapsid on any scientific or scholarly work, please cite the above reference to support this academic and open-source initiative from the [Luque lab](https://luquelab.github.io/website).
 
-![pyCapsid-workflow](docs/figure_process_overview_07_13_CB.png)
-**Figure: pyCapsid's workflow**. a) The protein shell (atom coordinates, atom types, and B-factors) is inputted using a PDB file (or a PDB ID). (b) The elastic network model (ENM) is calibrated (parametrized). (c) Normal mode analysis (NMA) determines the distance fluctuations between residues. (d) The correlation coefficient of predicted and experimental B-factors is generated for quality control. (e) Spectral clustering is applied to obtain the quasi-rigid molecular domains in the capsid. (f) The fluctuations between residues within the rigid clusters are calculated. (g) The results are mapped back to the capsid protein atomic model for structural interpretation. 
+![pyCapsid-steps](docs/figure_process_overview_07_13_CB.png)
+**Figure: pyCapsid's key steps**. a) The protein shell (atom coordinates, atom types, and B-factors) is inputted using a PDB file (or a PDB ID). (b) The elastic network model (ENM) is calibrated (parametrized). (c) Normal mode analysis (NMA) determines the distance fluctuations between residues. (d) The correlation coefficient of predicted and experimental B-factors is generated for quality control. (e) Spectral clustering is applied to obtain the quasi-rigid molecular domains in the capsid. (f) The fluctuations between residues within the rigid clusters are calculated. (g) The results are mapped back to the capsid protein atomic model for structural interpretation. 
 
 ## Installation
 The package requires Python>3.7 and < 3.11; we recommend Python 3.10.
