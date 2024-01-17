@@ -52,8 +52,7 @@ This is an evolving repository:
 
 ## Folder's content
 
-### /bin
-Basic scripts and executable files.
++ `/bin`: Basic scripts and executable files.
 
 ### /conda
 Files needed to deploy in Conda's repository.
