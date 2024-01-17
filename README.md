@@ -35,6 +35,8 @@ pyCapsid's documentation is available as a GitHub-pages website accessible at <h
 ## Examples and Tutorials
 The online [Colab notebook](https://colab.research.google.com/github/luquelab/pyCapsid/blob/main/notebooks/pyCapsid_colab_notebook.ipynb) contains a default example in the Quick-start guide, which is the simplest way to get started using pyCapsid.
 
+An example of the pyCapsid report is accessible at <https://github.com/luquelab/pyCapsid/tree/main/notebooks/pyCapsid_report_example>.
+
 The online documentation includes a page with [tutorials](https://luquelab.github.io/pyCapsid/tutorial/).
 
 The [pyCapsid YouTube playlist](https://www.youtube.com/playlist?list=PLoqX8Gr-Q1jaDwF8phzP2MfVsMw71IdOt) includes video tutorials with instructions on using the Colab notebook and visualizing the results in ChimeraX.
@@ -48,23 +50,29 @@ This is an evolving repository:
 + Ended: Ongoing
 
 
-## FILES & FOLDERS
-FOLDER: /bin
---> This folder contains basic scripts and executable files.
+## Folder's content
 
-FOLDER: /data
---> This folder contains the raw data associated with the project and the potential references.
+### /bin
+Basic scripts and executable files.
 
-FOLDER: /docs
---> This folder contains the manuscript and digital copies of the cited references, figures, and other associated files for publication.
+### /conda
+Files needed to deploy in Conda's repository.
 
-FOLDER: /results
---> This folder contains the results, performance analysis, and commented references associated with the project.
+### /data
+Raw data associated with the project and the potential references.
 
-FOLDER: /src
---> This folder contains the source code of the package.
+### /docs
+This folder contains the project's documentation.
 
-The syntax of markdown files (.md) is CommonMark unless specified otherwise (https://commonmark.org/help/)
+### /notebooks
+Notebooks associated with the project.
+
+### /results
+This folder contains the results, performance analysis, and commented references associated with the project.
+
+### /src/pyCapsid
+Package's source codes.
+
 
 
 
