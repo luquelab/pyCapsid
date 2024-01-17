@@ -3,7 +3,9 @@
 # pyCapsid
 
 ## Description
-A Python package for identifying dominant motions and rigid domains of protein shells using Elastic Network Models.
+pyCapsid is a Python package that identifies dominant motions, rigid domains, and disassembly units of protein shells (and other macromolecular complexes), combining elastic network models and clustering methods. The input of pyCapsid is a molecular structure from the Protein Data Bank (PDBid) or in PDB format. The output of pyCapsid includes a report that includes key analyses and figures. 
+
+
 
 ## Associated Peer-Reviewed Publication
 Brown, Colin, Anuradha Agarwal, and Antoni Luque. "pyCapsid: Identifying dominant dynamics and quasi-rigid mechanical units in protein shells." *Bioinformatics*, 40(1), btad761, **2024**. <https://doi.org/10.1093/bioinformatics/btad761>
