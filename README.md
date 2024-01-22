@@ -52,7 +52,6 @@ This is an evolving repository:
 
 ## Folders' description
 
-+ [`/bin`](/docs): Basic scripts and executable files.
 + [`/conda`](/conda): Files needed to deploy in Conda's repository.
 + [`/data`](/data): Raw data associated with the project and the potential references.
 + [`/docs`](/docs): This folder contains the project's documentation.
