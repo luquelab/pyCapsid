@@ -53,7 +53,6 @@ This is an evolving repository:
 ## Folders' description
 
 + [`/conda`](/conda): Files needed to deploy in Conda's repository.
-+ [`/data`](/data): Raw data associated with the project and the potential references.
 + [`/docs`](/docs): This folder contains the project's documentation.
 + [`/notebooks`](/notebooks): Notebooks associated with the project.
 + [`/results`](/results): This folder contains the results, performance analysis, and commented references associated with the project.
